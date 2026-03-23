@@ -1,0 +1,23 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/studentsolution
+      - PORT=3000
+      - NODE_ENV=production
+      - JWT_SECRET=change-this-in-production
+      - CLIENT_URL=http://localhost:3001
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
