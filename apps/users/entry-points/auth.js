@@ -122,7 +122,9 @@ router.get('/google/callback',
 
       // Redirect to frontend with tokens
       const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
-      res.redirect(`${clientUrl}/auth/success?token=${accessToken}&refreshToken=${refreshToken}`);
+      const encodedToken = encodeURIComponent(accessToken);
+      const encodedRefreshToken = encodeURIComponent(refreshToken);
+      res.redirect(`${clientUrl}/auth/success?token=${encodedToken}&refreshToken=${encodedRefreshToken}`);
     } catch (error) {
       logger.error('Google callback error:', error);
       res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}/login?error=auth_failed`);
