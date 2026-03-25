@@ -60,6 +60,23 @@ const authLimiter = rateLimit({
     success: false,
     error: 'Too many authentication attempts, please try again later',
     code: 'RATE_LIMIT'
+  },
+  skip: (req) => {
+    // Allow more frequent /auth/me requests since they're read-only and used for auth state checks
+    return req.method === 'GET' && req.path === '/auth/me';
+  }
+});
+
+// Lenient rate limiter for /auth/me: 100 requests per 15 minutes
+const authMeLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    error: 'Too many authentication checks, please try again later',
+    code: 'RATE_LIMIT'
   }
 });
 
@@ -83,6 +100,9 @@ app.get('/health', (req, res) => {
 // API routes
 // API routes
 app.use('/auth', process.env.NODE_ENV === 'test' ? (req, res, next) => next() : authLimiter, authRoutes);
+
+// Apply more lenient rate limiting to /auth/me specifically
+app.use('/auth/me', process.env.NODE_ENV === 'test' ? (req, res, next) => next() : authMeLimiter);
 app.use('/tools', toolRoutes);
 app.use('/comments', ratingRoutes);
 app.use('/search', searchRoutes);

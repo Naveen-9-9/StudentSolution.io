@@ -112,9 +112,26 @@ router.get('/google',
 // @route   GET /auth/google/callback
 // @desc    Google OAuth callback
 // @access  Public
-router.get('/google/callback',
-  passport.authenticate('google', { session: false }),
-  (req, res) => {
+router.get('/google/callback', (req, res, next) => {
+  passport.authenticate('google', {
+    session: false,
+    failureRedirect: `${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/login?error=oauth_failed`
+  }, (err, user, info) => {
+    if (err) {
+      logger.error('Google callback auth error:', err, info);
+      return res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/login?error=oauth_failed`);
+    }
+
+    if (!user) {
+      logger.error('Google callback no user:', info);
+      return res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/login?error=oauth_failed`);
+    }
+
+    req.user = user;
+    next();
+  })(req, res, next);
+},
+(req, res) => {
     try {
       // Generate tokens
       const accessToken = generateAccessToken(req.user._id);
@@ -177,7 +194,7 @@ router.post('/logout', requireAuth, (req, res) => {
 // @route   GET /auth/me
 // @desc    Get current user profile
 // @access  Private
-router.get('/me', requireAuth, asyncHandler(async (req, res) => {
+router.get('/me', authenticateToken, requireAuth, asyncHandler(async (req, res) => {
   const user = await userService.getUserById(req.user.userId);
 
   res.json({
