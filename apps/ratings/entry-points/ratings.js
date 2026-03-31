@@ -11,6 +11,7 @@ const router = express.Router();
 // Validation schemas
 const addCommentSchema = Joi.object({
   text: Joi.string().min(1).max(1000).required(),
+  rating: Joi.number().integer().min(1).max(5).optional(),
   parentId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).optional().messages({
     'string.pattern.base': 'Invalid parent comment ID format'
   })
@@ -61,10 +62,10 @@ router.get('/tools/:toolId', validateParams(toolIdParamSchema), validateQuery(co
 // @access  Private
 router.post('/tools/:toolId', authenticateToken, requireAuth, validateParams(toolIdParamSchema), validate(addCommentSchema), asyncHandler(async (req, res) => {
   const { toolId } = req.params;
-  const { text, parentId } = req.body;
+  const { text, rating, parentId } = req.body;
   const userId = req.user.userId;
 
-  const comment = await commentService.addComment(toolId, userId, text, parentId);
+  const comment = await commentService.addComment(toolId, userId, text, rating, parentId);
 
   res.status(201).json({
     success: true,

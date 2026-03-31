@@ -44,6 +44,14 @@ const toolSchema = new mongoose.Schema({
     trim: true,
     lowercase: true
   }],
+  status: {
+    type: String,
+    enum: {
+      values: ['pending', 'approved', 'rejected'],
+      message: 'Status must be one of: pending, approved, rejected'
+    },
+    default: 'pending'
+  },
   isActive: {
     type: Boolean,
     default: true
@@ -80,7 +88,7 @@ const toolSchema = new mongoose.Schema({
 toolSchema.plugin(mongoosePaginate);
 
 // Indexes for performance
-toolSchema.index({ category: 1, isActive: 1 });
+toolSchema.index({ category: 1, status: 1, isActive: 1 });
 toolSchema.index({ submittedBy: 1 });
 toolSchema.index({ name: 'text', description: 'text' }); // For text search
 toolSchema.index({ tags: 1 });

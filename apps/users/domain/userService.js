@@ -178,6 +178,77 @@ class UserService {
       throw error;
     }
   }
+
+  // Get user public profile data (safe for anyone to view)
+  async getUserPublicProfile(userId) {
+    try {
+      const user = await User.findById(userId).select('name registeredAt');
+      if (!user) {
+        throw new NotFoundError('User not found');
+      }
+
+      // We late-require toolService to avoid circular dependencies
+      const toolService = require('../../tools/domain/toolService');
+      const stats = await toolService.getUserStats(userId);
+
+      // Simple Reputation Score (Upvotes * 10) + (Tools * 50)
+      const impactScore = (stats.totalUpvotes || 0) * 10 + (stats.totalTools || 0) * 50;
+
+      return {
+        _id: user._id,
+        name: user.name,
+        registeredAt: user.registeredAt,
+        totalTools: stats.totalTools || 0,
+        totalUpvotes: stats.totalUpvotes || 0,
+        impactScore
+      };
+    } catch (error) {
+       logger.error('Error getting public profile:', error);
+       throw error;
+    }
+  }
+
+  // Get site-wide leaderboard ranking top contributors
+  async getGlobalLeaderboard() {
+    try {
+      // Late require to avoid cycles
+      const Tool = require('../../tools/data-access/toolModel');
+      
+      const leaderboard = await Tool.aggregate([
+        { $match: { status: 'approved', isActive: true } },
+        {
+          $group: {
+            _id: '$submittedBy',
+            toolCount: { $sum: 1 },
+            upvoteCount: { $sum: '$upvoteCount' }
+          }
+        },
+        { 
+          $project: {
+            user: '$_id',
+            toolCount: 1,
+            upvoteCount: 1,
+            impactScore: { 
+               $add: [
+                  { $multiply: ['$upvoteCount', 10] },
+                  { $multiply: ['$toolCount', 50] }
+               ]
+            }
+          }
+        },
+        { $sort: { impactScore: -1 } },
+        { $limit: 20 }
+      ]);
+
+      // Populate user names
+      const result = await User.populate(leaderboard, { path: 'user', select: 'name' });
+      
+      return result.filter(entry => entry.user != null);
+    } catch (error) {
+       logger.error('Error getting global leaderboard:', error);
+       throw error;
+    }
+  }
 }
 
 module.exports = new UserService();

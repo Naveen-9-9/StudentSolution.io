@@ -1,8 +1,30 @@
+const mongoose = require('mongoose');
 const Tool = require('../data-access/toolModel');
 const { ValidationError, NotFoundError, ForbiddenError } = require('../../../libraries/errors');
 const logger = require('../../../libraries/logger');
 
 class ToolService {
+  // Get site-wide stats for the Global Leaderboard
+  async getGlobalStats() {
+    try {
+      const stats = await Tool.aggregate([
+        { $match: { status: 'approved', isActive: true } },
+        { 
+          $group: { 
+            _id: null, 
+            totalTools: { $sum: 1 }, 
+            totalUpvotes: { $sum: '$upvoteCount' } 
+          } 
+        }
+      ]);
+
+      return stats.length > 0 ? stats[0] : { totalTools: 0, totalUpvotes: 0 };
+    } catch (error) {
+      logger.error('Error getting global stats:', error);
+      throw error;
+    }
+  }
+
   // Create a new tool
   async createTool(toolData, userId) {
     try {
@@ -24,10 +46,14 @@ class ToolService {
     }
   }
 
-  // Get all tools with pagination and filtering
-  async getTools(filters = {}, page = 1, limit = 20) {
+  // Get all tools with pagination and filtering (Approved only)
+  async getTools(filters = {}, page = 1, limit = 20, includePending = false) {
     try {
       const query = { isActive: true };
+      
+      if (!includePending) {
+        query.status = 'approved';
+      }
 
       // Apply filters
       if (filters.category) {
@@ -38,6 +64,10 @@ class ToolService {
         query.$text = { $search: filters.search };
       }
 
+      if (filters.submittedBy) {
+        query.submittedBy = filters.submittedBy;
+      }
+
       if (filters.tags && filters.tags.length > 0) {
         query.tags = { $in: filters.tags };
       }
@@ -45,7 +75,9 @@ class ToolService {
       const options = {
         page: page,
         limit: limit,
-        sort: filters.sortBy === 'popular' ? { upvoteCount: -1, createdAt: -1 } : { createdAt: -1 },
+        sort: filters.sortBy === 'popular' ? { upvoteCount: -1, createdAt: -1 } : 
+              filters.sortBy === 'trending' ? { trendingScore: -1, upvoteCount: -1 } :
+              { createdAt: -1 },
         populate: {
           path: 'submittedBy',
           select: 'name'
@@ -71,18 +103,27 @@ class ToolService {
   }
 
   // Get tool by ID
-  async getToolById(toolId) {
+  async getToolById(toolId, userId = null) {
     try {
       const tool = await Tool.findById(toolId)
         .populate('submittedBy', 'name')
         .populate({
           path: 'upvotes.user',
           select: 'name',
-          options: { limit: 10 } // Limit to prevent large responses
+          options: { limit: 10 }
         });
 
       if (!tool || !tool.isActive) {
         throw new NotFoundError('Tool not found');
+      }
+
+      // If tool is not approved, only the owner or an admin can see it
+      if (tool.status !== 'approved') {
+        const isOwner = userId && tool.submittedBy && tool.submittedBy._id.toString() === userId.toString();
+        if (!isOwner) {
+          // TODO: Check if userId belongs to an admin
+          throw new ForbiddenError('This tool is pending moderation');
+        }
       }
 
       return tool;
@@ -241,13 +282,126 @@ class ToolService {
     }
   }
 
-  // Search tools
-  async searchTools(query, filters = {}, page = 1, limit = 20) {
+  // Get tools by user (for dashboard)
+  async getToolsByUser(userId, page = 1, limit = 10) {
     try {
-      const searchFilters = { ...filters, search: query };
-      return await this.getTools(searchFilters, page, limit);
+      const query = { submittedBy: userId, isActive: true };
+      const options = {
+        page: page,
+        limit: limit,
+        sort: { createdAt: -1 }
+      };
+
+      const result = await Tool.paginate(query, options);
+
+      return {
+        tools: result.docs,
+        pagination: {
+          page: result.page,
+          totalPages: result.totalPages,
+          totalItems: result.totalDocs,
+          hasNext: result.hasNextPage,
+          hasPrev: result.hasPrevPage
+        }
+      };
     } catch (error) {
-      logger.error('Error searching tools:', error);
+      logger.error('Error getting tools by user:', error);
+      throw error;
+    }
+  }
+
+  // Update tool status (for moderation)
+  async updateToolStatus(toolId, status) {
+    try {
+      const tool = await Tool.findById(toolId);
+      if (!tool) throw new NotFoundError('Tool not found');
+
+      tool.status = status;
+      await tool.save();
+
+      logger.info(`Tool status updated: ${tool.name} -> ${status}`);
+      return tool;
+    } catch (error) {
+       logger.error('Error updating tool status:', error);
+       throw error;
+    }
+  }
+  // Get aggregate stats for a user (total upvotes received, tool count)
+  async getUserStats(userId) {
+    try {
+      const stats = await Tool.aggregate([
+        { $match: { submittedBy: new mongoose.Types.ObjectId(userId), isActive: true, status: 'approved' } },
+        {
+          $group: {
+            _id: '$submittedBy',
+            totalUpvotes: { $sum: '$upvoteCount' },
+            totalTools: { $sum: 1 }
+          }
+        }
+      ]);
+
+      return stats.length > 0 ? stats[0] : { totalUpvotes: 0, totalTools: 0 };
+    } catch (error) {
+      logger.error('Error getting user stats:', error);
+      throw error;
+    }
+  }
+
+  // Get trending tools (based on upvotes in last 24 hours)
+  async getTrendingTools(limit = 10) {
+    try {
+      const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+      
+      const trendingTools = await Tool.aggregate([
+        { $match: { isActive: true, status: 'approved' } },
+        {
+          $addFields: {
+            recentUpvotes: {
+              $filter: {
+                input: '$upvotes',
+                as: 'upvote',
+                cond: { $gte: ['$$upvote.createdAt', twentyFourHoursAgo] }
+              }
+            }
+          }
+        },
+        {
+          $addFields: {
+            trendingScore: { $size: '$recentUpvotes' }
+          }
+        },
+        { $sort: { trendingScore: -1, upvoteCount: -1, createdAt: -1 } },
+        { $limit: limit },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'submittedBy',
+            foreignField: '_id',
+            as: 'submittedBy'
+          }
+        },
+        { $unwind: '$submittedBy' },
+        {
+          $project: {
+            name: 1,
+            url: 1,
+            category: 1,
+            description: 1,
+            tags: 1,
+            upvoteCount: 1,
+            averageRating: 1,
+            reviewCount: 1,
+            createdAt: 1,
+            trendingScore: 1,
+            'submittedBy.name': 1,
+            'submittedBy._id': 1
+          }
+        }
+      ]);
+
+      return trendingTools;
+    } catch (error) {
+      logger.error('Error getting trending tools:', error);
       throw error;
     }
   }

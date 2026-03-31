@@ -72,3 +72,6 @@ playwright-report/
 
 # Auth errors or temporary files
 auth_err.txt
+
+# Planning files
+.planning/

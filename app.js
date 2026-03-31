@@ -19,6 +19,8 @@ const authRoutes = require('./apps/users/entry-points/auth');
 const toolRoutes = require('./apps/tools/entry-points/tools');
 const ratingRoutes = require('./apps/ratings/entry-points/ratings');
 const searchRoutes = require('./apps/search/entry-points/search');
+const userRoutes = require('./apps/users/entry-points/users');
+const collectionRoutes = require('./apps/collections/entry-points/collections');
 
 // Database connection is handled by server.js or tests
 
@@ -108,6 +110,8 @@ app.use('/auth/me', isDevOrTest ? (req, res, next) => next() : authMeLimiter);
 app.use('/tools', toolRoutes);
 app.use('/comments', ratingRoutes);
 app.use('/search', searchRoutes);
+app.use('/users', userRoutes);
+app.use('/collections', collectionRoutes);
 
 app.get('/', (req, res) => {
   res.json({

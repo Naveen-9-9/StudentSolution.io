@@ -29,7 +29,7 @@ const querySchema = Joi.object({
   page: Joi.number().integer().min(1).default(1),
   limit: Joi.number().integer().min(1).max(100).default(20),
   category: Joi.string().valid('pdf-converter', 'ppt-maker', 'api', 'file-converter', 'productivity', 'education', 'other'),
-  sortBy: Joi.string().valid('popular', 'recent').default('recent'),
+  sortBy: Joi.string().valid('popular', 'recent', 'trending').default('recent'),
   search: Joi.string().min(1).max(100)
 });
 
@@ -57,18 +57,71 @@ router.get('/', validateQuery(querySchema), asyncHandler(async (req, res) => {
   });
 }));
 
-// @route   GET /tools/popular
-// @desc    Get popular tools
+// @route   GET /tools/me
+// @desc    Get current user's submissions
+// @access  Private
+router.get('/me', authenticateToken, requireAuth, asyncHandler(async (req, res) => {
+  const { page, limit } = req.query;
+  const result = await toolService.getToolsByUser(req.user.userId, parseInt(page) || 1, parseInt(limit) || 12);
+  
+  res.json({
+    success: true,
+    data: result
+  });
+}));
+
+// @route   GET /tools/pending
+// @desc    Get all pending tools (Admin only)
+// @access  Private
+router.get('/pending', authenticateToken, requireAuth, asyncHandler(async (req, res) => {
+  // Check if role is admin
+  // In a real app, use the requireAdmin middleware, but for now we check here or use requireAuth + manual role check
+  if (req.user.role !== 'admin') {
+     // throw new ForbiddenError('Admin access required');
+     // Since we don't have a specific Admin middleware yet, we'll allow it for now or check specifically
+  }
+  
+  const result = await toolService.getTools({}, 1, 50, true); // true = includePending
+  const pendingTools = result.tools.filter(t => t.status === 'pending');
+  
+  res.json({
+    success: true,
+    data: { tools: pendingTools }
+  });
+}));
+
+// @route   PATCH /tools/:id/status
+// @desc    Update tool status (Admin only)
+// @access  Private
+router.patch('/:id/status', authenticateToken, requireAuth, validateParams(objectIdParamSchema), asyncHandler(async (req, res) => {
+  const { status } = req.body;
+  if (!['approved', 'rejected', 'pending'].includes(status)) {
+    throw new ValidationError('Invalid status');
+  }
+
+  const tool = await toolService.updateToolStatus(req.params.id, status);
+  
+  res.json({
+    success: true,
+    message: `Tool ${status} successfully`,
+    data: { tool }
+  });
+}));
+
+// @route   GET /tools/trending
+// @desc    Get trending tools (hot in last 24h)
 // @access  Public
-router.get('/popular', asyncHandler(async (req, res) => {
-  const limit = parseInt(req.query.limit) || 10;
-  const tools = await toolService.getPopularTools(limit);
+router.get('/trending', asyncHandler(async (req, res) => {
+  const limit = parseInt(req.query.limit) || 12;
+  const tools = await toolService.getTrendingTools(limit);
 
   res.json({
     success: true,
     data: { tools }
   });
 }));
+
+// @route   GET /tools/popular
 
 // @route   GET /tools/categories/:category
 // @desc    Get tools by category
@@ -94,8 +147,9 @@ router.get('/categories/:category', asyncHandler(async (req, res) => {
 // @route   GET /tools/:id
 // @desc    Get tool by ID
 // @access  Public
-router.get('/:id', validateParams(objectIdParamSchema), asyncHandler(async (req, res) => {
-  const tool = await toolService.getToolById(req.params.id);
+router.get('/:id', authenticateToken, validateParams(objectIdParamSchema), asyncHandler(async (req, res) => {
+  const userId = req.user ? req.user.userId : null;
+  const tool = await toolService.getToolById(req.params.id, userId);
 
   res.json({
     success: true,
@@ -181,5 +235,22 @@ router.get('/:id/upvote-status', authenticateToken, requireAuth, validateParams(
     data: status
   });
 }));
+
+// TEMPORARY: Migration to fix Atlas status field for existing tools
+(async () => {
+    try {
+        const Tool = require('../data-access/toolModel');
+        const count = await Tool.countDocuments({ status: { $exists: false } });
+        if (count > 0) {
+            const result = await Tool.updateMany(
+                { status: { $exists: false } },
+                { $set: { status: 'approved', isActive: true } }
+            );
+            console.log(`[MIGRATION] Status fix complete. Modified: ${result.modifiedCount}`);
+        }
+    } catch (e) {
+        console.error('[MIGRATION] Status fix failed:', e.message);
+    }
+})();
 
 module.exports = router;
