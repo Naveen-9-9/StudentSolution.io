@@ -43,13 +43,14 @@ const objectIdParamSchema = Joi.object({
 // @desc    Get all tools with optional filtering and pagination
 // @access  Public
 router.get('/', validateQuery(querySchema), asyncHandler(async (req, res) => {
-  const { page, limit, category, sortBy, search } = req.query;
-
+  const { category, search, sortBy, page, limit } = req.query;
   const filters = {};
   if (category) filters.category = category;
   if (search) filters.search = search;
+  if (sortBy) filters.sortBy = sortBy;
 
-  const result = await toolService.getTools(filters, parseInt(page), parseInt(limit));
+  const userId = req.user ? req.user.userId : null;
+  const result = await toolService.getTools(filters, parseInt(page), parseInt(limit), false, userId);
 
   res.json({
     success: true,
@@ -113,7 +114,8 @@ router.patch('/:id/status', authenticateToken, requireAuth, validateParams(objec
 // @access  Public
 router.get('/trending', asyncHandler(async (req, res) => {
   const limit = parseInt(req.query.limit) || 12;
-  const tools = await toolService.getTrendingTools(limit);
+  const userId = req.user ? req.user.userId : null;
+  const tools = await toolService.getTrendingTools(limit, userId);
 
   res.json({
     success: true,
@@ -236,21 +238,5 @@ router.get('/:id/upvote-status', authenticateToken, requireAuth, validateParams(
   });
 }));
 
-// TEMPORARY: Migration to fix Atlas status field for existing tools
-(async () => {
-    try {
-        const Tool = require('../data-access/toolModel');
-        const count = await Tool.countDocuments({ status: { $exists: false } });
-        if (count > 0) {
-            const result = await Tool.updateMany(
-                { status: { $exists: false } },
-                { $set: { status: 'approved', isActive: true } }
-            );
-            console.log(`[MIGRATION] Status fix complete. Modified: ${result.modifiedCount}`);
-        }
-    } catch (e) {
-        console.error('[MIGRATION] Status fix failed:', e.message);
-    }
-})();
 
 module.exports = router;

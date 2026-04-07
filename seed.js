@@ -509,7 +509,19 @@ const tools = [
 
 async function seed() {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI);
+    const mongoUri = process.env.MONGO_URI;
+    const options = {
+      maxPoolSize: 10,
+      minPoolSize: 1,
+      connectTimeoutMS: 20000,
+      socketTimeoutMS: 45000,
+      serverSelectionTimeoutMS: 15000,
+    };
+
+    mongoose.set('bufferCommands', false);
+
+    console.log('Attempting to connect to MongoDB for seeding...');
+    await mongoose.connect(mongoUri, options);
     console.log('Connected to MongoDB');
 
     // Clear existing seeded tools and reviews

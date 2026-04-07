@@ -47,7 +47,7 @@ class ToolService {
   }
 
   // Get all tools with pagination and filtering (Approved only)
-  async getTools(filters = {}, page = 1, limit = 20, includePending = false) {
+  async getTools(filters = {}, page = 1, limit = 20, includePending = false, userId = null) {
     try {
       const query = { isActive: true };
       
@@ -86,8 +86,23 @@ class ToolService {
 
       const result = await Tool.paginate(query, options);
 
+      // Check if current user has upvoted each tool
+      const tools = result.docs.map(tool => {
+        const toolObj = tool.toObject();
+        if (userId) {
+          toolObj.hasUpvoted = tool.upvotes.some(
+            upvote => upvote.user.toString() === userId.toString()
+          );
+        } else {
+          toolObj.hasUpvoted = false;
+        }
+        // Don't leak full upvotes array in listings for performance
+        delete toolObj.upvotes;
+        return toolObj;
+      });
+
       return {
-        tools: result.docs,
+        tools,
         pagination: {
           page: result.page,
           totalPages: result.totalPages,
@@ -126,7 +141,16 @@ class ToolService {
         }
       }
 
-      return tool;
+      const toolObj = tool.toObject({ virtuals: true });
+      if (userId) {
+        toolObj.hasUpvoted = tool.upvotes.some(
+          upvote => upvote.user && upvote.user._id.toString() === userId.toString()
+        );
+      } else {
+        toolObj.hasUpvoted = false;
+      }
+
+      return toolObj;
     } catch (error) {
       logger.error('Error getting tool by ID:', error);
       throw error;
@@ -348,7 +372,7 @@ class ToolService {
   }
 
   // Get trending tools (based on upvotes in last 24 hours)
-  async getTrendingTools(limit = 10) {
+  async getTrendingTools(limit = 10, userId = null) {
     try {
       const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
       
@@ -392,6 +416,7 @@ class ToolService {
             averageRating: 1,
             reviewCount: 1,
             createdAt: 1,
+            upvotes: 1,
             trendingScore: 1,
             'submittedBy.name': 1,
             'submittedBy._id': 1
@@ -399,7 +424,17 @@ class ToolService {
         }
       ]);
 
-      return trendingTools;
+      return trendingTools.map(tool => {
+        if (userId) {
+          tool.hasUpvoted = tool.upvotes.some(
+            upvote => upvote.user.toString() === userId.toString()
+          );
+        } else {
+          tool.hasUpvoted = false;
+        }
+        delete tool.upvotes;
+        return tool;
+      });
     } catch (error) {
       logger.error('Error getting trending tools:', error);
       throw error;
