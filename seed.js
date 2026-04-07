@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const dns = require('dns');
 const Tool = require('./apps/tools/data-access/toolModel');
 const Comment = require('./apps/ratings/data-access/commentModel');
 const dotenv = require('dotenv');
@@ -509,6 +510,7 @@ const tools = [
 
 async function seed() {
   try {
+    dns.setServers(['8.8.8.8']);
     const mongoUri = process.env.MONGO_URI;
     const options = {
       maxPoolSize: 10,
@@ -524,10 +526,10 @@ async function seed() {
     await mongoose.connect(mongoUri, options);
     console.log('Connected to MongoDB');
 
-    // Clear existing seeded tools and reviews
-    await Tool.deleteMany({ submittedBy: SYSTEM_USER_ID });
-    await Comment.deleteMany({ userId: SYSTEM_USER_ID });
-    console.log('Cleared existing seeded tools and reviews');
+    // Clear existing tools and reviews to ensure fresh state for rating tests
+    await Tool.deleteMany({});
+    await Comment.deleteMany({});
+    console.log('Cleared existing tools and reviews collection');
 
     const sampleReviews = [
       { text: "This tool saved me so much time on my last assignment!", rating: 5 },
@@ -545,7 +547,10 @@ async function seed() {
     console.log(`Starting to seed ${tools.length} tools...`);
     
     for (const toolData of tools) {
-      const tool = new Tool(toolData);
+      const tool = new Tool({
+        ...toolData,
+        status: 'approved'
+      });
       
       // Generate 2-5 random reviews for each tool
       const numReviews = Math.floor(Math.random() * 4) + 2;
