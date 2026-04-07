@@ -1,69 +1,69 @@
-# Project Roadmap: StudentSolution.ai
+# Roadmap — Milestone v1.1: Premium UI & Color Identity
 
-## Current Status: Community Hub Beta (v0.8)
+## Overview
 
-The platform is now a fully functional community ecosystem where students can discover, rate, and trend academic resources while building their social reputation.
-
----
-
-### ✅ Milestone 1: Premium Foundation
-<details>
-<summary>Completed (Archived 2026-04-07)</summary>
-See [.planning/milestones/v1-ROADMAP.md](milestones/v1-ROADMAP.md) for full details.
-</details>
-
-### ✅ Milestone 2: Community Submission
-- [x] Tool Submission Pipeline (Validation & Duplicate Detection)
-- [x] Admin Approval & Moderation Dashboard
-- [x] Live Toolkit Browser
-
-### ✅ Milestone 3: Social Engagement
-- [x] Threaded Discussions & Nested Replies
-- [x] 1-5 Star Selection & Review System
-- [x] Real-Time Aggregate Ratings
-
-### ✅ Milestone 4: Search Evolution
-- [x] Real-Time "Hot Today" Trending Algorithm
-- [x] Cinematic Home Page Overhaul with Scrollers
-- [x] Global Search with Trending Logic
-
-### ✅ Milestone 5: Public User Profiles
-- [x] Public Social Identity Pages (`/profile/[id]`)
-- [x] Community Impact Score (Karma System)
-- [x] Achievement Badges (Rising Star, Verified Contributor)
-
-### ✅ Milestone 6: Personalized Collections
-- [x] Bookmark System (Save to Toolkit)
-- [x] Collection Modal (Real-time Curation)
-- [x] Dashboard Management Hub
+**Milestone:** v1.1
+**Phases:** 03–05 (continuing from v1.0)
+**Goal:** Distinctive visual identity through bold colors, unique components, and polished motion.
 
 ---
 
-## 🚀 Upcoming Milestones
+## Phase 03: Design System & Color Foundation
 
-### ✅ Milestone 7: Global Leaderboard & Stats
-- [x] Hall of Fame Dashboard (The Podium)
-- [x] Global Reach Metrics
-- [x] Contributor Ranking Algorithm
+**Goal:** Establish the new color palette, category color tokens, and typography scale as CSS custom properties.
 
----
+**Requirements:** COLOR-01, COLOR-02, COLOR-03, TYPE-01, TYPE-02
 
-## 🚀 Upcoming Milestones
+**Deliverables:**
+- Update `globals.css` with new brand palette (electric violet → cyan gradient primary)
+- Define 7 category color tokens as CSS custom properties
+- Deepen dark mode base to `#060612` with ambient glow system
+- Refine typography scale (heading weights, tracking, line-height)
+- Update spacing tokens for consistent vertical rhythm
 
-### 🚧 Milestone 8: Real-Time Notifications (Next)
-**Goal**: Foster an active community through live feedback loops.
-- **Push Alerts**: Instant notifications for upvotes, tool approvals, and milestones.
-- **Activity Log**: A visual feed of community events (e.g., "Naveen just shared a tool!").
-- **UI Animation**: Premium notification toasts and live badge updates.
-
-### ✅ Milestone 9: Advanced AI Search
-- [x] Natural Language Intent Engine
-- [x] Synonym Expansion & Task Mapping
-- [x] AI-Powered Result Contextualization (Smart Match)
+**Success Criteria:**
+1. All pages render with the new color palette — no plain indigo remnants
+2. Category colors are accessible via CSS variables (e.g., `--category-pdf`)
+3. Dark mode background is visibly deeper and richer than before
+4. Typography hierarchy is visually distinct (h1 vs h2 vs body)
 
 ---
 
-## Project Health
-- **Build Status**: ✅ `npm run build` Passing.
-- **Stability**: ✅ MongoDB Aggregation Optimized.
-- **UX**: ✅ Mobile-responsive & High-Engagement.
+## Phase 04: Component Redesign
+
+**Goal:** Apply the new design system to ToolCard, category pills, and interactive elements.
+
+**Requirements:** COMP-01, COMP-02, COMP-03, COMP-04
+
+**Deliverables:**
+- ToolCard: category-tinted left border/glow, prominent rating badge
+- Upvote button: animated scale + color shift on toggle
+- Category filter pills: colored by category with active state
+- Update search page and leaderboard to use new component styles
+
+**Success Criteria:**
+1. Each ToolCard shows a colored accent matching its category
+2. Rating badge is immediately visible with filled-star styling
+3. Upvote button animates on click (not just color change)
+4. Category pills are color-coded and clearly show active selection
+
+---
+
+## Phase 05: Hero, Navigation & Polish
+
+**Goal:** Complete the visual transformation with hero section, nav refinement, and page transitions.
+
+**Requirements:** HERO-01, NAV-01, POLISH-01, POLISH-02
+
+**Deliverables:**
+- Homepage hero: animated gradient mesh with brand heading
+- Navigation: frosted-glass blur effect, gradient wordmark
+- Page transitions: subtle fade/slide between routes
+- Loading skeletons: match actual component shapes
+- Auth pages: deepen gradients with new palette
+
+**Success Criteria:**
+1. Hero section immediately feels cinematic and distinctive
+2. Nav blur is visible on scroll with smooth transition
+3. Route changes have visible but non-jarring animation
+4. Skeleton loaders match the shape of their target components
