@@ -7,9 +7,10 @@ The platform is now a fully functional community ecosystem where students can di
 ---
 
 ### ✅ Milestone 1: Premium Foundation
-- [x] Modern Midnight Design System (Glassmorphism & High-Contrast)
-- [x] Global Navigation & Sidebar Identity
-- [x] Authentication & Profile Basics
+<details>
+<summary>Completed (Archived 2026-04-07)</summary>
+See [.planning/milestones/v1-ROADMAP.md](milestones/v1-ROADMAP.md) for full details.
+</details>
 
 ### ✅ Milestone 2: Community Submission
 - [x] Tool Submission Pipeline (Validation & Duplicate Detection)
