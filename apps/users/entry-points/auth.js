@@ -8,6 +8,7 @@ const { requireAuth } = require('../../../middleware/roles');
 const { ValidationError } = require('../../../libraries/errors');
 const { validate, asyncHandler } = require('../../../middleware/validate');
 const logger = require('../../../libraries/logger');
+const { sendVerificationEmail } = require('../../../libraries/email');
 
 const router = express.Router();
 
@@ -43,6 +44,11 @@ router.post('/register', validate(registerSchema), asyncHandler(async (req, res)
   // Generate tokens
   const accessToken = generateAccessToken(user._id);
   const refreshToken = generateRefreshToken(user._id);
+
+  // Send verification email (async)
+  sendVerificationEmail(user, user.verificationToken).catch(err => {
+    logger.error('Failed to send verification email during registration:', err);
+  });
 
   res.status(201).json({
     success: true,
@@ -176,6 +182,38 @@ router.post('/refresh', asyncHandler(async (req, res) => {
       accessToken: newAccessToken,
       refreshToken: newRefreshToken
     }
+  });
+}));
+
+// @route   GET /auth/verify
+// @desc    Verify email address
+// @access  Public
+router.get('/verify', asyncHandler(async (req, res) => {
+  const { token } = req.query;
+
+  if (!token) {
+    throw new ValidationError('Verification token required');
+  }
+
+  await userService.verifyEmail(token);
+
+  res.json({
+    success: true,
+    message: 'Identity established and verified.'
+  });
+}));
+
+// @route   POST /auth/resend-verification
+// @desc    Resend verification email
+// @access  Private
+router.post('/resend-verification', authenticateToken, requireAuth, asyncHandler(async (req, res) => {
+  const user = await userService.createVerificationToken(req.user.userId);
+  
+  await sendVerificationEmail(user, user.verificationToken);
+
+  res.json({
+    success: true,
+    message: 'New verification link dispatched.'
   });
 }));
 

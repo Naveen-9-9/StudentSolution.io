@@ -39,7 +39,13 @@ const userSchema = new mongoose.Schema({
   },
   lastLogin: {
     type: Date
-  }
+  },
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
+  verificationToken: String,
+  verificationExpires: Date
 }, {
   timestamps: true
 });

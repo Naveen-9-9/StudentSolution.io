@@ -67,3 +67,34 @@
 2. Nav blur is visible on scroll with smooth transition
 3. Route changes have visible but non-jarring animation
 4. Skeleton loaders match the shape of their target components
+
+---
+
+# Roadmap — Milestone v1.2: Engagement & Identity
+
+## Overview
+
+**Milestone:** v1.2
+**Phases:** 06–08
+**Goal:** Strengthen the community layer with verified identities and personal curation hubs.
+
+---
+
+## Phase 06: Email Verification & User Onboarding
+
+**Goal:** Implement a secure email verification loop to ensure community quality and account security.
+
+**Requirements:** VERIFY-01, VERIFY-02, VERIFY-03
+
+**Deliverables:**
+- Backend: Update `User` model with verification fields.
+- Backend: Verification routes (`/auth/verify`, `/auth/resend`).
+- Backend: Email service integration (Nodemailer).
+- Frontend: "Verify Identity" landing page.
+- Frontend: "Check Link" state in Registration flow.
+
+**Success Criteria:**
+1. New users receive a verification link immediately after signup.
+2. Users cannot access restricted features (e.g., Tool Submission) until verified.
+3. Verification link correctly activates the account in the database.
+4. Resend verification button works for expired/lost links.

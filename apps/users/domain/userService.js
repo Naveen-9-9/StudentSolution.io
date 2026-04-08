@@ -1,4 +1,5 @@
 const User = require('../data-access/userModel');
+const crypto = require('crypto');
 const { ValidationError, ConflictError, NotFoundError } = require('../../../libraries/errors');
 const logger = require('../../../libraries/logger');
 
@@ -21,12 +22,15 @@ class UserService {
       const user = new User({
         email: email.toLowerCase(),
         password,
-        name: name.trim()
+        name: name.trim(),
+        isVerified: false,
+        verificationToken: crypto.randomBytes(32).toString('hex'),
+        verificationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
       });
 
       await user.save();
 
-      logger.info(`New user registered: ${user.email}`);
+      logger.info(`New user registered (unverified): ${user.email}`);
       return user;
     } catch (error) {
       logger.error('Error registering user:', error);
@@ -246,6 +250,49 @@ class UserService {
       return result.filter(entry => entry.user != null);
     } catch (error) {
        logger.error('Error getting global leaderboard:', error);
+       throw error;
+    }
+  }
+
+  // Verify email using token
+  async verifyEmail(token) {
+    try {
+      const user = await User.findOne({
+        verificationToken: token,
+        verificationExpires: { $gt: new Date() }
+      });
+
+      if (!user) {
+        throw new ValidationError('Activation link is invalid or has expired');
+      }
+
+      user.isVerified = true;
+      user.verificationToken = undefined;
+      user.verificationExpires = undefined;
+      await user.save();
+
+      logger.info(`Email verified for user: ${user.email}`);
+      return user;
+    } catch (error) {
+      logger.error('Error verifying email:', error);
+      throw error;
+    }
+  }
+
+  // Generate a new verification token for resending
+  async createVerificationToken(userId) {
+    try {
+      const user = await User.findById(userId);
+      if (!user) throw new NotFoundError('User not found');
+      if (user.isVerified) throw new ValidationError('Account is already established');
+
+      user.verificationToken = crypto.randomBytes(32).toString('hex');
+      user.verificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000);
+      await user.save();
+
+      return user;
+    } catch (error) {
+       logger.error('Error creating verification token:', error);
        throw error;
     }
   }

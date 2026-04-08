@@ -28,12 +28,14 @@
 - [x] **POLISH-01**: Page transitions use subtle fade/slide animations between routes
 - [x] **POLISH-02**: Loading skeletons match the actual component layout shapes
 
-## Future Requirements
+## v1.2 Requirements
 
-- Real-time notifications
-- Admin panel
-- User profile pages
-- Email verification
+### Identity Verification
+- [x] **VERIFY-01**: System generates a unique, time-limited verification token upon user registration.
+- [x] **VERIFY-02**: Users receive a premium-styled HTML email containing a secure activation link.
+- [x] **VERIFY-03**: Verification landing page provides clear feedback (success/error/expired) and transitions to dashboard.
+
+## Future Requirements
 
 ## Out of Scope
 
@@ -58,3 +60,6 @@
 | TYPE-02     | 03    |
 | POLISH-01   | 05    |
 | POLISH-02   | 05    |
+| VERIFY-01   | 06    |
+| VERIFY-02   | 06    |
+| VERIFY-03   | 06    |
