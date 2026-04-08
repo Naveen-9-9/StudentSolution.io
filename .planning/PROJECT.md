@@ -23,6 +23,9 @@ A community-driven platform where students discover, share, and discuss the best
 - ✓ Google OAuth login — existing
 - ✓ JWT authentication (access + refresh tokens) — existing
 - ✓ Tool CRUD (create, read, update, delete) — existing
+- ✓ Tool cards with hover details and ratings/reviews display — v1.1
+- ✓ Polished, premium UI design (Cyber-Pulse) — v1.1
+- ✓ Tool submission workflow with moderation — v1.1
 - ✓ Tool categories with filtering — existing
 - ✓ Upvote/downvote system — existing
 - ✓ Comments and threaded discussions — existing
@@ -35,10 +38,9 @@ A community-driven platform where students discover, share, and discuss the best
 
 - [ ] Tool cards with hover details and ratings/reviews display
 - [ ] Polished, premium UI design (current UI is basic)
-- [ ] Tool submission workflow with moderation
-- [ ] User profiles and dashboard improvements
+- [ ] User profiles and dashboard improvements (Expansion)
 - [ ] Email verification for new accounts
-- [ ] Token refresh on frontend (auto-refresh expired tokens)
+- [ ] Token refresh on frontend (Audit backend logic)
 
 ### Out of Scope
 
@@ -61,18 +63,19 @@ A community-driven platform where students discover, share, and discuss the best
 
 Milestone v1.0 shipped with core backend (auth, tools, ratings, search), functional frontend, and 47 seeded tools. Phase 02 gap closure fixed tool rating visibility and delivered premium auth pages. The UI works but uses a generic indigo/gray palette that lacks visual distinction.
 
-## Current Milestone: v1.1 Premium UI & Color Identity
+## Current State
 
-**Goal:** Give StudentSolution.ai a distinctive visual identity through a bold new color system, unique component design, and polished motion.
+Milestone v1.1 is complete. v1.2 focuses on community engagement and verified identity.
+
+## Current Milestone: v1.2 Engagement & Identity
+
+**Goal:** Strengthen the community layer with verified identities and personal curation hubs.
 
 **Target features:**
-- Color system overhaul — replace plain indigo/gray with rich brand palette, per-category color tokens
-- Category color coding — each category badge/pill uses a unique hue
-- ToolCard redesign — category-tinted glow, bolder ratings, animated upvote feedback
-- Homepage hero — cinematic animated gradient mesh
-- Navigation polish — blur nav with gradient brand wordmark
-- Global typography & spacing refinement
-- Auth pages — deepen with richer gradients
+- [ ] Email verification for new accounts
+- [ ] User Profile expansion (Bio, Socials, Contribution history)
+- [ ] Community Moderation Dashboard polish
+- [ ] Token refresh on frontend (Audit backend)
 
 ## Evolution
 1. Requirements invalidated? → Move to Out of Scope with reason

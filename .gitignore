@@ -75,3 +75,5 @@ auth_err.txt
 
 # Project specifics
 .gemini/
+# Planning files
+.planning/

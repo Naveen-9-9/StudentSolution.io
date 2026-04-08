@@ -1,4 +1,4 @@
-# Roadmap — Milestone v1.1: Premium UI & Color Identity
+# Roadmap — Milestone v1.1 (COMPLETE)
 
 ## Overview
 
@@ -8,7 +8,7 @@
 
 ---
 
-## Phase 03: Design System & Color Foundation
+## ✓ Phase 03: Design System & Color Foundation
 
 **Goal:** Establish the new color palette, category color tokens, and typography scale as CSS custom properties.
 
@@ -29,7 +29,7 @@
 
 ---
 
-## Phase 04: Component Redesign
+## ✓ Phase 04: Component Redesign
 
 **Goal:** Apply the new design system to ToolCard, category pills, and interactive elements.
 
@@ -49,7 +49,7 @@
 
 ---
 
-## Phase 05: Hero, Navigation & Polish
+## ✓ Phase 05: Hero, Navigation & Polish
 
 **Goal:** Complete the visual transformation with hero section, nav refinement, and page transitions.
 

@@ -6,27 +6,27 @@
 ## v1.1 Requirements
 
 ### Color System
-- [ ] **COLOR-01**: App uses a distinctive brand palette with electric violet → cyan gradient accents replacing the plain indigo
-- [ ] **COLOR-02**: Each tool category has a unique accent hue (PDF=rose, PPT=amber, API=cyan, File=emerald, Productivity=violet, Education=blue, Other=slate)
-- [ ] **COLOR-03**: Dark mode uses a deep midnight base (#060612) with subtle colored ambient glows
+- [x] **COLOR-01**: App uses a distinctive brand palette with electric violet → cyan gradient accents replacing the plain indigo
+- [x] **COLOR-02**: Each tool category has a unique accent hue (PDF=rose, PPT=amber, API=cyan, File=emerald, Productivity=violet, Education=blue, Other=slate)
+- [x] **COLOR-03**: Dark mode uses a deep midnight base (#060612) with subtle colored ambient glows
 
 ### Components
-- [ ] **COMP-01**: ToolCard displays a category-tinted left border/glow accent matching its category color
-- [ ] **COMP-02**: ToolCard rating badge is visually prominent with filled-star styling and count
-- [ ] **COMP-03**: Upvote button has an animated micro-interaction on toggle (scale + color shift)
-- [ ] **COMP-04**: Category filter pills use their respective category colors with active state indication
+- [x] **COMP-01**: ToolCard displays a category-tinted left border/glow accent matching its category color
+- [x] **COMP-02**: ToolCard rating badge is visually prominent with filled-star styling and count
+- [x] **COMP-03**: Upvote button has an animated micro-interaction on toggle (scale + color shift)
+- [x] **COMP-04**: Category filter pills use their respective category colors with active state indication
 
 ### Layout & Hero
-- [ ] **HERO-01**: Homepage hero section uses an animated mesh gradient background with brand typography
-- [ ] **NAV-01**: Navigation bar has a frosted-glass blur with gradient brand wordmark on scroll
+- [x] **HERO-01**: Homepage hero section uses an animated mesh gradient background with brand typography
+- [x] **NAV-01**: Navigation bar has a frosted-glass blur with gradient brand wordmark on scroll
 
 ### Typography & Spacing
-- [ ] **TYPE-01**: Heading hierarchy uses a refined type scale with tighter tracking and bolder weights
-- [ ] **TYPE-02**: Consistent vertical rhythm and spacing tokens across all pages
+- [x] **TYPE-01**: Heading hierarchy uses a refined type scale with tighter tracking and bolder weights
+- [x] **TYPE-02**: Consistent vertical rhythm and spacing tokens across all pages
 
 ### Polish
-- [ ] **POLISH-01**: Page transitions use subtle fade/slide animations between routes
-- [ ] **POLISH-02**: Loading skeletons match the actual component layout shapes
+- [x] **POLISH-01**: Page transitions use subtle fade/slide animations between routes
+- [x] **POLISH-02**: Loading skeletons match the actual component layout shapes
 
 ## Future Requirements
 
