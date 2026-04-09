@@ -1,0 +1,360 @@
+"use client";
+
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import { Search, Filter, Loader2, ChevronLeft, ChevronRight, User, LayoutGrid, ListFilter, Sparkles } from "lucide-react";
+import { fetchApi } from "@/lib/api";
+import { Tool, PaginationData } from "@/lib/types";
+import ToolCard from "@/components/ToolCard";
+import { useAuth } from "@/context/AuthContext";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
+
+function SearchResults() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const { isAuthenticated } = useAuth();
+  
+  const q = searchParams.get("q") || "";
+  const category = searchParams.get("category") || "";
+  const page = parseInt(searchParams.get("page") || "1");
+  const sortBy = searchParams.get("sortBy") || "relevant";
+
+  const [tools, setTools] = useState<Tool[]>([]);
+  const [pagination, setPagination] = useState<PaginationData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [upvotingIds, setUpvotingIds] = useState<Set<string>>(new Set());
+  const [intentMatched, setIntentMatched] = useState<string | null>(null);
+
+  const categories = [
+    { id: "", label: "All Categories" },
+    { id: "pdf-converter", label: "PDF Converter" },
+    { id: "ppt-maker", label: "PPT Maker" },
+    { id: "api", label: "API" },
+    { id: "file-converter", label: "File Converter" },
+    { id: "productivity", label: "Productivity" },
+    { id: "education", label: "Education" },
+    { id: "other", label: "Other" },
+  ];
+
+  useEffect(() => {
+    const fetchResults = async () => {
+      try {
+        setIsLoading(true);
+        const params = new URLSearchParams();
+        if (q) params.append("q", q);
+        if (category) params.append("category", category);
+        params.append("page", page.toString());
+        params.append("sortBy", sortBy);
+        params.append("limit", "12");
+
+        const res = await fetchApi(`/search?${params.toString()}`);
+        if (res.success) {
+          setTools(res.data.tools);
+          setPagination(res.data.pagination);
+          setIntentMatched(res.data.intentMatched);
+        }
+      } catch (error) {
+        console.error("Search fetch error:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchResults();
+  }, [q, category, page, sortBy]);
+
+  const handleFilterChange = (key: string, value: string) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    if (value) {
+      newParams.set(key, value);
+    } else {
+      newParams.delete(key);
+    }
+    newParams.set("page", "1");
+    router.push(`/search?${newParams.toString()}`);
+  };
+
+  const handleUpvote = async (toolId: string) => {
+    if (!isAuthenticated) {
+      router.push("/auth/login");
+      return;
+    }
+    if (upvotingIds.has(toolId)) return;
+    try {
+      setUpvotingIds(prev => new Set(prev).add(toolId));
+      const res = await fetchApi(`/tools/${toolId}/upvote`, { method: "POST" });
+      if (res.success) {
+        setTools(prev => prev.map(t => 
+          t._id === toolId ? { 
+            ...t, 
+            upvoteCount: res.data.upvoteCount,
+            hasUpvoted: res.data.upvoted 
+          } : t
+        ));
+      }
+    } catch (error) {
+       console.error("Upvote failed:", error);
+    } finally {
+      setUpvotingIds(prev => {
+        const next = new Set(prev);
+        next.delete(toolId);
+        return next;
+      });
+    }
+  };
+
+  return (
+    <div className="w-full px-6 py-12">
+      <div className="flex flex-col lg:flex-row gap-12">
+        {/* Premium Sidebar Filters */}
+        <aside className="w-full lg:w-72 space-y-8">
+          <div className="glass p-8 rounded-[32px] sticky top-24">
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-primary mb-6 flex items-center gap-2">
+              <Filter size={14} /> Filter Results
+            </h3>
+            
+            <div className="space-y-8">
+              <div>
+                <label className="text-sm font-bold block mb-4 text-foreground/80 flex items-center gap-2">
+                  <LayoutGrid size={14} className="text-primary" /> Category
+                </label>
+                <div className="flex flex-col gap-1">
+                  {categories.map((cat) => {
+                    const categoryStyles: Record<string, { active: string, inactiveBullet: string, hoverBullet: string }> = {
+                      "pdf-converter": { active: "bg-cat-pdf text-white shadow-lg shadow-cat-pdf/30", inactiveBullet: "bg-cat-pdf/40", hoverBullet: "group-hover/cat:bg-cat-pdf" },
+                      "ppt-maker": { active: "bg-cat-presentation text-white shadow-lg shadow-cat-presentation/30", inactiveBullet: "bg-cat-presentation/40", hoverBullet: "group-hover/cat:bg-cat-presentation" },
+                      "api": { active: "bg-cat-api text-white shadow-lg shadow-cat-api/30", inactiveBullet: "bg-cat-api/40", hoverBullet: "group-hover/cat:bg-cat-api" },
+                      "file-converter": { active: "bg-cat-file-converter text-white shadow-lg shadow-cat-file-converter/30", inactiveBullet: "bg-cat-file-converter/40", hoverBullet: "group-hover/cat:bg-cat-file-converter" },
+                      "productivity": { active: "bg-cat-productivity text-white shadow-lg shadow-cat-productivity/30", inactiveBullet: "bg-cat-productivity/40", hoverBullet: "group-hover/cat:bg-cat-productivity" },
+                      "education": { active: "bg-cat-education text-white shadow-lg shadow-cat-education/30", inactiveBullet: "bg-cat-education/40", hoverBullet: "group-hover/cat:bg-cat-education" },
+                      "ai": { active: "bg-cat-ai text-white shadow-lg shadow-cat-ai/30", inactiveBullet: "bg-cat-ai/40", hoverBullet: "group-hover/cat:bg-cat-ai" },
+                    };
+                    
+                    const style = categoryStyles[cat.id.toLowerCase()] || { active: "bg-primary text-white shadow-lg shadow-primary/30", inactiveBullet: "bg-primary/40", hoverBullet: "group-hover/cat:bg-primary" };
+                    const isActive = category === cat.id;
+                    
+                    return (
+                      <button
+                        key={cat.id}
+                        onClick={() => handleFilterChange("category", cat.id)}
+                        className={cn(
+                          "w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 flex items-center gap-3 group/cat",
+                          isActive 
+                            ? style.active 
+                            : "text-muted-foreground hover:bg-white/5 dark:hover:bg-white/5 hover:text-foreground"
+                        )}
+                      >
+                        <div className={cn(
+                          "w-2 h-2 rounded-full transition-all duration-300",
+                          isActive ? "bg-white scale-125 shadow-[0_0_8px_white]" : cn(style.inactiveBullet, "group-hover/cat:scale-125 shadow-sm", style.hoverBullet)
+                        )} />
+                        {cat.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-bold block mb-4 text-foreground/80 flex items-center gap-2">
+                  <ListFilter size={14} className="text-primary" /> Sort By
+                </label>
+                <select
+                  value={sortBy}
+                  onChange={(e) => handleFilterChange("sortBy", e.target.value)}
+                  className="w-full bg-background/50 border border-border/40 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-primary/20 outline-none transition-all cursor-pointer"
+                >
+                  <option value="relevant">Most Relevant</option>
+                  <option value="popular">Most Popular</option>
+                  <option value="recent">Newest First</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        {/* Main Results Area */}
+        <main className="flex-1">
+          <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <motion.h2 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="text-4xl font-black tracking-tight text-foreground"
+              >
+                {isLoading ? "Searching Tools..." : q ? `Results for "${q}"` : "All Tools"}
+              </motion.h2>
+              {category && (
+                <p className="text-primary font-bold mt-2 uppercase tracking-widest text-xs">
+                  Category: {category.replace('-', ' ')}
+                </p>
+              )}
+            </div>
+            {!isLoading && pagination && (
+              <div className="bg-primary/5 px-4 py-2 rounded-full border border-primary/10">
+                <p className="text-xs font-black text-primary uppercase tracking-wider">
+                  {pagination.totalItems} Discoveries
+                </p>
+              </div>
+            )}
+          </div>
+
+          <AnimatePresence mode="wait">
+            {isLoading ? (
+              <motion.div 
+                key="loading"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="grid sm:grid-cols-2 gap-8"
+              >
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="h-72 rounded-[32px] border border-border/40 animate-pulse bg-muted/20" />
+                ))}
+              </motion.div>
+            ) : !isAuthenticated ? (
+              <motion.div 
+                key="auth-required"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="py-24 text-center glass-dark rounded-[40px] flex flex-col items-center justify-center space-y-8 px-8"
+              >
+                <div className="bg-primary/20 w-24 h-24 rounded-[32px] flex items-center justify-center text-primary shadow-2xl">
+                  <User className="w-12 h-12" />
+                </div>
+                <div className="max-w-md">
+                  <h3 className="text-3xl font-black text-white mb-4">Member Access Only</h3>
+                  <p className="text-blue-100/60 font-medium leading-relaxed">
+                    Personalized search and full tool access are reserved for our community. Join thousands of students today.
+                  </p>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link href="/auth/login" className="bg-primary text-white font-black px-10 py-4 rounded-2xl hover:bg-primary/90 transition-all shadow-xl shadow-primary/20">
+                    Sign In
+                  </Link>
+                  <Link href="/auth/register" className="bg-white text-black font-black px-10 py-4 rounded-2xl hover:bg-gray-100 transition-all shadow-xl">
+                    Create Account
+                  </Link>
+                </div>
+              </motion.div>
+            ) : tools.length > 0 ? (
+              <motion.div 
+                key="results"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="space-y-12"
+              >
+                {/* Milestone 9: Smart Match Banner */}
+                {intentMatched && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-8 glass rounded-[32px] border-primary/20 bg-primary/5 flex items-center gap-8 relative overflow-hidden group"
+                  >
+                     <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <Sparkles size={120} className="text-primary" />
+                     </div>
+                     
+                     <div className="w-16 h-16 rounded-[24px] bg-primary/10 flex items-center justify-center text-primary shadow-inner shrink-0">
+                        <Sparkles size={32} className="animate-pulse" />
+                     </div>
+                     
+                     <div className="relative z-10">
+                        <div className="flex items-center gap-2 mb-2">
+                           <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">AI Smart Match</span>
+                           <div className="w-1 h-1 rounded-full bg-primary/40" />
+                           <span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60 capitalize">{intentMatched} Intent</span>
+                        </div>
+                        <h4 className="text-2xl font-black tracking-tight text-foreground">
+                           Looking for {intentMatched === 'writing' ? 'academic writing' : 
+                                       intentMatched === 'presentation' ? 'slide deck' : 
+                                       intentMatched === 'file' ? 'document' : 
+                                       intentMatched === 'math' ? 'problem solving' : 'specialized'} tools?
+                        </h4>
+                        <p className="text-sm font-medium text-muted-foreground/80 mt-1">
+                           Our semantic engine has prioritized verified resources matching your task.
+                        </p>
+                     </div>
+                  </motion.div>
+                )}
+
+                <div className="grid sm:grid-cols-2 gap-8">
+                  {tools.map((tool, idx) => (
+                    <motion.div
+                      key={tool._id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.05 }}
+                    >
+                      <ToolCard
+                        tool={tool}
+                        onUpvote={handleUpvote}
+                        isUpvoting={upvotingIds.has(tool._id)}
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Premium Pagination */}
+                {pagination && pagination.totalPages > 1 && (
+                  <div className="flex justify-center items-center gap-4">
+                    <button
+                      onClick={() => handleFilterChange("page", (page - 1).toString())}
+                      disabled={!pagination.hasPrev}
+                      className="p-3 glass rounded-2xl disabled:opacity-30 hover:bg-primary hover:text-white transition-all text-foreground shadow-lg active:scale-95"
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
+                    <div className="glass px-6 py-3 rounded-2xl font-black text-sm tracking-widest text-primary">
+                      {pagination.page} / {pagination.totalPages}
+                    </div>
+                    <button
+                      onClick={() => handleFilterChange("page", (page + 1).toString())}
+                      disabled={!pagination.hasNext}
+                      className="p-3 glass rounded-2xl disabled:opacity-30 hover:bg-primary hover:text-white transition-all text-foreground shadow-lg active:scale-95"
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+                  </div>
+                )}
+              </motion.div>
+            ) : (
+              <motion.div 
+                key="no-results"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center py-32 glass rounded-[40px] border-2 border-dashed border-primary/20"
+              >
+                <div className="bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-primary shadow-inner">
+                   <Search size={32} />
+                </div>
+                <h3 className="text-2xl font-black mb-3">No tools found</h3>
+                <p className="text-muted-foreground font-medium mb-8 max-w-sm mx-auto">Try adjusting your filters or searching for more general terms like &quot;PDF&quot; or &quot;Design&quot;.</p>
+                <button 
+                  onClick={() => router.push("/search")}
+                  className="bg-primary/10 text-primary px-8 py-4 rounded-2xl font-black hover:bg-primary hover:text-white transition-all active:scale-95"
+                >
+                  Clear All Filters
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </main>
+      </div>
+    </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-12 h-12 animate-spin text-primary opacity-20" />
+      </div>
+    }>
+      <SearchResults />
+    </Suspense>
+  );
+}
