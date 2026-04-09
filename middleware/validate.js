@@ -5,12 +5,16 @@ const { ValidationError } = require('../libraries/errors');
  */
 const validate = (schema) => {
   return (req, res, next) => {
-    const { error } = schema.validate(req.body, { abortEarly: false });
-    if (error) {
-      const message = error.details.map(d => d.message).join('; ');
-      throw new ValidationError(message);
+    try {
+      const { error } = schema.validate(req.body, { abortEarly: false });
+      if (error) {
+        const message = error.details.map(d => d.message).join('; ');
+        throw new ValidationError(message);
+      }
+      next();
+    } catch (err) {
+      next(err);
     }
-    next();
   };
 };
 
@@ -20,13 +24,17 @@ const validate = (schema) => {
  */
 const validateQuery = (schema) => {
   return (req, res, next) => {
-    const { error, value } = schema.validate(req.query, { abortEarly: false });
-    if (error) {
-      const message = error.details.map(d => d.message).join('; ');
-      throw new ValidationError(message);
+    try {
+      const { error, value } = schema.validate(req.query, { abortEarly: false });
+      if (error) {
+        const message = error.details.map(d => d.message).join('; ');
+        throw new ValidationError(message);
+      }
+      req.query = value;
+      next();
+    } catch (err) {
+      next(err);
     }
-    req.query = value;
-    next();
   };
 };
 
@@ -35,12 +43,16 @@ const validateQuery = (schema) => {
  */
 const validateParams = (schema) => {
   return (req, res, next) => {
-    const { error } = schema.validate(req.params, { abortEarly: false });
-    if (error) {
-      const message = error.details.map(d => d.message).join('; ');
-      throw new ValidationError(message);
+    try {
+      const { error } = schema.validate(req.params, { abortEarly: false });
+      if (error) {
+        const message = error.details.map(d => d.message).join('; ');
+        throw new ValidationError(message);
+      }
+      next();
+    } catch (err) {
+      next(err);
     }
-    next();
   };
 };
 

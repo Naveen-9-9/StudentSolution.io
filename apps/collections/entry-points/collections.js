@@ -25,15 +25,23 @@ const toggleToolParams = Joi.object({
 // @desc    Get current user's collections
 // @access  Private
 router.get('/me', authenticate, asyncHandler(async (req, res) => {
-  const collections = await collectionService.getUserCollections(req.user.id);
+  const collections = await collectionService.getUserCollections(req.user.userId);
   res.json({ success: true, data: { collections } });
+}));
+
+// @route   GET /collections/me/tools
+// @desc    Get all tools saved by current user across all collections
+// @access  Private
+router.get('/me/tools', authenticate, asyncHandler(async (req, res) => {
+  const tools = await collectionService.getUserSavedTools(req.user.userId);
+  res.json({ success: true, data: { tools } });
 }));
 
 // @route   POST /collections
 // @desc    Create a new collection
 // @access  Private
 router.post('/', authenticate, validate(collectionSchema), asyncHandler(async (req, res) => {
-  const collection = await collectionService.createCollection(req.user.id, req.body);
+  const collection = await collectionService.createCollection(req.user.userId, req.body);
   res.status(201).json({ success: true, data: { collection } });
 }));
 
@@ -42,7 +50,7 @@ router.post('/', authenticate, validate(collectionSchema), asyncHandler(async (r
 // @access  Private
 router.post('/:id/tools/:toolId', authenticate, validateParams(toggleToolParams), asyncHandler(async (req, res) => {
   const { collection, action } = await collectionService.toggleToolInCollection(
-    req.user.id, 
+    req.user.userId, 
     req.params.id, 
     req.params.toolId
   );
@@ -60,7 +68,7 @@ router.post('/:id/tools/:toolId', authenticate, validateParams(toggleToolParams)
 router.get('/:id', validateParams(objectIdParams), asyncHandler(async (req, res) => {
   // We use the optional user object if present (from an optional auth middleware if we had one)
   // For now, if unauthenticated, req.user will be null in service logic
-  const collection = await collectionService.getCollectionById(req.user?.id, req.params.id);
+  const collection = await collectionService.getCollectionById(req.user?.userId, req.params.id);
   res.json({ success: true, data: { collection } });
 }));
 
@@ -68,7 +76,7 @@ router.get('/:id', validateParams(objectIdParams), asyncHandler(async (req, res)
 // @desc    Delete a collection
 // @access  Private
 router.delete('/:id', authenticate, validateParams(objectIdParams), asyncHandler(async (req, res) => {
-  await collectionService.deleteCollection(req.user.id, req.params.id);
+  await collectionService.deleteCollection(req.user.userId, req.params.id);
   res.json({ success: true, message: 'Collection deleted successfully' });
 }));
 

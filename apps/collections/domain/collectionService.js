@@ -105,6 +105,32 @@ class CollectionService {
        throw error;
      }
   }
+
+  // Get all tools saved by a user across all collections
+  async getUserSavedTools(userId) {
+    try {
+      const collections = await Collection.find({ user: userId }).select('tools');
+      const toolIds = [...new Set(collections.flatMap(collection => collection.tools))];
+
+      if (toolIds.length === 0) {
+        return [];
+      }
+
+      // Import Tool model here to avoid circular dependencies
+      const Tool = require('../../tools/data-access/toolModel');
+
+      const tools = await Tool.find({
+        _id: { $in: toolIds },
+        isActive: true,
+        status: 'approved'
+      }).populate('submittedBy', 'name');
+
+      return tools;
+    } catch (error) {
+      logger.error('Error fetching user saved tools:', error);
+      throw error;
+    }
+  }
 }
 
 module.exports = new CollectionService();

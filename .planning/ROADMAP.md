@@ -78,6 +78,16 @@
 **Phases:** 06–08
 **Goal:** Strengthen the community layer with verified identities and personal curation hubs.
 
+### Phase 1: Add system reviews, upvotes, tool info modal, fix errors, add tools, create user dashboard for saved tools, fix saving system
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run  to break down)
+
 ---
 
 ## Phase 06: Email Verification & User Onboarding
