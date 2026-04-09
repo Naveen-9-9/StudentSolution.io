@@ -8,6 +8,10 @@ dotenv.config();
 
 const SYSTEM_USER_ID = '000000000000000000000001';
 
+// Helper: build upvotes array of count entries
+const buildUpvotes = (count) =>
+  Array.from({ length: count }, () => ({ user: SYSTEM_USER_ID }));
+
 const tools = [
   // ═══════════════════════════════════════════
   // PDF CONVERTER
@@ -20,7 +24,8 @@ const tools = [
     tags: ['pdf', 'merge', 'compress', 'convert', 'free'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 42
+    upvoteCount: 42,
+    upvotes: buildUpvotes(42)
   },
   {
     name: 'Smallpdf',
@@ -30,7 +35,8 @@ const tools = [
     tags: ['pdf', 'compress', 'edit', 'sign', 'freemium'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 38
+    upvoteCount: 38,
+    upvotes: buildUpvotes(38)
   },
   {
     name: 'PDF24 Tools',
@@ -40,7 +46,8 @@ const tools = [
     tags: ['pdf', 'free', 'merge', 'split', 'no-watermark'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 35
+    upvoteCount: 35,
+    upvotes: buildUpvotes(35)
   },
   {
     name: 'Adobe Acrobat Online',
@@ -50,7 +57,8 @@ const tools = [
     tags: ['pdf', 'adobe', 'convert', 'sign', 'paid'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 30
+    upvoteCount: 30,
+    upvotes: buildUpvotes(30)
   },
   {
     name: 'Sejda PDF',
@@ -60,7 +68,8 @@ const tools = [
     tags: ['pdf', 'editor', 'merge', 'freemium'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 22
+    upvoteCount: 22,
+    upvotes: buildUpvotes(22)
   },
   {
     name: 'PDF Candy',
@@ -70,7 +79,19 @@ const tools = [
     tags: ['pdf', 'convert', 'ocr', 'free'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 18
+    upvoteCount: 18,
+    upvotes: buildUpvotes(18)
+  },
+  {
+    name: 'PDF Expert',
+    url: 'https://pdfexpert.com',
+    category: 'pdf-converter',
+    description: 'Powerful PDF editor for Mac and iOS. Edit text, images, and annotations, fill forms, and sign documents with a professional interface.',
+    tags: ['pdf', 'editor', 'mac', 'forms', 'paid'],
+    submittedBy: SYSTEM_USER_ID,
+    isActive: true,
+    upvoteCount: 15,
+    upvotes: buildUpvotes(15)
   },
 
   // ═══════════════════════════════════════════
@@ -84,7 +105,8 @@ const tools = [
     tags: ['presentation', 'design', 'templates', 'free'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 55
+    upvoteCount: 55,
+    upvotes: buildUpvotes(55)
   },
   {
     name: 'Google Slides',
@@ -94,7 +116,8 @@ const tools = [
     tags: ['presentation', 'google', 'collaboration', 'free', 'cloud'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 48
+    upvoteCount: 48,
+    upvotes: buildUpvotes(48)
   },
   {
     name: 'Beautiful.ai',
@@ -104,7 +127,8 @@ const tools = [
     tags: ['presentation', 'ai', 'design', 'paid'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 33
+    upvoteCount: 33,
+    upvotes: buildUpvotes(33)
   },
   {
     name: 'Pitch',
@@ -114,7 +138,8 @@ const tools = [
     tags: ['presentation', 'collaboration', 'templates', 'freemium'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 28
+    upvoteCount: 28,
+    upvotes: buildUpvotes(28)
   },
   {
     name: 'Prezi',
@@ -124,7 +149,8 @@ const tools = [
     tags: ['presentation', 'interactive', 'zoom', 'freemium'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 25
+    upvoteCount: 25,
+    upvotes: buildUpvotes(25)
   },
   {
     name: 'Slidesgo',
@@ -134,7 +160,8 @@ const tools = [
     tags: ['templates', 'free', 'powerpoint', 'google-slides'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 40
+    upvoteCount: 40,
+    upvotes: buildUpvotes(40)
   },
   {
     name: 'Gamma',
@@ -144,7 +171,19 @@ const tools = [
     tags: ['ai', 'presentation', 'generator', 'freemium'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 45
+    upvoteCount: 45,
+    upvotes: buildUpvotes(45)
+  },
+  {
+    name: 'Slidebean',
+    url: 'https://slidebean.com',
+    category: 'ppt-maker',
+    description: 'AI-powered pitch deck platform used by thousands of startups. Auto-designs slides based on your content and generates investor-ready presentations.',
+    tags: ['pitch', 'startup', 'ai', 'presentation', 'freemium'],
+    submittedBy: SYSTEM_USER_ID,
+    isActive: true,
+    upvoteCount: 18,
+    upvotes: buildUpvotes(18)
   },
 
   // ═══════════════════════════════════════════
@@ -158,7 +197,8 @@ const tools = [
     tags: ['api', 'testing', 'development', 'freemium'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 50
+    upvoteCount: 50,
+    upvotes: buildUpvotes(50)
   },
   {
     name: 'RapidAPI',
@@ -168,7 +208,8 @@ const tools = [
     tags: ['api', 'marketplace', 'integration', 'freemium'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 35
+    upvoteCount: 35,
+    upvotes: buildUpvotes(35)
   },
   {
     name: 'Insomnia',
@@ -178,7 +219,8 @@ const tools = [
     tags: ['api', 'rest', 'graphql', 'open-source', 'free'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 28
+    upvoteCount: 28,
+    upvotes: buildUpvotes(28)
   },
   {
     name: 'Swagger Editor',
@@ -188,7 +230,8 @@ const tools = [
     tags: ['api', 'documentation', 'openapi', 'free'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 32
+    upvoteCount: 32,
+    upvotes: buildUpvotes(32)
   },
   {
     name: 'Hoppscotch',
@@ -198,7 +241,8 @@ const tools = [
     tags: ['api', 'testing', 'open-source', 'free', 'lightweight'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 30
+    upvoteCount: 30,
+    upvotes: buildUpvotes(30)
   },
   {
     name: 'Thunder Client',
@@ -208,7 +252,30 @@ const tools = [
     tags: ['api', 'vscode', 'extension', 'free'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 26
+    upvoteCount: 26,
+    upvotes: buildUpvotes(26)
+  },
+  {
+    name: 'HTTPie',
+    url: 'https://httpie.io',
+    category: 'api',
+    description: 'User-friendly command-line HTTP client that makes interacting with APIs natural and intuitive. Great for quick API testing and debugging.',
+    tags: ['api', 'cli', 'testing', 'open-source', 'free'],
+    submittedBy: SYSTEM_USER_ID,
+    isActive: true,
+    upvoteCount: 20,
+    upvotes: buildUpvotes(20)
+  },
+  {
+    name: 'JSONPlaceholder',
+    url: 'https://jsonplaceholder.typicode.com',
+    category: 'api',
+    description: 'Free fake REST API for testing and prototyping. Returns fake data for posts, comments, users, and more. Perfect for learning and mocking.',
+    tags: ['api', 'testing', 'mock', 'free', 'fake-data'],
+    submittedBy: SYSTEM_USER_ID,
+    isActive: true,
+    upvoteCount: 14,
+    upvotes: buildUpvotes(14)
   },
 
   // ═══════════════════════════════════════════
@@ -222,7 +289,8 @@ const tools = [
     tags: ['converter', 'documents', 'images', 'video', 'freemium'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 40
+    upvoteCount: 40,
+    upvotes: buildUpvotes(40)
   },
   {
     name: 'Zamzar',
@@ -232,7 +300,8 @@ const tools = [
     tags: ['converter', 'free', 'documents', 'video', 'audio'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 32
+    upvoteCount: 32,
+    upvotes: buildUpvotes(32)
   },
   {
     name: 'Convertio',
@@ -242,7 +311,8 @@ const tools = [
     tags: ['converter', 'cloud', 'drag-drop', 'freemium'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 36
+    upvoteCount: 36,
+    upvotes: buildUpvotes(36)
   },
   {
     name: 'Online-Convert',
@@ -252,7 +322,8 @@ const tools = [
     tags: ['converter', 'free', 'audio', 'video', 'ebook'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 24
+    upvoteCount: 24,
+    upvotes: buildUpvotes(24)
   },
   {
     name: 'HandBrake',
@@ -262,7 +333,8 @@ const tools = [
     tags: ['video', 'converter', 'open-source', 'free', 'desktop'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 38
+    upvoteCount: 38,
+    upvotes: buildUpvotes(38)
   },
   {
     name: 'FFmpeg',
@@ -272,7 +344,8 @@ const tools = [
     tags: ['video', 'audio', 'command-line', 'open-source', 'free'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 44
+    upvoteCount: 44,
+    upvotes: buildUpvotes(44)
   },
 
   // ═══════════════════════════════════════════
@@ -286,7 +359,8 @@ const tools = [
     tags: ['notes', 'tasks', 'wiki', 'collaboration', 'freemium'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 60
+    upvoteCount: 60,
+    upvotes: buildUpvotes(60)
   },
   {
     name: 'Obsidian',
@@ -296,7 +370,8 @@ const tools = [
     tags: ['notes', 'markdown', 'knowledge-base', 'free'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 52
+    upvoteCount: 52,
+    upvotes: buildUpvotes(52)
   },
   {
     name: 'Todoist',
@@ -306,7 +381,8 @@ const tools = [
     tags: ['tasks', 'todo', 'deadlines', 'freemium'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 40
+    upvoteCount: 40,
+    upvotes: buildUpvotes(40)
   },
   {
     name: 'Trello',
@@ -316,7 +392,8 @@ const tools = [
     tags: ['kanban', 'project-management', 'collaboration', 'free'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 38
+    upvoteCount: 38,
+    upvotes: buildUpvotes(38)
   },
   {
     name: 'Forest',
@@ -326,7 +403,8 @@ const tools = [
     tags: ['focus', 'timer', 'gamification', 'paid'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 35
+    upvoteCount: 35,
+    upvotes: buildUpvotes(35)
   },
   {
     name: 'Excalidraw',
@@ -336,7 +414,8 @@ const tools = [
     tags: ['whiteboard', 'drawing', 'diagrams', 'free', 'open-source'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 45
+    upvoteCount: 45,
+    upvotes: buildUpvotes(45)
   },
   {
     name: 'Google Calendar',
@@ -346,7 +425,30 @@ const tools = [
     tags: ['calendar', 'scheduling', 'google', 'free'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 42
+    upvoteCount: 42,
+    upvotes: buildUpvotes(42)
+  },
+  {
+    name: 'ClickUp',
+    url: 'https://clickup.com',
+    category: 'productivity',
+    description: 'All-in-one project management platform with docs, goals, time tracking, and custom workflows. Replaces Notion, Asana, Trello, and more.',
+    tags: ['project-management', 'tasks', 'docs', 'freemium'],
+    submittedBy: SYSTEM_USER_ID,
+    isActive: true,
+    upvoteCount: 32,
+    upvotes: buildUpvotes(32)
+  },
+  {
+    name: 'Anytype',
+    url: 'https://anytype.io',
+    category: 'productivity',
+    description: 'Local-first, P2P workspace for notes, tasks, and wikis with end-to-end encryption. Your data stays yours — no cloud dependency.',
+    tags: ['notes', 'local-first', 'privacy', 'open-source', 'free'],
+    submittedBy: SYSTEM_USER_ID,
+    isActive: true,
+    upvoteCount: 18,
+    upvotes: buildUpvotes(18)
   },
 
   // ═══════════════════════════════════════════
@@ -360,7 +462,8 @@ const tools = [
     tags: ['learning', 'math', 'science', 'free', 'videos'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 58
+    upvoteCount: 58,
+    upvotes: buildUpvotes(58)
   },
   {
     name: 'Coursera',
@@ -370,7 +473,8 @@ const tools = [
     tags: ['courses', 'university', 'certificates', 'freemium'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 50
+    upvoteCount: 50,
+    upvotes: buildUpvotes(50)
   },
   {
     name: 'Quizlet',
@@ -380,7 +484,8 @@ const tools = [
     tags: ['flashcards', 'study', 'quizzes', 'freemium'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 45
+    upvoteCount: 45,
+    upvotes: buildUpvotes(45)
   },
   {
     name: 'Wolfram Alpha',
@@ -390,7 +495,8 @@ const tools = [
     tags: ['math', 'science', 'solver', 'freemium'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 55
+    upvoteCount: 55,
+    upvotes: buildUpvotes(55)
   },
   {
     name: 'Desmos',
@@ -400,7 +506,8 @@ const tools = [
     tags: ['math', 'graphing', 'calculator', 'free'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 42
+    upvoteCount: 42,
+    upvotes: buildUpvotes(42)
   },
   {
     name: 'Grammarly',
@@ -410,7 +517,8 @@ const tools = [
     tags: ['writing', 'grammar', 'ai', 'freemium'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 48
+    upvoteCount: 48,
+    upvotes: buildUpvotes(48)
   },
   {
     name: 'Zotero',
@@ -420,7 +528,8 @@ const tools = [
     tags: ['research', 'citations', 'bibliography', 'free', 'open-source'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 38
+    upvoteCount: 38,
+    upvotes: buildUpvotes(38)
   },
   {
     name: 'edX',
@@ -430,7 +539,30 @@ const tools = [
     tags: ['courses', 'university', 'free', 'certificates'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 40
+    upvoteCount: 40,
+    upvotes: buildUpvotes(40)
+  },
+  {
+    name: 'Brilliant',
+    url: 'https://brilliant.org',
+    category: 'education',
+    description: 'Visual math and science learning platform with interactive puzzles and guided courses. Build problem-solving intuition through discovery.',
+    tags: ['math', 'science', 'puzzles', 'courses', 'freemium'],
+    submittedBy: SYSTEM_USER_ID,
+    isActive: true,
+    upvoteCount: 22,
+    upvotes: buildUpvotes(22)
+  },
+  {
+    name: 'JSTOR',
+    url: 'https://www.jstor.org',
+    category: 'education',
+    description: 'Digital library of academic journals, books, and primary sources. Essential for research papers, literature reviews, and scholarly articles.',
+    tags: ['research', 'journals', 'academic', 'paid'],
+    submittedBy: SYSTEM_USER_ID,
+    isActive: true,
+    upvoteCount: 28,
+    upvotes: buildUpvotes(28)
   },
 
   // ═══════════════════════════════════════════
@@ -444,7 +576,8 @@ const tools = [
     tags: ['ai', 'chatbot', 'writing', 'coding', 'freemium'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 65
+    upvoteCount: 65,
+    upvotes: buildUpvotes(65)
   },
   {
     name: 'GitHub',
@@ -454,7 +587,8 @@ const tools = [
     tags: ['git', 'code', 'collaboration', 'open-source', 'free'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 55
+    upvoteCount: 55,
+    upvotes: buildUpvotes(55)
   },
   {
     name: 'Figma',
@@ -464,7 +598,8 @@ const tools = [
     tags: ['design', 'ui', 'prototyping', 'collaboration', 'free'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 50
+    upvoteCount: 50,
+    upvotes: buildUpvotes(50)
   },
   {
     name: 'Replit',
@@ -474,7 +609,8 @@ const tools = [
     tags: ['coding', 'ide', 'online', 'collaboration', 'freemium'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 42
+    upvoteCount: 42,
+    upvotes: buildUpvotes(42)
   },
   {
     name: 'Remove.bg',
@@ -484,7 +620,8 @@ const tools = [
     tags: ['images', 'ai', 'background-removal', 'free'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 38
+    upvoteCount: 38,
+    upvotes: buildUpvotes(38)
   },
   {
     name: 'TinyPNG',
@@ -494,7 +631,8 @@ const tools = [
     tags: ['images', 'compression', 'free', 'png', 'jpeg'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 30
+    upvoteCount: 30,
+    upvotes: buildUpvotes(30)
   },
   {
     name: 'Overleaf',
@@ -504,7 +642,89 @@ const tools = [
     tags: ['latex', 'academic', 'writing', 'collaboration', 'freemium'],
     submittedBy: SYSTEM_USER_ID,
     isActive: true,
-    upvoteCount: 46
+    upvoteCount: 46,
+    upvotes: buildUpvotes(46)
+  },
+  {
+    name: 'Calendly',
+    url: 'https://calendly.com',
+    category: 'other',
+    description: 'Free scheduling tool that lets you set your availability and let others book time slots with you. Integrates with Zoom, Google Meet, and more.',
+    tags: ['scheduling', 'meetings', 'calendar', 'free'],
+    submittedBy: SYSTEM_USER_ID,
+    isActive: true,
+    upvoteCount: 24,
+    upvotes: buildUpvotes(24)
+  },
+  {
+    name: 'Loom',
+    url: 'https://loom.com',
+    category: 'other',
+    description: 'Record quick videos of your screen and camera. Perfect for sharing project walkthroughs, bug reports, and async feedback in student teams.',
+    tags: ['video', 'screen-record', 'async', 'freemium'],
+    submittedBy: SYSTEM_USER_ID,
+    isActive: true,
+    upvoteCount: 28,
+    upvotes: buildUpvotes(28)
+  },
+  {
+    name: 'Miro',
+    url: 'https://miro.com',
+    category: 'other',
+    description: 'Infinite collaborative whiteboard for brainstorming, diagramming, and team workshops. Real-time collaboration with sticky notes and templates.',
+    tags: ['whiteboard', 'collaboration', 'diagrams', 'freemium'],
+    submittedBy: SYSTEM_USER_ID,
+    isActive: true,
+    upvoteCount: 35,
+    upvotes: buildUpvotes(35)
+  },
+
+  // ═══════════════════════════════════════════
+  // AI
+  // ═══════════════════════════════════════════
+  {
+    name: 'Claude',
+    url: 'https://claude.ai',
+    category: 'ai',
+    description: 'AI assistant by Anthropic for deep reasoning, writing, analysis, and coding help. Excellent for research papers and complex problem solving.',
+    tags: ['ai', 'chatbot', 'writing', 'coding', 'reasoning', 'freemium'],
+    submittedBy: SYSTEM_USER_ID,
+    isActive: true,
+    upvoteCount: 58,
+    upvotes: buildUpvotes(58)
+  },
+  {
+    name: 'Gemini',
+    url: 'https://gemini.google.com',
+    category: 'ai',
+    description: 'Google\'s multimodal AI that understands text, images, audio, and video. Great for research, study help, and creative projects.',
+    tags: ['ai', 'multimodal', 'google', 'writing', 'freemium'],
+    submittedBy: SYSTEM_USER_ID,
+    isActive: true,
+    upvoteCount: 45,
+    upvotes: buildUpvotes(45)
+  },
+  {
+    name: 'Perplexity',
+    url: 'https://perplexity.ai',
+    category: 'ai',
+    description: 'AI-powered search engine that gives direct answers with cited sources. Perfect for research and finding credible academic references.',
+    tags: ['ai', 'search', 'research', 'citations', 'free'],
+    submittedBy: SYSTEM_USER_ID,
+    isActive: true,
+    upvoteCount: 38,
+    upvotes: buildUpvotes(38)
+  },
+  {
+    name: 'Cursor',
+    url: 'https://cursor.sh',
+    category: 'ai',
+    description: 'AI-first code editor built for pair programming with AI. Features intelligent autocomplete, codebase-aware suggestions, and natural language refactoring.',
+    tags: ['ai', 'coding', 'ide', 'editor', 'paid'],
+    submittedBy: SYSTEM_USER_ID,
+    isActive: true,
+    upvoteCount: 32,
+    upvotes: buildUpvotes(32)
   }
 ];
 
