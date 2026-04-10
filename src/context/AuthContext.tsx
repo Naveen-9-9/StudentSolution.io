@@ -9,6 +9,14 @@ type User = {
   name: string;
   role: string;
   isVerified: boolean;
+  bio?: string;
+  socialLinks?: {
+    github?: string;
+    linkedin?: string;
+    twitter?: string;
+  };
+  avatarId?: string;
+  themePreference?: string;
 };
 
 interface AuthContextType {
@@ -95,12 +103,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const res = await fetchApi("/auth/me");
       if (res.success && res.data && res.data.user) {
-        const fetchedUserData = {
+        const fetchedUserData: User = {
           id: res.data.user.id || res.data.user._id,
           email: res.data.user.email,
           name: res.data.user.name,
           role: res.data.user.role,
-          isVerified: res.data.user.isVerified
+          isVerified: res.data.user.isVerified,
+          bio: res.data.user.bio,
+          socialLinks: res.data.user.socialLinks,
+          avatarId: res.data.user.avatarId,
+          themePreference: res.data.user.themePreference
         };
         setUser(fetchedUserData);
       } else {
