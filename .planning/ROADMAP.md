@@ -98,6 +98,16 @@ Plans:
 Plans:
 - [ ] TBD (run /gsd-plan-phase 1 to break down)
 
+### Phase 1: now add a profile menu on the top right side and move the submiit menu to the that and add the user dashboard in it where he can acces hes dashboard
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 1 to break down)
+
 ---
 
 ## Phase 06: Email Verification & User Onboarding
