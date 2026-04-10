@@ -37,14 +37,15 @@ const collectionSchema = new mongoose.Schema({
 });
 
 // Create slug from name before saving
-collectionSchema.pre('save', function(next) {
+collectionSchema.pre('save', function() {
   if (this.isModified('name')) {
-    this.slug = this.name
+    const baseSlug = this.name
       .toLowerCase()
       .replace(/[^\w ]+/g, '')
       .replace(/ +/g, '-');
+    const randomSuffix = Math.random().toString(36).substring(2, 8);
+    this.slug = `${baseSlug}-${randomSuffix}`;
   }
-  next();
 });
 
 module.exports = mongoose.model('Collection', collectionSchema);

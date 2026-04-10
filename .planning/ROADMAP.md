@@ -88,6 +88,16 @@
 Plans:
 - [ ] TBD (run  to break down)
 
+### Phase 1: Fix issues: nav tracking, bookmark empty state, missing search bar, modern sort dropdown, email verify for submission, trending logic, pagination bug
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 1 to break down)
+
 ---
 
 ## Phase 06: Email Verification & User Onboarding

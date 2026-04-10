@@ -58,7 +58,8 @@ router.post('/register', validate(registerSchema), asyncHandler(async (req, res)
         id: user._id,
         email: user.email,
         name: user.name,
-        role: user.role
+        role: user.role,
+        isVerified: user.isVerified
       },
       tokens: {
         accessToken,
@@ -94,7 +95,8 @@ router.post('/login', validate(loginSchema), (req, res, next) => {
           id: user._id,
           email: user.email,
           name: user.name,
-          role: user.role
+          role: user.role,
+          isVerified: user.isVerified
         },
         tokens: {
           accessToken,
@@ -243,6 +245,7 @@ router.get('/me', authenticateToken, requireAuth, asyncHandler(async (req, res) 
         email: user.email,
         name: user.name,
         role: user.role,
+        isVerified: user.isVerified,
         registeredAt: user.registeredAt,
         lastLogin: user.lastLogin
       }
@@ -264,7 +267,8 @@ router.put('/me', authenticateToken, requireAuth, validate(updateProfileSchema),
         id: user._id,
         email: user.email,
         name: user.name,
-        role: user.role
+        role: user.role,
+        isVerified: user.isVerified
       }
     }
   });

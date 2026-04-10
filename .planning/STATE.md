@@ -36,6 +36,7 @@ Last activity: 2026-04-08 — Created CONTEXT, UI-SPEC, and PLAN for Phase 05 wi
 - v1.0 shipped: Tool cards, auth, upvote persistence, 47 seeded tools
 - v1.1 started: 3 phases (03-05) for UI & Color Identity overhaul
 - Phase 1 added: Add system reviews, upvotes, tool info modal, fix errors, add tools, create user dashboard for saved tools, fix saving system
+- Phase 1 added: Fix issues: nav tracking, bookmark empty state, missing search bar, modern sort dropdown, email verify for submission, trending logic, pagination bug
 
 ### Key Learnings
 

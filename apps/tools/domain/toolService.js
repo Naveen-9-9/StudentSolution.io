@@ -371,41 +371,12 @@ class ToolService {
     }
   }
 
-  // Get trending tools (based on upvotes in last 24 hours)
+  // Get trending tools (based on upvotes in last 24 hours) with random fallback padding
   async getTrendingTools(limit = 10, userId = null) {
     try {
       const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
       
-      const trendingTools = await Tool.aggregate([
-        { $match: { isActive: true, status: 'approved' } },
-        {
-          $addFields: {
-            recentUpvotes: {
-              $filter: {
-                input: '$upvotes',
-                as: 'upvote',
-                cond: { $gte: ['$$upvote.createdAt', twentyFourHoursAgo] }
-              }
-            }
-          }
-        },
-        {
-          $addFields: {
-            trendingScore: { $size: '$recentUpvotes' }
-          }
-        },
-        { $sort: { trendingScore: -1, upvoteCount: -1, createdAt: -1 } },
-        { $limit: limit },
-        {
-          $lookup: {
-            from: 'users',
-            localField: 'submittedBy',
-            foreignField: '_id',
-            as: 'submittedBy'
-          }
-        },
-        { $unwind: '$submittedBy' },
-        {
+      const projectPipeline = {
           $project: {
             name: 1,
             url: 1,
@@ -417,16 +388,73 @@ class ToolService {
             reviewCount: 1,
             createdAt: 1,
             upvotes: 1,
-            trendingScore: 1,
+            trendingScore: { $ifNull: ['$trendingScore', 0] },
             'submittedBy.name': 1,
             'submittedBy._id': 1
           }
-        }
+      };
+
+      const activeTrendingTools = await Tool.aggregate([
+        { $match: { isActive: true, status: 'approved' } },
+        {
+          $addFields: {
+            recentUpvotes: {
+              $filter: {
+                input: { $ifNull: ['$upvotes', []] },
+                as: 'upvote',
+                cond: { $gte: ['$$upvote.createdAt', twentyFourHoursAgo] }
+              }
+            }
+          }
+        },
+        {
+          $addFields: {
+            trendingScore: { $size: '$recentUpvotes' }
+          }
+        },
+        { $match: { trendingScore: { $gt: 0 } } },
+        { $sort: { trendingScore: -1, upvoteCount: -1, createdAt: -1 } },
+        { $limit: limit },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'submittedBy',
+            foreignField: '_id',
+            as: 'submittedBy'
+          }
+        },
+        { $unwind: '$submittedBy' },
+        projectPipeline
       ]);
+
+      let trendingTools = activeTrendingTools;
+
+      if (trendingTools.length < limit) {
+         const remaining = limit - trendingTools.length;
+         const activeIds = trendingTools.map(t => t._id);
+         
+         const randomTools = await Tool.aggregate([
+            { $match: { isActive: true, status: 'approved', _id: { $nin: activeIds } } },
+            { $sample: { size: remaining } },
+            { $addFields: { trendingScore: 0 } },
+            {
+               $lookup: {
+                 from: 'users',
+                 localField: 'submittedBy',
+                 foreignField: '_id',
+                 as: 'submittedBy'
+               }
+            },
+            { $unwind: '$submittedBy' },
+            projectPipeline
+         ]);
+         
+         trendingTools = [...trendingTools, ...randomTools];
+      }
 
       return trendingTools.map(tool => {
         if (userId) {
-          tool.hasUpvoted = tool.upvotes.some(
+          tool.hasUpvoted = tool.upvotes && tool.upvotes.some(
             upvote => upvote.user.toString() === userId.toString()
           );
         } else {
