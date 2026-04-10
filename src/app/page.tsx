@@ -191,7 +191,7 @@ export default function HomePage() {
               <h2 className="text-4xl md:text-5xl font-black tracking-tight text-foreground leading-none">Trending Today</h2>
               <p className="text-muted-foreground font-medium text-lg">Most active community resources in the last 24 hours.</p>
             </div>
-            <Link href="/search?sortBy=trending" className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-primary hover:gap-5 transition-all group p-4 border border-primary/20 rounded-2xl bg-primary/5">
+            <Link href="/search?sortBy=popular" className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-primary hover:gap-5 transition-all group p-4 border border-primary/20 rounded-2xl bg-primary/5">
               Live Feed <ArrowRight size={14} />
             </Link>
           </div>

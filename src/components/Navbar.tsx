@@ -1,29 +1,32 @@
 "use client";
 
 import { NavBar, NavItem } from "./ui/tubelight-navbar";
-import { Home, Search, PlusCircle, LogIn, UserPlus, LogOut, Trophy } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+import { Home, Search, Trophy } from "lucide-react";
+import Link from "next/link";
+import UserProfile from "./UserProfile";
 
 export default function GlobalNavbar() {
-  const { isAuthenticated, logout } = useAuth();
-
   const navItems: NavItem[] = [
     { name: "Home", url: "/", icon: Home },
-    { name: "Search", url: "/search", icon: Search },
+    { name: "Discovery", url: "/search", icon: Search },
     { name: "Ranking", url: "/leaderboard", icon: Trophy },
   ];
 
-  if (isAuthenticated) {
-    navItems.push(
-      { name: "Submit", url: "/tools/submit", icon: PlusCircle },
-      { name: "Sign Out", url: "#", icon: LogOut, action: logout }
-    );
-  } else {
-    navItems.push(
-      { name: "Sign In", url: "/auth/login", icon: LogIn },
-      { name: "Register", url: "/auth/register", icon: UserPlus }
-    );
-  }
+  return (
+    <>
+      <div className="fixed top-0 left-0 p-4 md:p-6 z-[60]">
+        <Link href="/" className="flex items-center gap-2 group">
+          <span className="text-xl font-black tracking-tight text-foreground font-display uppercase group-hover:scale-105 transition-transform">
+            StudentSolution<span className="text-cyber-gradient">.ai</span>
+          </span>
+        </Link>
+      </div>
 
-  return <NavBar items={navItems} className="mb-0 sm:pt-6" />;
+      <NavBar items={navItems} className="mb-0 sm:pt-6" />
+
+      <div className="fixed top-0 right-0 p-4 md:p-6 z-[60]">
+        <UserProfile />
+      </div>
+    </>
+  );  
 }

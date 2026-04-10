@@ -124,6 +124,23 @@ export default function SubmitToolPage() {
               <Sparkles className="w-12 h-12 text-primary/40 hidden md:block animate-pulse" />
             </div>
 
+            {user && !user.isVerified && (
+              <div className="mb-10 p-6 md:p-8 glass rounded-[32px] border border-primary/40 bg-primary/5 flex max-md:flex-col items-center justify-between gap-6">
+                 <div className="flex items-center gap-6">
+                    <div className="w-16 h-16 rounded-[24px] bg-primary/20 flex items-center justify-center text-primary shrink-0">
+                       <ShieldAlert size={32} />
+                    </div>
+                    <div>
+                       <h3 className="text-xl font-black text-foreground mb-1 tracking-tight">Identity Verification Required</h3>
+                       <p className="text-sm font-medium text-muted-foreground">To maintain community trust, please verify your email before submitting tools.</p>
+                    </div>
+                 </div>
+                 <Link href="/auth/verify" className="px-8 py-4 bg-primary text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-primary/90 transition-all shadow-xl shadow-primary/40 whitespace-nowrap text-center max-md:w-full">
+                   Verify Email Now
+                 </Link>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-10">
               {/* Primary Info */}
               <div className="glass p-8 md:p-12 rounded-[40px] border-primary/20 shadow-2xl space-y-8">

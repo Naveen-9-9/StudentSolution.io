@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { Search, Filter, Loader2, ChevronLeft, ChevronRight, User, LayoutGrid, ListFilter, Sparkles } from "lucide-react";
+import { Search, Filter, Loader2, ChevronLeft, ChevronRight, User, LayoutGrid, ListFilter, Sparkles, ChevronDown } from "lucide-react";
 import { fetchApi } from "@/lib/api";
 import { Tool, PaginationData } from "@/lib/types";
 import ToolCard from "@/components/ToolCard";
@@ -72,7 +72,9 @@ function SearchResults() {
     } else {
       newParams.delete(key);
     }
-    newParams.set("page", "1");
+    if (key !== "page") {
+      newParams.set("page", "1");
+    }
     router.push(`/search?${newParams.toString()}`);
   };
 
@@ -118,6 +120,22 @@ function SearchResults() {
             <div className="space-y-8">
               <div>
                 <label className="text-sm font-bold block mb-4 text-foreground/80 flex items-center gap-2">
+                  <Search size={14} className="text-primary" /> Search
+                </label>
+                <div className="relative">
+                  <input
+                    type="search"
+                    placeholder="Search tools..."
+                    value={q}
+                    onChange={(e) => handleFilterChange("q", e.target.value)}
+                    className="w-full bg-background/50 border border-border/40 rounded-xl pl-10 pr-4 py-3 text-sm font-bold focus:ring-2 focus:ring-primary/20 focus:border-primary/40 outline-none transition-all placeholder:font-medium placeholder:text-muted-foreground/50"
+                  />
+                  <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/50" />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-bold block mb-4 text-foreground/80 flex items-center gap-2">
                   <LayoutGrid size={14} className="text-primary" /> Category
                 </label>
                 <div className="flex flex-col gap-1">
@@ -161,15 +179,20 @@ function SearchResults() {
                 <label className="text-sm font-bold block mb-4 text-foreground/80 flex items-center gap-2">
                   <ListFilter size={14} className="text-primary" /> Sort By
                 </label>
-                <select
-                  value={sortBy}
-                  onChange={(e) => handleFilterChange("sortBy", e.target.value)}
-                  className="w-full bg-background/50 border border-border/40 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-primary/20 outline-none transition-all cursor-pointer"
-                >
-                  <option value="relevant">Most Relevant</option>
-                  <option value="popular">Most Popular</option>
-                  <option value="recent">Newest First</option>
-                </select>
+                <div className="relative group/sort">
+                  <select
+                    value={sortBy}
+                    onChange={(e) => handleFilterChange("sortBy", e.target.value)}
+                    className="w-full appearance-none bg-background/50 border border-border/40 group-hover/sort:border-primary/40 rounded-xl pl-4 pr-10 py-3 text-sm font-bold focus:ring-2 focus:ring-primary/20 outline-none transition-all cursor-pointer text-foreground"
+                  >
+                    <option value="relevant">Most Relevant</option>
+                    <option value="popular">Most Popular</option>
+                    <option value="recent">Newest First</option>
+                  </select>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground group-hover/sort:text-primary transition-colors">
+                    <ChevronDown size={16} />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

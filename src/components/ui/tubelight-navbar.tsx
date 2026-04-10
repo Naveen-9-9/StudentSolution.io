@@ -37,7 +37,7 @@ export function NavBar({ items, className }: NavBarProps) {
       <div className="flex items-center gap-2 bg-black/10 dark:bg-card/20 border border-white/10 backdrop-blur-[60px] p-1.5 rounded-full shadow-2xl">
         {items.map((item) => {
           const Icon = item.icon
-          const isActive = pathname === item.url || (pathname === "/" && item.url === "/")
+          const isActive = item.url === "/" ? pathname === "/" : pathname.startsWith(item.url)
           const hasAction = !!item.action
 
           const commonClasses = cn(

@@ -26,8 +26,8 @@ function VerifyContent() {
         if (res.success) {
           setStatus('success');
           setMessage("Identity established. Profile verified successfully.");
-          // Redirect to dashboard after a delay
-          setTimeout(() => router.push("/dashboard"), 3000);
+          // Redirect to dashboard after a delay (hard redirect to refresh auth context)
+          setTimeout(() => window.location.href = "/dashboard", 3000);
         }
       } catch (err: unknown) {
         setStatus('error');
