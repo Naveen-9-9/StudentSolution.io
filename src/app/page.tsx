@@ -12,6 +12,7 @@ import ToolCard from "@/components/ToolCard";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SpecialText } from "@/components/ui/special-text";
 
 export default function HomePage() {
   const { isAuthenticated } = useAuth();
@@ -148,13 +149,24 @@ export default function HomePage() {
             </div>
             
             <motion.h1 
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 1, delay: 0.2 }}
               className="text-7xl md:text-9xl font-black tracking-tighter leading-[0.85] mb-8 font-display"
             >
-              Master Your <br className="hidden md:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-400 to-indigo-500 italic drop-shadow-sm">Academic Success.</span>
+              <motion.span
+                initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{ duration: 0.8, delay: 0.2, ease: [0.2, 0.65, 0.3, 0.9] }}
+                className="block"
+              >
+                Master Your
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{ duration: 0.8, delay: 0.4, ease: [0.2, 0.65, 0.3, 0.9] }}
+                className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-400 to-indigo-500 italic drop-shadow-sm block"
+              >
+                Academic Success.
+              </motion.span>
             </motion.h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground/70 max-w-4xl mx-auto mb-16 leading-relaxed font-medium">

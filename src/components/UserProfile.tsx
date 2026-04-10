@@ -12,14 +12,33 @@ import {
   ChevronDown,
   LogIn,
   UserPlus,
-  Settings
+  Settings,
+  ShieldCheck,
+  Palette,
+  Globe,
+  Github,
+  Linkedin,
+  Twitter
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+const AVATAR_MAP: Record<string, any> = {
+  "default-1": User,
+  "default-2": ShieldCheck,
+  "default-3": Palette,
+  "default-4": Globe,
+  "default-5": Github,
+  "default-6": Linkedin,
+  "default-7": Twitter,
+  "default-8": Settings,
+};
 
 export default function UserProfile() {
   const { user, isAuthenticated, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const SelectedAvatar = user?.avatarId ? AVATAR_MAP[user.avatarId] || User : User;
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -58,7 +77,7 @@ export default function UserProfile() {
         className="flex items-center gap-3 p-1.5 pr-4 rounded-full bg-black/10 dark:bg-card/20 border border-white/10 backdrop-blur-xl hover:bg-white/5 transition-all group"
       >
         <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-black shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform">
-          {user?.name?.[0]?.toUpperCase() || <User size={18} />}
+          <SelectedAvatar size={18} />
         </div>
         <div className="hidden md:block text-left">
           <p className="text-[11px] font-black uppercase tracking-widest text-foreground truncate max-w-[100px]">
@@ -107,12 +126,14 @@ export default function UserProfile() {
                 <span className="text-xs font-black uppercase tracking-widest">Submit Tool</span>
               </Link>
 
-              <button
+              <Link
+                href="/settings"
+                onClick={() => setIsOpen(false)}
                 className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primary/10 text-foreground/80 hover:text-primary transition-all group"
               >
                 <Settings size={18} className="group-hover:scale-110 transition-transform" />
                 <span className="text-xs font-black uppercase tracking-widest">Settings</span>
-              </button>
+              </Link>
             </div>
 
             <div className="mt-2 pt-2 border-t border-primary/10">
