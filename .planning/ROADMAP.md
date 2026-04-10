@@ -98,15 +98,16 @@ Plans:
 Plans:
 - [ ] TBD (run /gsd-plan-phase 1 to break down)
 
-### Phase 1: now add a profile menu on the top right side and move the submiit menu to the that and add the user dashboard in it where he can acces hes dashboard
+### Phase 07: Profile Menu & User Dashboard Navigation
 
-**Goal:** [To be planned]
+**Goal:** now add a profile menu on the top right side and move the submiit menu to the that and add the user dashboard in it where he can acces hes dashboard
 **Requirements**: TBD
-**Depends on:** Phase 0
+**Depends on:** Phase 06
 **Plans:** 0 plans
 
 Plans:
-- [ ] TBD (run /gsd-plan-phase 1 to break down)
+- [ ] TBD (run /gsd-plan-phase 7 to break down)
+
 
 ---
 
