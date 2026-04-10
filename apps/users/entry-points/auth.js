@@ -59,7 +59,11 @@ router.post('/register', validate(registerSchema), asyncHandler(async (req, res)
         email: user.email,
         name: user.name,
         role: user.role,
-        isVerified: user.isVerified
+        isVerified: user.isVerified,
+        bio: user.bio,
+        socialLinks: user.socialLinks,
+        avatarId: user.avatarId,
+        themePreference: user.themePreference
       },
       tokens: {
         accessToken,
@@ -96,7 +100,11 @@ router.post('/login', validate(loginSchema), (req, res, next) => {
           email: user.email,
           name: user.name,
           role: user.role,
-          isVerified: user.isVerified
+          isVerified: user.isVerified,
+          bio: user.bio,
+          socialLinks: user.socialLinks,
+          avatarId: user.avatarId,
+          themePreference: user.themePreference
         },
         tokens: {
           accessToken,
@@ -247,7 +255,11 @@ router.get('/me', authenticateToken, requireAuth, asyncHandler(async (req, res) 
         role: user.role,
         isVerified: user.isVerified,
         registeredAt: user.registeredAt,
-        lastLogin: user.lastLogin
+        lastLogin: user.lastLogin,
+        bio: user.bio,
+        socialLinks: user.socialLinks,
+        avatarId: user.avatarId,
+        themePreference: user.themePreference
       }
     }
   });
@@ -268,7 +280,11 @@ router.put('/me', authenticateToken, requireAuth, validate(updateProfileSchema),
         email: user.email,
         name: user.name,
         role: user.role,
-        isVerified: user.isVerified
+        isVerified: user.isVerified,
+        bio: user.bio,
+        socialLinks: user.socialLinks,
+        avatarId: user.avatarId,
+        themePreference: user.themePreference
       }
     }
   });

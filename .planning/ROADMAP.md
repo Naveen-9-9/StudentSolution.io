@@ -109,6 +109,16 @@ Plans:
 - [ ] TBD (run /gsd-plan-phase 7 to break down)
 
 
+### Phase 1: Profile Settings & Theming: Implement settings page with theme switching and account management
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 1 to break down)
+
 ---
 
 ## Phase 06: Email Verification & User Onboarding

@@ -90,7 +90,7 @@ class UserService {
   // Update user profile
   async updateUser(userId, updates) {
     try {
-      const allowedUpdates = ['name'];
+      const allowedUpdates = ['name', 'bio', 'socialLinks', 'avatarId', 'themePreference'];
       const filteredUpdates = {};
 
       Object.keys(updates).forEach(key => {

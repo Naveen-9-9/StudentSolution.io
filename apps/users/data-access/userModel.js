@@ -45,7 +45,26 @@ const userSchema = new mongoose.Schema({
     default: false
   },
   verificationToken: String,
-  verificationExpires: Date
+  verificationExpires: Date,
+  bio: {
+    type: String,
+    maxlength: [200, 'Bio cannot exceed 200 characters'],
+    default: ""
+  },
+  socialLinks: {
+    github: { type: String, default: "" },
+    linkedin: { type: String, default: "" },
+    twitter: { type: String, default: "" }
+  },
+  avatarId: {
+    type: String,
+    default: "default-1"
+  },
+  themePreference: {
+    type: String,
+    enum: ['light', 'dark', 'system', 'violet', 'emerald', 'ruby', 'amber'],
+    default: 'system'
+  }
 }, {
   timestamps: true
 });
