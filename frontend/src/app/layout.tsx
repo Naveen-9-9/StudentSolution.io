@@ -76,7 +76,7 @@ export default function RootLayout({
                   <a href="https://github.com/nbunn" className="hover:text-primary transition-colors">GitHub</a>
                 </div>
                 <div className="text-xs font-bold text-muted-foreground/50">
-                  © {new Date().getFullYear()} StudentSolution.ai. All rights reserved.
+                  © 2026 StudentSolution.ai. All rights reserved.
                 </div>
               </div>
             </footer>
