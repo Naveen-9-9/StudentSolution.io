@@ -1,4 +1,4 @@
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://studentsolution-io.onrender.com/";
 
 let isRefreshing = false;
 let refreshSubscribers: ((token: string) => void)[] = [];
