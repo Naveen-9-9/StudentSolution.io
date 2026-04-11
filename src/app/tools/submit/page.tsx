@@ -4,13 +4,13 @@ import { useState } from "react";
 import { fetchApi } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Send, 
-  Sparkles, 
-  ArrowLeft, 
-  CheckCircle2, 
-  AlertCircle, 
-  Plus, 
+import {
+  Send,
+  Sparkles,
+  ArrowLeft,
+  CheckCircle2,
+  AlertCircle,
+  Plus,
   X,
   Type,
   Link as LinkIcon,
@@ -33,7 +33,7 @@ const CATEGORIES = [
 ];
 
 export default function SubmitToolPage() {
-  const { isAuthenticated, user } = useAuth(); 
+  const { isAuthenticated, user } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     url: "",
@@ -61,7 +61,7 @@ export default function SubmitToolPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isAuthenticated) return;
-    
+
     setIsSubmitting(true);
     setError("");
 
@@ -82,21 +82,21 @@ export default function SubmitToolPage() {
   };
 
   if (!isAuthenticated) {
-     return (
-       <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-6">
-         <motion.div 
-           initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-           className="glass p-12 rounded-[40px] max-w-lg border-primary/20 shadow-2xl"
-         >
-           <AlertCircle className="w-16 h-16 text-primary mx-auto mb-6" />
-           <h1 className="text-3xl font-black mb-4">Authentication Required</h1>
-           <p className="text-muted-foreground font-medium mb-8">You need to be part of the community to share new student tools.</p>
-           <Link href="/auth/login" className="inline-flex items-center justify-center px-8 py-4 bg-primary text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-primary/90 transition-all shadow-xl shadow-primary/20">
-             Sign In to Continue
-           </Link>
-         </motion.div>
-       </div>
-     );
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-6">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+          className="glass p-12 rounded-[40px] max-w-lg border-primary/20 shadow-2xl"
+        >
+          <AlertCircle className="w-16 h-16 text-primary mx-auto mb-6" />
+          <h1 className="text-3xl font-black mb-4">Authentication Required</h1>
+          <p className="text-muted-foreground font-medium mb-8">You need to be part of the community to share new student tools.</p>
+          <Link href="/auth/login" className="inline-flex items-center justify-center px-8 py-4 bg-primary text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-primary/90 transition-all shadow-xl shadow-primary/20">
+            Sign In to Continue
+          </Link>
+        </motion.div>
+      </div>
+    );
   }
 
   return (
@@ -107,7 +107,7 @@ export default function SubmitToolPage() {
 
       <AnimatePresence mode="wait">
         {!submitted ? (
-          <motion.div 
+          <motion.div
             key="form"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -126,18 +126,18 @@ export default function SubmitToolPage() {
 
             {user && !user.isVerified && (
               <div className="mb-10 p-6 md:p-8 glass rounded-[32px] border border-primary/40 bg-primary/5 flex max-md:flex-col items-center justify-between gap-6">
-                 <div className="flex items-center gap-6">
-                    <div className="w-16 h-16 rounded-[24px] bg-primary/20 flex items-center justify-center text-primary shrink-0">
-                       <ShieldAlert size={32} />
-                    </div>
-                    <div>
-                       <h3 className="text-xl font-black text-foreground mb-1 tracking-tight">Identity Verification Required</h3>
-                       <p className="text-sm font-medium text-muted-foreground">To maintain community trust, please verify your email before submitting tools.</p>
-                    </div>
-                 </div>
-                 <Link href="/auth/verify" className="px-8 py-4 bg-primary text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-primary/90 transition-all shadow-xl shadow-primary/40 whitespace-nowrap text-center max-md:w-full">
-                   Verify Email Now
-                 </Link>
+                <div className="flex items-center gap-6">
+                  <div className="w-16 h-16 rounded-[24px] bg-primary/20 flex items-center justify-center text-primary shrink-0">
+                    <ShieldAlert size={32} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black text-foreground mb-1 tracking-tight">Identity Verification Required</h3>
+                    <p className="text-sm font-medium text-muted-foreground">To maintain community trust, please verify your email before submitting tools.</p>
+                  </div>
+                </div>
+                <Link href="/auth/verify" className="px-8 py-4 bg-primary text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-primary/90 transition-all shadow-xl shadow-primary/40 whitespace-nowrap text-center max-md:w-full">
+                  Verify Email Now
+                </Link>
               </div>
             )}
 
@@ -182,11 +182,11 @@ export default function SubmitToolPage() {
                       <button
                         key={cat.id}
                         type="button"
-                        onClick={() => setFormData({...formData, category: cat.id})}
+                        onClick={() => setFormData({ ...formData, category: cat.id })}
                         className={cn(
                           "px-4 py-4 rounded-2xl border text-sm font-black transition-all flex flex-col items-center gap-2",
-                          formData.category === cat.id 
-                            ? "bg-primary text-white border-primary shadow-lg shadow-primary/20 scale-[1.02]" 
+                          formData.category === cat.id
+                            ? "bg-primary text-white border-primary shadow-lg shadow-primary/20 scale-[1.02]"
                             : "bg-white/5 border-border/40 text-muted-foreground hover:bg-white/10 hover:border-border"
                         )}
                       >
@@ -206,7 +206,7 @@ export default function SubmitToolPage() {
                     required
                     rows={4}
                     value={formData.description}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-border/40 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold text-lg resize-none"
                   />
                 </div>
@@ -236,7 +236,7 @@ export default function SubmitToolPage() {
                       }}
                       className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-border/40 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold"
                     />
-                    <button 
+                    <button
                       type="button"
                       onClick={handleAddTag}
                       aria-label="Add tag"
@@ -267,7 +267,7 @@ export default function SubmitToolPage() {
                   </button>
                   {!!user && !user.isVerified && (
                     <span className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-2">
-                       <ShieldAlert size={14} /> Verify email to enable submission
+                      <ShieldAlert size={14} /> Verify email to enable submission
                     </span>
                   )}
                 </div>
@@ -278,7 +278,7 @@ export default function SubmitToolPage() {
             </form>
           </motion.div>
         ) : (
-          <motion.div 
+          <motion.div
             key="success"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -295,8 +295,8 @@ export default function SubmitToolPage() {
               <Link href="/dashboard" className="px-8 py-4 glass rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-primary/5 hover:text-primary transition-all">
                 Track Status on Dashboard
               </Link>
-              <button 
-                onClick={() => { setSubmitted(false); setFormData({name: "", url: "", category: "productivity", description: "", tags: []}); }} 
+              <button
+                onClick={() => { setSubmitted(false); setFormData({ name: "", url: "", category: "productivity", description: "", tags: [] }); }}
                 className="px-8 py-4 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-primary/20"
               >
                 Submit Another Tool
