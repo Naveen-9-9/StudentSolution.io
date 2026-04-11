@@ -1,0 +1,212 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* Shadcn / Core variables */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
+
+  /* Sidebar */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Charts */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* System colors */
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  /* Radius */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* PREMIUM BRAND - StudentSolution.ai Cyber-Pulse Palette (OKLCH) */
+  --color-brand-violet: oklch(0.6 0.25 285);
+  --color-brand-indigo: oklch(0.5 0.23 275);
+  --color-brand-cyan: oklch(0.7 0.22 200);
+
+  /* CATEGORY TOKENS - Specific OKLCH hues for semantic grouping */
+  --color-cat-ai: oklch(0.65 0.22 280);
+  --color-cat-productivity: oklch(0.68 0.18 190);
+  --color-cat-education: oklch(0.72 0.16 210);
+  --color-cat-pdf: oklch(0.7 0.2 300);
+  --color-cat-api: oklch(0.75 0.15 180);
+  --color-cat-file-converter: oklch(0.7 0.18 250);
+  --color-cat-presentation: oklch(0.74 0.14 30);
+  
+  --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-sharp: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --drop-shadow-glass: drop-shadow(0 20px 13px rgba(0, 0, 0, 0.03)) drop-shadow(0 8px 5px rgba(0, 0, 0, 0.08));
+
+  /* Theme Accents */
+  --primary-violet: oklch(0.65 0.25 285);
+  --primary-emerald: oklch(0.65 0.2 160);
+  --primary-ruby: oklch(0.6 0.22 25);
+  --primary-amber: oklch(0.75 0.18 85);
+}
+
+:root {
+  /* TECHNICAL WHITE (Razor Sharp, Clear) */
+  --background: oklch(0.99 0.005 285); /* near pure white with hint of brand */
+  --foreground: oklch(0.15 0.02 285); 
+  --card: oklch(1 0 0 / 0.7);
+  --card-foreground: oklch(0.15 0.02 285);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.15 0.02 285);
+  --primary: var(--primary-violet);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.96 0.01 285);
+  --secondary-foreground: oklch(0.15 0.02 285);
+  --muted: oklch(0.94 0.01 285);
+  --muted-foreground: oklch(0.45 0.02 285);
+  --accent: var(--primary) / 0.1;
+  --accent-foreground: var(--primary);
+  --destructive: oklch(0.55 0.2 25);
+  --border: oklch(0.2 0.02 285 / 0.1);
+  --input: oklch(0.2 0.02 285 / 0.05);
+  --ring: var(--primary) / 0.3;
+  --radius: 0.75rem;
+
+  /* Theme-aware pulses (Technical Blue/Gray) */
+  --pulse-1: oklch(0.65 0.15 285 / 0.1);
+  --pulse-2: oklch(0.6 0.1 200 / 0.08);
+}
+
+.dark {
+  /* MOODY OBSIDIAN (Deep Atmospheric Obsidian) */
+  --background: oklch(0.1 0.02 280); /* deeper obsidian */
+  --foreground: oklch(0.98 0 0);
+  --card: oklch(0.15 0.02 280 / 0.5);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: oklch(0.12 0.02 280);
+  --popover-foreground: oklch(0.98 0 0);
+  --primary: var(--primary-violet);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.18 0.02 280);
+  --secondary-foreground: oklch(0.98 0 0);
+  --muted: oklch(0.18 0.02 280);
+  --muted-foreground: oklch(0.55 0.02 280);
+  --accent: var(--primary) / 0.2;
+  --accent-foreground: var(--primary);
+  --destructive: oklch(0.5 0.2 25);
+  --border: oklch(1 0 0 / 0.15);
+  --input: oklch(1 0 0 / 0.1);
+  --ring: var(--primary) / 0.4;
+
+  /* Theme-aware pulses (Neon Violet/Cyan) */
+  --pulse-1: oklch(0.65 0.25 285 / 0.2);
+  --pulse-2: oklch(0.7 0.2 200 / 0.15);
+}
+
+/* Base Pulse Themes Override */
+.theme-violet { --primary: var(--primary-violet); }
+.theme-emerald { --primary: var(--primary-emerald); }
+.theme-ruby { --primary: var(--primary-ruby); }
+.theme-amber { --primary: var(--primary-amber); }
+
+@layer base {
+  * {
+    @apply border-border;
+    -webkit-tap-highlight-color: transparent;
+  }
+  *:focus-visible {
+    @apply outline-2 outline-ring/50 outline-offset-2 transition-all;
+  }
+  body {
+    @apply bg-background text-foreground selection:bg-primary/20 selection:text-primary;
+    font-feature-settings: "cv11", "ss01";
+    scroll-behavior: smooth;
+  }
+  h1, h2, h3, h4, .font-display {
+    @apply font-display tracking-tight text-foreground;
+  }
+}
+
+/* PREMIUM UTILITIES (Tailwind 4.0 Style) */
+@utility glass {
+  @apply bg-card backdrop-blur-2xl border border-border/20 dark:border-white/10 shadow-premium;
+}
+
+@utility bg-cyber-pulse {
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    color-mix(in oklch, var(--primary), black 20%) 45%,
+    var(--color-brand-cyan) 100%
+  );
+}
+
+@utility text-cyber-gradient {
+  @apply bg-cyber-pulse bg-clip-text text-transparent;
+}
+
+@utility mesh-gradient {
+  background-image: 
+    radial-gradient(at 0% 0%, var(--primary) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, var(--color-brand-cyan) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, var(--primary) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, var(--color-brand-cyan) 0px, transparent 50%);
+  opacity: 0.12;
+  filter: blur(120px);
+}
+
+@utility pinpoint-glow {
+  @apply absolute w-1 h-1 rounded-full bg-white opacity-40 blur-[1px] shadow-[0_0_12px_2px_rgba(255,255,255,0.3)];
+}
+
+@utility cat-glow-soft {
+  @apply absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 blur-2xl -z-10;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite ease-out;
+}
