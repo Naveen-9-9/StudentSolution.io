@@ -47,7 +47,7 @@ const ACCENTS = [
 ];
 
 export default function SettingsPage() {
-  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading, updateProfile } = useAuth();
   const router = useRouter();
   const { theme, setTheme, systemTheme } = useTheme();
   
@@ -102,15 +102,12 @@ export default function SettingsPage() {
     setMessage(null);
 
     try {
-      const res = await fetchApi("/auth/me", {
-        method: "PUT",
-        body: JSON.stringify(profileData)
-      });
+      const success = await updateProfile(profileData);
 
-      if (res.success) {
+      if (success) {
         setMessage({ type: "success", text: "Identity updated successfully." });
       } else {
-        setMessage({ type: "error", text: res.message || "Failed to update profile." });
+        setMessage({ type: "error", text: "Failed to update profile." });
       }
     } catch (err) {
       setMessage({ type: "error", text: "Network interference detected." });
@@ -152,17 +149,39 @@ export default function SettingsPage() {
   };
 
   const handleThemeChange = (newTheme: string) => {
-    setTheme(newTheme);
-    const body = document.body;
-    // Remove all theme classes
-    body.classList.remove("theme-violet", "theme-emerald", "theme-ruby", "theme-amber");
-    
-    if (newTheme.includes("-")) {
-       const accent = newTheme.split("-")[1];
-       body.classList.add(`theme-${accent}`);
+    // Current theme format: "mode-accent" or just "mode"
+    const currentFull = profileData.themePreference;
+    const [currentMode, currentAccent] = currentFull.split("-");
+
+    let finalTheme = newTheme;
+
+    // If newTheme is just a mode (light, dark, system)
+    if (["light", "dark", "system"].includes(newTheme)) {
+      finalTheme = currentAccent ? `${newTheme}-${currentAccent}` : newTheme;
+    } 
+    // If newTheme is an accent change (from ACCENTS buttons)
+    else if (newTheme.includes("-")) {
+      // In settings, accent buttons might pass "mode-accent" or just "accent"
+      // Looking at the JSX: handleThemeChange(`${theme}-${accent.id}`)
+      // So newTheme is already mode-accent. We use it directly.
+      finalTheme = newTheme;
+    } else {
+      // Just an accent name
+      finalTheme = `${currentMode || "system"}-${newTheme}`;
     }
+
+    // Update form state
+    setProfileData(prev => ({ ...prev, themePreference: finalTheme }));
+
+    // Apply immediate UI feedback
+    const [mode, accent] = finalTheme.split("-");
+    if (mode) setTheme(mode);
     
-    setProfileData(prev => ({ ...prev, themePreference: newTheme }));
+    const body = document.body;
+    body.classList.remove("theme-violet", "theme-emerald", "theme-ruby", "theme-amber");
+    if (accent) {
+      body.classList.add(`theme-${accent}`);
+    }
   };
 
   if (authLoading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="animate-spin text-primary" /></div>;

@@ -55,7 +55,10 @@ export default function ToolCard({ tool, onUpvote, isUpvoting }: ToolCardProps) 
     >
       {/* Premium Tool Card Body */}
       <div 
-        onClick={() => window.open(tool.url, "_blank")}
+        onClick={() => {
+          window.open(tool.url, "_blank");
+          localStorage.setItem(`tool_launched_${tool._id}`, "true");
+        }}
         className={cn(
           "cursor-pointer overflow-hidden rounded-[32px] p-1 transition-all duration-500",
           "bg-white/70 dark:bg-black/40 backdrop-blur-2xl border border-border/20 dark:border-white/5 shadow-xl dark:shadow-2xl group-hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)]",

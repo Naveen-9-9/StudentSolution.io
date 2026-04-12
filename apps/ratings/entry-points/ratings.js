@@ -18,7 +18,8 @@ const addCommentSchema = Joi.object({
 });
 
 const updateCommentSchema = Joi.object({
-  text: Joi.string().min(1).max(1000).required()
+  text: Joi.string().min(1).max(1000).required(),
+  rating: Joi.number().integer().min(1).max(5).optional()
 });
 
 const commentQuerySchema = Joi.object({
@@ -79,10 +80,10 @@ router.post('/tools/:toolId', authenticateToken, requireAuth, validateParams(too
 // @access  Private (owner only)
 router.put('/:commentId', authenticateToken, requireAuth, validateParams(commentIdParamSchema), validate(updateCommentSchema), asyncHandler(async (req, res) => {
   const { commentId } = req.params;
-  const { text } = req.body;
+  const { text, rating } = req.body;
   const userId = req.user.userId;
 
-  const comment = await commentService.updateComment(commentId, userId, text);
+  const comment = await commentService.updateComment(commentId, userId, text, rating);
 
   res.json({
     success: true,

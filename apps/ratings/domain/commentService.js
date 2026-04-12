@@ -81,7 +81,7 @@ class CommentService {
   }
 
   // Update a comment
-  async updateComment(commentId, userId, newText) {
+  async updateComment(commentId, userId, newText, newRating = null) {
     try {
       const comment = await Comment.findById(commentId);
 
@@ -96,7 +96,21 @@ class CommentService {
 
       // Update the comment
       comment.text = newText.trim();
+      
+      let ratingChanged = false;
+      if (!comment.parentId && newRating !== null) {
+        if (comment.rating !== newRating) {
+          comment.rating = newRating;
+          ratingChanged = true;
+        }
+      }
+
       await comment.save();
+
+      // Recalculate tool stats if rating changed
+      if (ratingChanged) {
+        await this._updateToolStats(comment.toolId);
+      }
 
       await comment.populate('userId', 'name');
 
@@ -234,10 +248,15 @@ class CommentService {
   // Update tool's average rating and review count
   async _updateToolStats(toolId) {
     try {
+      const mongoose = require('mongoose');
+      const toolObjectId = toolId instanceof mongoose.Types.ObjectId 
+        ? toolId 
+        : new mongoose.Types.ObjectId(toolId);
+
       const stats = await Comment.aggregate([
         { 
           $match: { 
-            toolId: new require('mongoose').Types.ObjectId(toolId), 
+            toolId: toolObjectId, 
             isActive: true, 
             parentId: null, 
             rating: { $ne: null } 

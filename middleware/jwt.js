@@ -25,6 +25,25 @@ const authenticateToken = (req, res, next) => {
   }
 };
 
+// Optional authentication - won't throw error if token is missing/invalid
+const optionalAuthenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return next();
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    // If token is invalid or expired, we just treat them as guest
+    next();
+  }
+};
+
 // Generate access token
 const generateAccessToken = (userId) => {
   return jwt.sign(
@@ -45,6 +64,7 @@ const generateRefreshToken = (userId) => {
 
 module.exports = {
   authenticateToken,
+  optionalAuthenticateToken,
   generateAccessToken,
   generateRefreshToken
 };

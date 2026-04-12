@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useTheme } from "next-themes";
 import { fetchApi, API_URL } from "@/lib/api";
 
 type User = {
@@ -26,6 +27,7 @@ interface AuthContextType {
   loginWithGoogle: () => void;
   logout: () => void;
   setTokensAndUser: (accessToken: string, refreshToken: string, userData?: User) => void;
+  updateProfile: (data: Partial<User>) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -34,6 +36,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const hasInitialized = useRef(false);
+  const hasSyncedTheme = useRef(false);
+
+  const { setTheme } = useTheme();
+
+  useEffect(() => {
+    // Apply compound theme from user preference (e.g., "dark-ruby")
+    // Only sync from user object once per session/login to avoid "fighting" with manual selection
+    if (user?.themePreference && !hasSyncedTheme.current) {
+      const [mode, accent] = user.themePreference.split("-");
+      
+      // Set base mode (light/dark/system)
+      setTheme(mode || "system");
+
+      // Handle accent pulse class on body
+      const body = document.body;
+      body.classList.remove("theme-violet", "theme-emerald", "theme-ruby", "theme-amber");
+      if (accent) {
+        body.classList.add(`theme-${accent}`);
+      }
+      
+      hasSyncedTheme.current = true;
+    }
+  }, [user?.themePreference, setTheme, user?.id]);
 
   useEffect(() => {
     // Only check initial auth state once per session
@@ -86,6 +111,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     setUser(null);
+    hasSyncedTheme.current = false;
   }, []);
 
   const setTokensAndUser = useCallback(async (accessToken: string, refreshToken: string, userData?: User) => {
@@ -94,7 +120,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("refreshToken", refreshToken);
 
     if (userData) {
-      // Use provided user data directly
       setUser(userData);
       return;
     }
@@ -103,27 +128,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const res = await fetchApi("/auth/me");
       if (res.success && res.data && res.data.user) {
-        const fetchedUserData: User = {
-          id: res.data.user.id || res.data.user._id,
-          email: res.data.user.email,
-          name: res.data.user.name,
-          role: res.data.user.role,
-          isVerified: res.data.user.isVerified,
-          bio: res.data.user.bio,
-          socialLinks: res.data.user.socialLinks,
-          avatarId: res.data.user.avatarId,
-          themePreference: res.data.user.themePreference
-        };
-        setUser(fetchedUserData);
+        setUser(res.data.user);
       } else {
         throw new Error("Invalid user data in response");
       }
     } catch (error) {
       console.error("Failed to fetch user after setting tokens:", error);
-      // Clear tokens if API call fails - token might be invalid
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-      throw error; // Re-throw so caller can handle it
+      throw error;
+    }
+  }, []);
+
+  const updateProfile = useCallback(async (data: Partial<User>) => {
+    try {
+      const res = await fetchApi("/auth/me", {
+        method: "PUT",
+        body: data
+      });
+      if (res.success && res.data && res.data.user) {
+        setUser(res.data.user);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+      return false;
     }
   }, []);
 
@@ -134,7 +164,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loginWithGoogle,
     logout,
     setTokensAndUser,
-  }), [user, isLoading, loginWithGoogle, logout, setTokensAndUser]);
+    updateProfile
+  }), [user, isLoading, loginWithGoogle, logout, setTokensAndUser, updateProfile]);
 
   return (
     <AuthContext.Provider value={value}>

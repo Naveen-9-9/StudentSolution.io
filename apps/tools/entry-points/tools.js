@@ -1,6 +1,6 @@
 const express = require('express');
 const toolService = require('../domain/toolService');
-const { authenticateToken } = require('../../../middleware/jwt');
+const { authenticateToken, optionalAuthenticateToken } = require('../../../middleware/jwt');
 const { requireAuth } = require('../../../middleware/roles');
 const { ValidationError } = require('../../../libraries/errors');
 const { validate, validateQuery, validateParams, asyncHandler } = require('../../../middleware/validate');
@@ -42,7 +42,7 @@ const objectIdParamSchema = Joi.object({
 // @route   GET /tools
 // @desc    Get all tools with optional filtering and pagination
 // @access  Public
-router.get('/', validateQuery(querySchema), asyncHandler(async (req, res) => {
+router.get('/', optionalAuthenticateToken, validateQuery(querySchema), asyncHandler(async (req, res) => {
   const { category, search, sortBy, page, limit } = req.query;
   const filters = {};
   if (category) filters.category = category;
@@ -149,7 +149,7 @@ router.get('/categories/:category', asyncHandler(async (req, res) => {
 // @route   GET /tools/:id
 // @desc    Get tool by ID
 // @access  Public
-router.get('/:id', authenticateToken, validateParams(objectIdParamSchema), asyncHandler(async (req, res) => {
+router.get('/:id', optionalAuthenticateToken, validateParams(objectIdParamSchema), asyncHandler(async (req, res) => {
   const userId = req.user ? req.user.userId : null;
   const tool = await toolService.getToolById(req.params.id, userId);
 

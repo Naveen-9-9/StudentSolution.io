@@ -25,7 +25,15 @@ const loginSchema = Joi.object({
 });
 
 const updateProfileSchema = Joi.object({
-  name: Joi.string().min(1).max(50).optional()
+  name: Joi.string().min(1).max(50).optional(),
+  bio: Joi.string().max(200).allow('').optional(),
+  avatarId: Joi.string().optional(),
+  themePreference: Joi.string().max(50).optional(),
+  socialLinks: Joi.object({
+    github: Joi.string().uri().allow('').optional(),
+    linkedin: Joi.string().uri().allow('').optional(),
+    twitter: Joi.string().uri().allow('').optional()
+  }).optional()
 });
 
 const changePasswordSchema = Joi.object({

@@ -15,6 +15,12 @@ export interface Tool {
   createdAt: string;
   updatedAt: string;
   hasUpvoted?: boolean;
+  howItWorks?: string;
+  features?: string[];
+  pricing?: {
+    freeTrial: string;
+    premiumPlan: string;
+  };
 }
 
 export interface PaginationData {

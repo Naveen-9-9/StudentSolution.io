@@ -77,6 +77,27 @@ const toolSchema = new mongoose.Schema({
   reviewCount: {
     type: Number,
     default: 0
+  },
+  howItWorks: {
+    type: String,
+    trim: true,
+    maxlength: [2000, 'How it works cannot exceed 2000 characters']
+  },
+  features: [{
+    type: String,
+    trim: true
+  }],
+  pricing: {
+    freeTrial: {
+      type: String,
+      trim: true,
+      default: "Standard access available"
+    },
+    premiumPlan: {
+      type: String,
+      trim: true,
+      default: "Upgrade for full potential"
+    }
   }
 }, {
   timestamps: true,

@@ -62,7 +62,6 @@ const userSchema = new mongoose.Schema({
   },
   themePreference: {
     type: String,
-    enum: ['light', 'dark', 'system', 'violet', 'emerald', 'ruby', 'amber'],
     default: 'system'
   }
 }, {

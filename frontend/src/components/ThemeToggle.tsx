@@ -4,6 +4,7 @@ import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function ThemeToggle() {
   const { theme, setTheme, resolvedTheme } = useTheme();
@@ -14,10 +15,32 @@ export default function ThemeToggle() {
     setMounted(true);
   }, []);
 
+  const { user, updateProfile, isAuthenticated } = useAuth();
   const currentTheme = theme === "system" ? resolvedTheme : theme;
 
-  const toggleTheme = () => {
-    setTheme(currentTheme === "dark" ? "light" : "dark");
+  const toggleTheme = async () => {
+    // Current themePreference is "mode-accent"
+    const currentFull = user?.themePreference || (theme === "system" ? resolvedTheme : theme) || "system";
+    const [_, currentAccent] = currentFull.split("-");
+
+    const nextMode = (theme === "dark" || (theme === "system" && resolvedTheme === "dark")) ? "light" : "dark";
+    
+    // Combine with existing accent
+    const newTheme = currentAccent ? `${nextMode}-${currentAccent}` : nextMode;
+    
+    setTheme(nextMode);
+    
+    // Apply accent class to body immediately
+    const body = document.body;
+    body.classList.remove("theme-violet", "theme-emerald", "theme-ruby", "theme-amber");
+    if (currentAccent) {
+      body.classList.add(`theme-${currentAccent}`);
+    }
+
+    // Persist to DB if logged in
+    if (isAuthenticated) {
+      await updateProfile({ themePreference: newTheme });
+    }
   };
 
   if (!mounted) {
