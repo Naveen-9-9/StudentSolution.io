@@ -7,6 +7,7 @@ import GlobalNavbar from "@/components/Navbar";
 import BackgroundMesh from "@/components/BackgroundMesh";
 import { cn } from "@/lib/utils";
 import RouteTransition from "@/components/RouteTransition";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -83,6 +84,7 @@ export default function RootLayout({
             </div>
           </AuthProvider>
         </ThemeProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
