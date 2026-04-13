@@ -217,7 +217,7 @@ export default function RegisterPage() {
                 {!loading && (
                    <div className="absolute inset-x-0 bottom-0 h-1 bg-white/20 transform translate-y-2 group-hover:translate-y-0 transition-transform" />
                 )}
-                {loading ? <Loader2 className="w-5 h-5 animate-spin text-white" /> : "Deploy Identity"}
+                {loading ? <Loader2 className="w-5 h-5 animate-spin text-primary-foreground" /> : "Deploy Identity"}
                 {!loading && <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />}
               </motion.button>
             </form>

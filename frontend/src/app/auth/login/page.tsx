@@ -161,14 +161,14 @@ export default function LoginPage() {
                 type="submit"
                 disabled={loading}
                 className={cn(
-                  "w-full py-6 rounded-[28px] font-black text-xs uppercase tracking-[0.3em] text-white transition-all flex items-center justify-center gap-4 shadow-2xl relative overflow-hidden group",
+                  "w-full py-6 rounded-[28px] font-black text-xs uppercase tracking-[0.3em] text-primary-foreground transition-all flex items-center justify-center gap-4 shadow-2xl relative overflow-hidden group",
                   loading ? "bg-primary/50 cursor-not-allowed" : "bg-primary shadow-primary/30"
                 )}
               >
                 {!loading && (
                    <div className="absolute inset-x-0 bottom-0 h-1 bg-white/20 transform translate-y-2 group-hover:translate-y-0 transition-transform" />
                 )}
-                {loading ? <Loader2 className="w-5 h-5 animate-spin text-white" /> : "Initiate Session"}
+                {loading ? <Loader2 className="w-5 h-5 animate-spin text-primary-foreground" /> : "Initiate Session"}
                 {!loading && <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />}
               </motion.button>
             </form>
