@@ -71,14 +71,14 @@ export default function LoginPage() {
         className="w-full max-w-[480px] relative"
       >
         {/* Floating Brand Elements */}
-        <div className="absolute -top-12 -left-12 w-24 h-24 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl flex items-center justify-center text-primary shadow-2xl animate-float -rotate-12 hidden md:flex">
+        <div className="absolute -top-12 -left-12 w-24 h-24 glass rounded-3xl flex items-center justify-center text-primary shadow-2xl animate-float -rotate-12 hidden md:flex">
           <Sparkles size={40} className="opacity-80" />
         </div>
-        <div className="absolute -bottom-8 -right-8 w-20 h-20 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[24px] flex items-center justify-center text-primary/60 shadow-2xl animate-float-delayed rotate-12 hidden md:flex">
+        <div className="absolute -bottom-8 -right-8 w-20 h-20 glass rounded-[24px] flex items-center justify-center text-primary/60 shadow-2xl animate-float-delayed rotate-12 hidden md:flex">
            <ShieldCheck size={32} className="opacity-80" />
         </div>
 
-        <div className="bg-card/50 backdrop-blur-3xl p-8 md:p-12 rounded-[48px] border border-border/20 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.3)] dark:shadow-[0_32px_120px_-20px_rgba(0,0,0,0.8)] relative overflow-hidden">
+        <div className="glass p-8 md:p-12 rounded-[48px] relative overflow-hidden">
           {/* Internal Accent Glow */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-primary/30 rounded-full blur-[60px] opacity-50" />
           
@@ -88,7 +88,7 @@ export default function LoginPage() {
                 whileHover={{ rotate: 15, scale: 1.1 }}
                 className="w-20 h-20 rounded-[28px] bg-gradient-to-br from-primary to-primary-dark p-[1px] mb-8 shadow-2xl shadow-primary/40 group cursor-pointer"
               >
-                <div className="w-full h-full rounded-[27px] bg-white/5 flex items-center justify-center text-primary transition-colors group-hover:bg-primary/10">
+                <div className="w-full h-full rounded-[27px] bg-background/50 flex items-center justify-center text-primary transition-colors group-hover:bg-primary/10">
                   <LogIn size={36} strokeWidth={2.5} />
                 </div>
               </motion.div>

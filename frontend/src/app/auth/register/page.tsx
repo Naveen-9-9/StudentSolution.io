@@ -84,14 +84,14 @@ export default function RegisterPage() {
         className="w-full max-w-[540px] relative"
       >
         {/* Floating Brand Elements */}
-        <div className="absolute -top-10 -right-10 w-20 h-20 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[28px] flex items-center justify-center text-primary/60 shadow-2xl animate-float-delayed rotate-12 hidden lg:flex">
+        <div className="absolute -top-10 -right-10 w-20 h-20 glass rounded-[28px] flex items-center justify-center text-primary/60 shadow-2xl animate-float-delayed rotate-12 hidden lg:flex">
           <Zap size={32} className="opacity-80" />
         </div>
-        <div className="absolute -bottom-6 -left-10 w-24 h-24 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[32px] flex items-center justify-center text-primary/60 shadow-2xl animate-float -rotate-6 hidden lg:flex">
+        <div className="absolute -bottom-6 -left-10 w-24 h-24 glass rounded-[32px] flex items-center justify-center text-primary/60 shadow-2xl animate-float -rotate-6 hidden lg:flex">
            <Sparkles size={40} className="opacity-80" />
         </div>
 
-        <div className="bg-card/50 backdrop-blur-3xl p-8 md:p-14 rounded-[56px] border border-border/20 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.3)] dark:shadow-[0_32px_120px_-20px_rgba(0,0,0,0.8)] relative overflow-hidden">
+        <div className="glass p-8 md:p-14 rounded-[56px] relative overflow-hidden">
           {/* Internal Accent Glow */}
           <div className="absolute bottom-0 left-0 w-40 h-40 bg-secondary/20 rounded-full blur-[80px] opacity-30" />
           
@@ -101,7 +101,7 @@ export default function RegisterPage() {
                 whileHover={{ scale: 1.1, rotate: -10 }}
                 className="w-20 h-20 rounded-[28px] bg-gradient-to-br from-secondary to-secondary-dark p-[1px] mb-8 shadow-2xl shadow-secondary/30 group cursor-pointer"
               >
-                <div className="w-full h-full rounded-[27px] bg-white/5 flex items-center justify-center text-secondary transition-colors group-hover:bg-secondary/10 border-white/5">
+                <div className="w-full h-full rounded-[27px] bg-background/50 flex items-center justify-center text-secondary transition-colors group-hover:bg-secondary/10 border-border/10">
                   <UserPlus size={36} strokeWidth={2.5} />
                 </div>
               </motion.div>
@@ -132,7 +132,7 @@ export default function RegisterPage() {
               <div className="space-y-3">
                 <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground/50 ml-4">Full Legal Name</label>
                 <div className="relative group">
-                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground/30 group-focus-within:text-secondary transition-all">
+                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground/30 group-focus-within:text-primary transition-all">
                     <User size={18} />
                   </div>
                   <input
@@ -142,7 +142,7 @@ export default function RegisterPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     disabled={loading}
-                    className="w-full pl-14 pr-6 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-secondary/30 focus:ring-4 focus:ring-secondary/5 outline-none transition-all font-bold text-lg text-foreground"
+                    className="w-full pl-14 pr-6 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-lg text-foreground"
                   />
                 </div>
               </div>
@@ -150,7 +150,7 @@ export default function RegisterPage() {
               <div className="space-y-3">
                 <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground/50 ml-4">Academic Email</label>
                 <div className="relative group">
-                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground/30 group-focus-within:text-secondary transition-all">
+                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground/30 group-focus-within:text-primary transition-all">
                     <Mail size={18} />
                   </div>
                   <input
@@ -160,7 +160,7 @@ export default function RegisterPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
-                    className="w-full pl-14 pr-6 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-secondary/30 focus:ring-4 focus:ring-secondary/5 outline-none transition-all font-bold text-lg text-foreground"
+                    className="w-full pl-14 pr-6 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-lg text-foreground"
                   />
                 </div>
               </div>
