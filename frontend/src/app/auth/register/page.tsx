@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { fetchApi, API_URL } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { UserPlus, Mail, Lock, User, ArrowRight, Chrome, Sparkles, Loader2, Zap } from "lucide-react";
+import { UserPlus, Mail, Lock, User, ArrowRight, Chrome, Sparkles, Loader2, Zap, Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function RegisterPage() {
@@ -14,6 +14,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { setTokensAndUser } = useAuth();
@@ -93,15 +94,15 @@ export default function RegisterPage() {
 
         <div className="glass p-8 md:p-14 rounded-[56px] relative overflow-hidden">
           {/* Internal Accent Glow */}
-          <div className="absolute bottom-0 left-0 w-40 h-40 bg-secondary/20 rounded-full blur-[80px] opacity-30" />
+          <div className="absolute bottom-0 left-0 w-40 h-40 bg-primary/20 rounded-full blur-[80px] opacity-30" />
           
           <div className="relative z-10">
             <div className="flex flex-col items-center text-center mb-12">
               <motion.div 
                 whileHover={{ scale: 1.1, rotate: -10 }}
-                className="w-20 h-20 rounded-[28px] bg-gradient-to-br from-secondary to-secondary-dark p-[1px] mb-8 shadow-2xl shadow-secondary/30 group cursor-pointer"
+                className="w-20 h-20 rounded-[28px] bg-gradient-to-br from-primary to-primary-dark p-[1px] mb-8 shadow-2xl shadow-primary/30 group cursor-pointer"
               >
-                <div className="w-full h-full rounded-[27px] bg-background/50 flex items-center justify-center text-secondary transition-colors group-hover:bg-secondary/10 border-border/10">
+                <div className="w-full h-full rounded-[27px] bg-background/50 flex items-center justify-center text-primary transition-colors group-hover:bg-primary/10 border-border/10">
                   <UserPlus size={36} strokeWidth={2.5} />
                 </div>
               </motion.div>
@@ -169,18 +170,25 @@ export default function RegisterPage() {
                 <div className="space-y-3">
                   <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground/50 ml-4">Passcode</label>
                   <div className="relative group">
-                    <div className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground/30 group-focus-within:text-secondary transition-all">
+                    <div className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground/30 group-focus-within:text-primary transition-all">
                       <Lock size={18} />
                     </div>
                     <input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       placeholder="••••••"
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       disabled={loading}
-                      className="w-full pl-14 pr-6 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-lg text-foreground"
+                      className="w-full pl-14 pr-14 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-lg text-foreground"
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-6 top-1/2 -translate-y-1/2 text-muted-foreground/40 hover:text-primary transition-colors focus:outline-none"
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
                   </div>
                   <p className="text-[9px] font-bold text-muted-foreground/40 ml-4 uppercase tracking-widest">Use a unique, strong passcode</p>
                 </div>
@@ -188,17 +196,17 @@ export default function RegisterPage() {
                 <div className="space-y-3">
                   <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground/50 ml-4">Verification</label>
                   <div className="relative group">
-                    <div className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground/30 group-focus-within:text-secondary transition-all">
+                    <div className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground/30 group-focus-within:text-primary transition-all">
                       <Lock size={18} />
                     </div>
                     <input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       placeholder="••••••"
                       required
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       disabled={loading}
-                      className="w-full pl-14 pr-6 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-lg text-foreground"
+                      className="w-full pl-14 pr-14 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-lg text-foreground"
                     />
                   </div>
                 </div>
