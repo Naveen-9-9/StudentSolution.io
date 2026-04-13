@@ -58,7 +58,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 py-12 md:py-20 bg-background text-white">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 py-12 md:py-20 bg-background text-foreground">
       {/* Background Orbs */}
       <motion.div 
         animate={{ 
@@ -91,7 +91,7 @@ export default function RegisterPage() {
            <Sparkles size={40} className="opacity-80" />
         </div>
 
-        <div className="bg-white/5 backdrop-blur-3xl p-8 md:p-14 rounded-[56px] border border-white/10 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.8)] relative overflow-hidden">
+        <div className="bg-card/50 backdrop-blur-3xl p-8 md:p-14 rounded-[56px] border border-border/20 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.3)] dark:shadow-[0_32px_120px_-20px_rgba(0,0,0,0.8)] relative overflow-hidden">
           {/* Internal Accent Glow */}
           <div className="absolute bottom-0 left-0 w-40 h-40 bg-secondary/20 rounded-full blur-[80px] opacity-30" />
           
@@ -142,7 +142,7 @@ export default function RegisterPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     disabled={loading}
-                    className="w-full pl-14 pr-6 py-5 rounded-3xl bg-white/5 border border-white/5 focus:bg-white/10 focus:border-secondary/30 focus:ring-4 focus:ring-secondary/5 outline-none transition-all font-bold text-lg"
+                    className="w-full pl-14 pr-6 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-secondary/30 focus:ring-4 focus:ring-secondary/5 outline-none transition-all font-bold text-lg text-foreground"
                   />
                 </div>
               </div>
@@ -160,7 +160,7 @@ export default function RegisterPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
-                    className="w-full pl-14 pr-6 py-5 rounded-3xl bg-white/5 border border-white/5 focus:bg-white/10 focus:border-secondary/30 focus:ring-4 focus:ring-secondary/5 outline-none transition-all font-bold text-lg"
+                    className="w-full pl-14 pr-6 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-secondary/30 focus:ring-4 focus:ring-secondary/5 outline-none transition-all font-bold text-lg text-foreground"
                   />
                 </div>
               </div>
@@ -179,7 +179,7 @@ export default function RegisterPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       disabled={loading}
-                      className="w-full pl-14 pr-6 py-5 rounded-3xl bg-white/5 border border-white/5 focus:bg-white/10 focus:border-secondary/30 focus:ring-4 focus:ring-secondary/5 outline-none transition-all font-bold text-lg"
+                      className="w-full pl-14 pr-6 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-lg text-foreground"
                     />
                   </div>
                   <p className="text-[9px] font-bold text-muted-foreground/40 ml-4 uppercase tracking-widest">Use a unique, strong passcode</p>
@@ -198,7 +198,7 @@ export default function RegisterPage() {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       disabled={loading}
-                      className="w-full pl-14 pr-6 py-5 rounded-3xl bg-white/5 border border-white/5 focus:bg-white/10 focus:border-secondary/30 focus:ring-4 focus:ring-secondary/5 outline-none transition-all font-bold text-lg"
+                      className="w-full pl-14 pr-6 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-lg text-foreground"
                     />
                   </div>
                 </div>
@@ -210,8 +210,8 @@ export default function RegisterPage() {
                 type="submit"
                 disabled={loading}
                 className={cn(
-                  "w-full py-6 mt-4 rounded-[28px] font-black text-xs uppercase tracking-[0.3em] text-white transition-all flex items-center justify-center gap-4 shadow-2xl relative overflow-hidden group",
-                  loading ? "bg-secondary/50 cursor-not-allowed" : "bg-secondary shadow-secondary/30"
+                  "w-full py-6 mt-4 rounded-[28px] font-black text-xs uppercase tracking-[0.3em] text-primary-foreground transition-all flex items-center justify-center gap-4 shadow-2xl relative overflow-hidden group",
+                  loading ? "bg-primary/50 cursor-not-allowed" : "bg-primary shadow-primary/30"
                 )}
               >
                 {!loading && (
@@ -227,7 +227,7 @@ export default function RegisterPage() {
                 <div className="w-full border-t border-white/10" />
               </div>
               <div className="relative flex justify-center text-[10px] font-black uppercase tracking-[0.4em] bg-transparent">
-                <span className="px-6 text-white/30 bg-background rounded-full">One-Tap Auth</span>
+                <span className="px-6 text-muted-foreground/40 bg-background rounded-full">One-Tap Auth</span>
               </div>
             </div>
 
@@ -244,7 +244,7 @@ export default function RegisterPage() {
 
             <div className="mt-12 text-center">
               <span className="text-sm font-bold text-muted-foreground/60">Already established?</span>
-              <Link href="/auth/login" className="ml-3 text-sm font-black text-secondary hover:text-secondary-dark transition-colors border-b-2 border-secondary/20 hover:border-secondary pb-1">
+              <Link href="/auth/login" className="ml-3 text-sm font-black text-primary hover:text-primary-dark transition-colors border-b-2 border-primary/20 hover:border-primary pb-1">
                 Access Account
               </Link>
             </div>

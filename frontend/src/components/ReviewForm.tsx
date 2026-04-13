@@ -119,8 +119,8 @@ export default function ReviewForm({ toolId, onSuccess, initialData, onCancel }:
                   className={cn(
                     "transition-all duration-200",
                     (hoverRating || rating) >= star
-                      ? "fill-yellow-400 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.4)]"
-                      : "text-white/20"
+                      ? "fill-yellow-400 text-yellow-500 drop-shadow-[0_0_8px_rgba(250,204,21,0.4)]"
+                      : "text-muted-foreground/30"
                   )}
                 />
               </motion.button>

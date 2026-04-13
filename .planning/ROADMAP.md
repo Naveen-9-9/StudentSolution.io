@@ -139,3 +139,22 @@ Plans:
 2. Users cannot access restricted features (e.g., Tool Submission) until verified.
 3. Verification link correctly activates the account in the database.
 4. Resend verification button works for expired/lost links.
+---
+
+## Phase 08: Critical UI Fixes & Light Mode Polish
+
+**Goal:** Resolve immediate visibility blockers in the Light theme and ensure the home page accurately reflects all tool categories.
+
+**Requirements:** UI-FIX-01, THEME-POLISH-01, THEME-POLISH-02
+
+**Deliverables:**
+- Fix "AI" category visibility on Home Page (ranking/rendering logic).
+- Audit and fix invisible "Stars" in Light Mode (ReviewForm & ToolCard).
+- Fix invisible Content/Text in Login & Register pages for Light Mode.
+- Global audit of `text-white` hardcoding vs theme-aware `text-foreground`.
+
+**Success Criteria:**
+1. "AI" toolkit is visible on the home page category list.
+2. Rating stars are clearly visible on white backgrounds.
+3. Login and Register forms are fully legible in the "Technical White" theme.
+4. No hardcoded white text remains in primary auth pathways.

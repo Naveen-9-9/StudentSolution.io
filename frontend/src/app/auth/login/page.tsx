@@ -45,7 +45,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden px-6 py-12 bg-background text-white">
+    <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden px-6 py-12 bg-background text-foreground">
       {/* Background Orbs */}
       <motion.div 
         animate={{ 
@@ -78,7 +78,7 @@ export default function LoginPage() {
            <ShieldCheck size={32} className="opacity-80" />
         </div>
 
-        <div className="bg-white/5 backdrop-blur-3xl p-8 md:p-12 rounded-[48px] border border-white/10 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.8)] relative overflow-hidden">
+        <div className="bg-card/50 backdrop-blur-3xl p-8 md:p-12 rounded-[48px] border border-border/20 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.3)] dark:shadow-[0_32px_120px_-20px_rgba(0,0,0,0.8)] relative overflow-hidden">
           {/* Internal Accent Glow */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-primary/30 rounded-full blur-[60px] opacity-50" />
           
@@ -129,7 +129,7 @@ export default function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
-                    className="w-full pl-14 pr-6 py-5 rounded-3xl bg-white/5 border border-white/5 focus:bg-white/10 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-lg placeholder:font-medium placeholder:text-muted-foreground/30"
+                    className="w-full pl-14 pr-6 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-lg placeholder:font-medium placeholder:text-muted-foreground/30 text-foreground"
                   />
                 </div>
               </div>
@@ -150,7 +150,7 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={loading}
-                    className="w-full pl-14 pr-6 py-5 rounded-3xl bg-white/5 border border-white/5 focus:bg-white/10 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-lg placeholder:font-medium placeholder:text-muted-foreground/30"
+                    className="w-full pl-14 pr-6 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-lg placeholder:font-medium placeholder:text-muted-foreground/30 text-foreground"
                   />
                 </div>
               </div>
@@ -178,7 +178,7 @@ export default function LoginPage() {
                 <div className="w-full border-t border-white/10" />
               </div>
               <div className="relative flex justify-center text-[10px] font-black uppercase tracking-[0.4em] bg-transparent">
-                <span className="px-6 text-white/30 bg-background rounded-full">Secure SSO</span>
+                <span className="px-6 text-muted-foreground/40 bg-background rounded-full">Secure SSO</span>
               </div>
             </div>
 

@@ -42,6 +42,7 @@ export default function ToolCard({ tool, onUpvote, isUpvoting }: ToolCardProps) 
     "productivity": { accent: "cat-productivity", text: "text-cat-productivity", bgAlpha: "bg-cat-productivity/10", border: "border-cat-productivity/30", glow: "shadow-[0_20px_40px_-15px_oklch(0.68_0.18_190/0.15)]", badgeBg: "bg-cat-productivity/10" },
     "education": { accent: "cat-education", text: "text-cat-education", bgAlpha: "bg-cat-education/10", border: "border-cat-education/30", glow: "shadow-[0_20px_40px_-15px_oklch(0.72_0.16_210/0.15)]", badgeBg: "bg-cat-education/10" },
     "ai": { accent: "cat-ai", text: "text-cat-ai", bgAlpha: "bg-cat-ai/10", border: "border-cat-ai/30", glow: "shadow-[0_20px_40px_-15px_oklch(0.65_0.22_280/0.15)]", badgeBg: "bg-cat-ai/10" },
+    "artificial-intelligence": { accent: "cat-ai", text: "text-cat-ai", bgAlpha: "bg-cat-ai/10", border: "border-cat-ai/30", glow: "shadow-[0_20px_40px_-15px_oklch(0.65_0.22_280/0.15)]", badgeBg: "bg-cat-ai/10" },
     "other": { accent: "primary", text: "text-primary", bgAlpha: "bg-primary/10", border: "border-primary/30", glow: "shadow-[0_20px_40px_-15px_var(--primary)/0.15]", badgeBg: "bg-primary/10" }
   };
 
@@ -77,8 +78,8 @@ export default function ToolCard({ tool, onUpvote, isUpvoting }: ToolCardProps) 
             )}>
               <TagIcon size={10} /> {tool.category.replace("-", " ")}
             </span>
-            <div className="flex items-center gap-1.5 bg-white/50 dark:bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-xl border border-border/20 dark:border-white/10 shadow-sm transition-all group-hover:scale-110 group-hover:border-yellow-400/50">
-              <Star size={12} className="fill-yellow-400 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" />
+            <div className="flex items-center gap-1.5 bg-background/50 backdrop-blur-md px-3 py-1.5 rounded-xl border border-border/20 shadow-sm transition-all group-hover:scale-110 group-hover:border-yellow-500/50">
+              <Star size={12} className="fill-yellow-500 dark:fill-yellow-400 text-yellow-500 dark:text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.3)]" />
               <span className="text-xs font-black text-foreground">
                 {tool.averageRating?.toFixed(1) || "5.0"}
               </span>

@@ -290,7 +290,7 @@ export default function HomePage() {
               <div key={i} className="h-28 rounded-[32px] border animate-pulse bg-white/5" />
             ))
           ) : Array.isArray(categories) ? (
-            categories.slice(0, 8).map((cat, idx) => {
+            categories.slice(0, 12).map((cat, idx) => {
               const categoryStyles: Record<string, { bg: string, border: string, text: string, iconBg: string, glow: string }> = {
                 "pdf-converter": { bg: "hover:bg-cat-pdf/10", border: "hover:border-cat-pdf/40", text: "group-hover:text-cat-pdf", iconBg: "group-hover:bg-cat-pdf", glow: "bg-cat-pdf" },
                 "ppt-maker": { bg: "hover:bg-cat-presentation/10", border: "hover:border-cat-presentation/40", text: "group-hover:text-cat-presentation", iconBg: "group-hover:bg-cat-presentation", glow: "bg-cat-presentation" },
@@ -299,6 +299,7 @@ export default function HomePage() {
                 "productivity": { bg: "hover:bg-cat-productivity/10", border: "hover:border-cat-productivity/40", text: "group-hover:text-cat-productivity", iconBg: "group-hover:bg-cat-productivity", glow: "bg-cat-productivity" },
                 "education": { bg: "hover:bg-cat-education/10", border: "hover:border-cat-education/40", text: "group-hover:text-cat-education", iconBg: "group-hover:bg-cat-education", glow: "bg-cat-education" },
                 "ai": { bg: "hover:bg-cat-ai/10", border: "hover:border-cat-ai/40", text: "group-hover:text-cat-ai", iconBg: "group-hover:bg-cat-ai", glow: "bg-cat-ai" },
+                "artificial-intelligence": { bg: "hover:bg-cat-ai/10", border: "hover:border-cat-ai/40", text: "group-hover:text-cat-ai", iconBg: "group-hover:bg-cat-ai", glow: "bg-cat-ai" },
               };
               
               const styles = categoryStyles[cat._id.toLowerCase()] || { bg: "hover:bg-primary/10", border: "hover:border-primary/40", text: "group-hover:text-primary", iconBg: "group-hover:bg-primary", glow: "bg-primary" };
@@ -369,16 +370,16 @@ export default function HomePage() {
                   <User className="w-16 h-16" />
                 </div>
                 <div className="max-w-xl space-y-4">
-                  <h3 className="text-5xl font-black text-white tracking-tighter leading-none">Member Access Only</h3>
-                  <p className="text-xl text-blue-100/60 font-medium leading-relaxed">
+                  <h3 className="text-5xl font-black text-foreground tracking-tighter leading-none">Member Access Only</h3>
+                  <p className="text-xl text-muted-foreground/80 font-medium leading-relaxed">
                     Unlock the full potential of our community. Join thousand of students discovering 50+ specialized tools, reviews, and social rewards.
                   </p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-6 w-full max-w-lg justify-center">
-                  <Link href="/auth/login" className="flex-1 bg-primary text-white font-black px-10 py-6 rounded-[28px] uppercase tracking-widest hover:bg-primary/90 transition-all shadow-2xl shadow-primary/40 block text-sm">
+                  <Link href="/auth/login" className="flex-1 bg-primary text-primary-foreground font-black px-10 py-6 rounded-[28px] uppercase tracking-widest hover:opacity-90 transition-all shadow-2xl shadow-primary/40 block text-sm">
                     Authenticate
                   </Link>
-                  <Link href="/auth/register" className="flex-1 glass text-white font-black px-10 py-6 rounded-[28px] uppercase tracking-widest hover:bg-white/10 transition-all block text-sm border-white/20">
+                  <Link href="/auth/register" className="flex-1 glass text-foreground font-black px-10 py-6 rounded-[28px] uppercase tracking-widest hover:bg-secondary/20 transition-all block text-sm border-border/20">
                     Create Identity
                   </Link>
                 </div>
