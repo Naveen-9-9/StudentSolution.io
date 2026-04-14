@@ -4,7 +4,12 @@ const { AuthError } = require('../libraries/errors');
 // Middleware to authenticate JWT tokens
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+  let token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+
+  // Fallback to query parameter for EventSource/SSE compatibility
+  if (!token && req.query.token) {
+    token = req.query.token;
+  }
 
   if (!token) {
     throw new AuthError('Access token required');

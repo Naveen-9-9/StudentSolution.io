@@ -35,7 +35,9 @@ export default function NotificationBell() {
     loadNotifications();
 
     // Setup SSE for real-time updates
-    const streamUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/notifications/stream`;
+    const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    const streamUrl = `${baseUrl}/notifications/stream${token ? `?token=${token}` : ''}`;
     const eventSource = new EventSource(streamUrl, { withCredentials: true });
 
     eventSource.onmessage = (event) => {
