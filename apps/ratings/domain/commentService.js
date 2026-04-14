@@ -216,19 +216,24 @@ class CommentService {
 
         // Dispatch notification to comment author
         try {
+          logger.debug(`Notification check: author=${comment.userId}, upvoter=${userId}`);
           if (comment.userId && comment.userId.toString() !== userId.toString()) {
             const User = require('mongoose').model('User');
             const upvoter = await User.findById(userId).select('name');
             const upvoterName = upvoter ? upvoter.name : 'A community member';
             const toolName = comment.toolId ? comment.toolId.name : 'a tool';
             
+            logger.debug(`Sending upvote notification for tool: ${toolName}`);
             const notificationService = require('../../notifications/domain/notificationService');
             notificationService.createNotification(
               comment.userId,
-              'tool_upvoted', // Using existing icon type or custom
+              'tool_upvoted', 
               `${upvoterName} found your comment on "${toolName}" helpful`,
               comment.toolId ? comment.toolId._id : null
-            ).catch(e => logger.error('Failed to send comment upvote notification:', e));
+            ).then(() => logger.info('Notification sent successfully'))
+             .catch(e => logger.error('Failed to send comment upvote notification:', e));
+          } else {
+            logger.debug('Skipping notification: Self-upvote or missing author');
           }
         } catch (notifErr) {
           logger.error('Error sending comment upvote notification:', notifErr);

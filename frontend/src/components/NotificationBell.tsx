@@ -34,8 +34,36 @@ export default function NotificationBell() {
 
     loadNotifications();
 
-    const interval = setInterval(loadNotifications, 30000); // Poll every 30s
-    return () => clearInterval(interval);
+    // Setup SSE for real-time updates
+    const streamUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/notifications/stream`;
+    const eventSource = new EventSource(streamUrl, { withCredentials: true });
+
+    eventSource.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === 'connected') return;
+        
+        // Add new notification and update count
+        setNotifications(prev => [data, ...prev].slice(0, 15));
+        setUnreadCount(prev => prev + 1);
+        
+        // Play subtle sound or trigger toast (optional)
+        console.log("New notification received:", data);
+      } catch (err) {
+        console.error("SSE parse error", err);
+      }
+    };
+
+    eventSource.onerror = (err) => {
+      console.error("SSE connection error", err);
+      eventSource.close();
+    };
+
+    const interval = setInterval(loadNotifications, 60000); // Fallback poll every 60s
+    return () => {
+      clearInterval(interval);
+      eventSource.close();
+    };
   }, [isAuthenticated]);
 
   useEffect(() => {

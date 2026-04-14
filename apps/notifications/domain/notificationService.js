@@ -15,6 +15,9 @@ class NotificationService {
         relatedTool: relatedToolId
       });
 
+      // Populate for SSE push and response
+      await notification.populate('relatedTool', 'name category');
+
       // Push to connected SSE clients
       this.pushToUser(userId.toString(), notification);
       
