@@ -68,3 +68,12 @@ export interface UserProfile {
   totalUpvotes: number;
   impactScore: number;
 }
+
+export interface Notification {
+  _id: string;
+  type: 'new_review' | 'tool_approved' | 'tool_upvoted';
+  message: string;
+  relatedTool?: { _id: string; name: string; category: string };
+  read: boolean;
+  createdAt: string;
+}

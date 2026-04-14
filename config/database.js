@@ -61,7 +61,16 @@ const connectDB = async () => {
     if (process.env.NODE_ENV === 'production') {
       process.exit(1);
     } else {
-      console.log('[MongoDB] Continuing in development mode (limited functionality)...');
+      console.log('[MongoDB] Attempting fallback to local MongoDB...');
+      try {
+        const localUri = 'mongodb://127.0.0.1:27017/studentsolution_local';
+        const conn = await mongoose.connect(localUri, options);
+        console.log(`[MongoDB] ✅ Connected to Local Fallback: ${conn.connection.host}`);
+        return conn;
+      } catch (localErr) {
+        console.error('[MongoDB] ❌ Local fallback also failed:', localErr.message);
+        console.log('[MongoDB] Continuing in development mode (limited functionality)...');
+      }
     }
   }
 };

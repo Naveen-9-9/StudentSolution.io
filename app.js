@@ -21,6 +21,7 @@ const ratingRoutes = require('./apps/ratings/entry-points/ratings');
 const searchRoutes = require('./apps/search/entry-points/search');
 const userRoutes = require('./apps/users/entry-points/users');
 const collectionRoutes = require('./apps/collections/entry-points/collections');
+const notificationRoutes = require('./apps/notifications/entry-points/notifications');
 
 // Database connection is handled by server.js or tests
 
@@ -132,6 +133,7 @@ app.use('/comments', ratingRoutes);
 app.use('/search', searchRoutes);
 app.use('/users', userRoutes);
 app.use('/collections', collectionRoutes);
+app.use('/notifications', notificationRoutes);
 
 app.get('/', (req, res) => {
   res.json({

@@ -254,6 +254,16 @@ class ToolService {
         tool.upvoteCount = tool.upvotes.length;
         await tool.save();
 
+        if (tool.submittedBy && tool.submittedBy.toString() !== userId.toString()) {
+          const notificationService = require('../../notifications/domain/notificationService');
+          notificationService.createNotification(
+            tool.submittedBy,
+            'tool_upvoted',
+            `Someone upvoted your tool "${tool.name}"!`,
+            tool._id
+          ).catch(e => logger.error('Failed to send tool_upvoted notification:', e));
+        }
+
         logger.info(`Upvote added to tool: ${tool.name}`);
         return { upvoted: true, upvoteCount: tool.upvoteCount };
       }
@@ -340,8 +350,19 @@ class ToolService {
       const tool = await Tool.findById(toolId);
       if (!tool) throw new NotFoundError('Tool not found');
 
+      const oldStatus = tool.status;
       tool.status = status;
       await tool.save();
+
+      if (oldStatus !== 'approved' && status === 'approved' && tool.submittedBy) {
+        const notificationService = require('../../notifications/domain/notificationService');
+        notificationService.createNotification(
+          tool.submittedBy,
+          'tool_approved',
+          `Your tool "${tool.name}" has been approved and is now live!`,
+          tool._id
+        ).catch(e => logger.error('Failed to send tool_approved notification:', e));
+      }
 
       logger.info(`Tool status updated: ${tool.name} -> ${status}`);
       return tool;

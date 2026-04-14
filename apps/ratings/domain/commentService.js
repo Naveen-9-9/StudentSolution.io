@@ -49,6 +49,22 @@ class CommentService {
       // Populate user data for response
       await comment.populate('userId', 'name');
 
+      // Send notification to tool submitter
+      try {
+        const tool = await Tool.findById(toolId).select('submittedBy name');
+        if (tool && tool.submittedBy && tool.submittedBy.toString() !== userId.toString()) {
+          const notificationService = require('../../notifications/domain/notificationService');
+          notificationService.createNotification(
+            tool.submittedBy,
+            'new_review',
+            `User ${comment.userId.name} ${parentId ? 'replied to a comment on' : 'left a review on'} your tool "${tool.name}"`,
+            toolId
+          ).catch(e => logger.error('Failed to send new_review notification:', e));
+        }
+      } catch (err) {
+        logger.error('Failed to process review notification:', err);
+      }
+
       logger.info(`Comment added to tool ${toolId} by user ${userId}`);
       return comment;
     } catch (error) {
