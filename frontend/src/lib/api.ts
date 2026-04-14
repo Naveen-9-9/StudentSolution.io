@@ -52,9 +52,16 @@ export async function fetchApi(endpoint: string, options: any = {}): Promise<any
   }
 
   let body = options.body;
-  if (body && typeof body === "object" && !(body instanceof FormData) && !(body instanceof Blob)) {
-    headers.set("Content-Type", "application/json");
-    body = JSON.stringify(body);
+  if (body) {
+    if (typeof body === "object" && !(body instanceof FormData) && !(body instanceof Blob)) {
+      headers.set("Content-Type", "application/json");
+      body = JSON.stringify(body);
+    } else if (typeof body === "string") {
+      // If it's a string, we assume it's JSON if it looks like it and no content-type is set
+      if (!headers.has("Content-Type") && (body.startsWith("{") || body.startsWith("["))) {
+        headers.set("Content-Type", "application/json");
+      }
+    }
   }
 
   const response = await fetch(`${API_URL}${endpoint}`, {

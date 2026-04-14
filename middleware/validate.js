@@ -6,11 +6,12 @@ const { ValidationError } = require('../libraries/errors');
 const validate = (schema) => {
   return (req, res, next) => {
     try {
-      const { error } = schema.validate(req.body, { abortEarly: false });
+      const { error, value } = schema.validate(req.body || {}, { abortEarly: false });
       if (error) {
         const message = error.details.map(d => d.message).join('; ');
         throw new ValidationError(message);
       }
+      req.body = value; // Update body with defaults/parsed values
       next();
     } catch (err) {
       next(err);
