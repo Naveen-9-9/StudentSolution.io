@@ -62,13 +62,13 @@ export default function ToolCard({ tool, onUpvote, isUpvoting }: ToolCardProps) 
         }}
         className={cn(
           "cursor-pointer overflow-hidden rounded-[32px] p-1 transition-all duration-500",
-          "bg-white/70 dark:bg-black/40 backdrop-blur-2xl border border-border/20 dark:border-white/5 shadow-xl dark:shadow-2xl group-hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)]",
+          "bg-card/70 backdrop-blur-2xl border border-border/20 shadow-xl dark:shadow-2xl group-hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)]",
           `hover:border-l-4 group-hover:${style.border}`
         )}
       >
         <div className={cn(
           "relative p-7 flex flex-col h-full space-y-6 rounded-[28px] transition-all duration-500",
-          "group-hover:bg-gradient-to-br group-hover:from-white/50 group-hover:to-transparent dark:group-hover:from-white/5 dark:group-hover:to-transparent"
+          "group-hover:bg-gradient-to-br group-hover:from-foreground/5 group-hover:to-transparent"
         )}>
           {/* Top Row: Category & Rating */}
           <div className="flex items-center justify-between">
@@ -116,7 +116,7 @@ export default function ToolCard({ tool, onUpvote, isUpvoting }: ToolCardProps) 
                   e.stopPropagation();
                   setIsInfoModalOpen(true);
                 }}
-                className="p-3 rounded-2xl bg-secondary/50 text-secondary-foreground hover:bg-primary hover:text-white transition-all shadow-md active:scale-95"
+                className="p-3 rounded-2xl bg-secondary/50 text-secondary-foreground hover:bg-primary hover:text-primary-foreground transition-all shadow-md active:scale-95"
               >
                 <Info size={18} />
               </button>
@@ -143,7 +143,7 @@ export default function ToolCard({ tool, onUpvote, isUpvoting }: ToolCardProps) 
                     ? "bg-primary/20 text-primary cursor-wait" 
                     : tool.hasUpvoted
                       ? "bg-primary/20 text-primary border border-primary/40 shadow-primary/30"
-                      : "bg-primary text-white hover:shadow-primary/40"
+                      : "bg-primary text-primary-foreground hover:shadow-primary/40"
                 )}
               >
                 <ArrowUpCircle size={18} className={cn(tool.hasUpvoted && "fill-primary")} />
@@ -206,7 +206,7 @@ export default function ToolCard({ tool, onUpvote, isUpvoting }: ToolCardProps) 
               
               <Link 
                 href={`/tools/${tool._id}`}
-                className="flex items-center justify-between w-full p-4 rounded-2xl bg-primary text-white font-black text-xs uppercase tracking-widest hover:bg-primary/90 transition-all group/btn"
+                className="flex items-center justify-between w-full p-4 rounded-2xl bg-primary text-primary-foreground font-black text-xs uppercase tracking-widest hover:bg-primary/90 transition-all group/btn"
               >
                 View Reviews <ChevronRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
               </Link>

@@ -93,7 +93,7 @@ export default function ToolInfoModal({ tool, isOpen, onClose }: ToolInfoModalPr
               animate={{ scale: 1, opacity: 1, y: 0, rotateX: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 30 }}
               transition={{ type: "spring", damping: 20, stiffness: 300 }}
-              className="w-full max-w-xl glass rounded-[60px] shadow-[0_40px_120px_-20px_rgba(0,0,0,0.8)] border border-primary/20 flex flex-col max-h-[90vh] pointer-events-auto overflow-hidden relative"
+              className="w-full max-w-xl glass-adaptive rounded-[60px] shadow-[0_40px_120px_-20px_rgba(0,0,0,0.8)] border border-primary/20 flex flex-col max-h-[85vh] pointer-events-auto overflow-hidden relative"
             >
               {/* Top Accent Gradient */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50" />
@@ -105,7 +105,7 @@ export default function ToolInfoModal({ tool, isOpen, onClose }: ToolInfoModalPr
               <div className="p-10 pb-6 relative flex-shrink-0">
                 <button
                   onClick={onClose}
-                  className="absolute top-8 right-8 p-3 text-muted-foreground hover:text-white transition-all rounded-2xl hover:bg-white/10 group active:scale-90"
+                  className="absolute top-8 right-8 p-3 text-muted-foreground hover:text-foreground transition-all rounded-2xl hover:bg-foreground/10 group active:scale-90"
                 >
                   <X size={20} className="group-hover:rotate-90 transition-transform" />
                 </button>
@@ -129,7 +129,7 @@ export default function ToolInfoModal({ tool, isOpen, onClose }: ToolInfoModalPr
                       <Star size={14} className="fill-yellow-500" />
                       <span className="text-sm font-black">{tool.averageRating?.toFixed(1) || "5.0"}</span>
                     </div>
-                    <div className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-xl border border-white/5">
+                    <div className="flex items-center gap-2 bg-foreground/5 px-4 py-2 rounded-xl border border-foreground/5">
                       <ThumbsUp size={12} className="text-muted-foreground/60" />
                       <span className="text-sm font-black">{tool.upvoteCount || 0}</span>
                     </div>
@@ -140,7 +140,7 @@ export default function ToolInfoModal({ tool, isOpen, onClose }: ToolInfoModalPr
               {/* Content Area — Scrollable */}
               <div className="px-10 pb-10 space-y-10 overflow-y-auto no-scrollbar flex-1">
                 {/* Visual Separator */}
-                <div className="h-px w-full bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+                <div className="h-px w-full bg-gradient-to-r from-transparent via-foreground/5 to-transparent" />
 
                 {/* Description Grid */}
                 <div className="grid md:grid-cols-12 gap-8 items-start">
@@ -163,7 +163,7 @@ export default function ToolInfoModal({ tool, isOpen, onClose }: ToolInfoModalPr
                         </a>
                       </div>
                    </div>
-                   <div className="md:col-span-4 p-5 rounded-3xl bg-white/[0.03] border border-white/5 flex flex-col items-center justify-center text-center gap-2">
+                   <div className="md:col-span-4 p-5 rounded-3xl bg-foreground/[0.03] border border-foreground/5 flex flex-col items-center justify-center text-center gap-2">
                       <Layout size={24} className="text-primary/40" />
                       <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40">Tool ID</span>
                       <span className="text-[9px] font-mono text-primary/60">{tool._id.slice(-8).toUpperCase()}</span>
@@ -183,7 +183,7 @@ export default function ToolInfoModal({ tool, isOpen, onClose }: ToolInfoModalPr
                   </div>
 
                   {isLoading ? (
-                    <div className="py-12 flex flex-col items-center justify-center gap-4 bg-white/[0.02] rounded-[32px] border border-dashed border-white/10">
+                    <div className="py-12 flex flex-col items-center justify-center gap-4 bg-foreground/[0.02] rounded-[32px] border border-dashed border-foreground/10">
                       <Loader2 className="animate-spin text-primary" size={32} />
                       <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground animate-pulse">Synchronizing Feedback...</p>
                     </div>
@@ -195,7 +195,7 @@ export default function ToolInfoModal({ tool, isOpen, onClose }: ToolInfoModalPr
                           initial={{ opacity: 0, x: -20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: idx * 0.1 }}
-                          className="p-6 rounded-[32px] bg-white/[0.03] border border-white/5 hover:border-primary/20 transition-all group"
+                          className="p-6 rounded-[32px] bg-foreground/[0.03] border border-foreground/5 hover:border-primary/20 transition-all group"
                         >
                           <div className="flex items-start gap-4">
                             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
@@ -218,7 +218,7 @@ export default function ToolInfoModal({ tool, isOpen, onClose }: ToolInfoModalPr
                       ))}
                     </div>
                   ) : (
-                    <div className="py-12 text-center bg-white/[0.02] rounded-[32px] border border-dashed border-white/10">
+                    <div className="py-12 text-center bg-foreground/[0.02] rounded-[32px] border border-dashed border-foreground/10">
                       <Sparkles size={32} className="mx-auto text-primary/20 mb-4" />
                       <p className="text-xs font-black uppercase tracking-widest text-muted-foreground/40">No Verified Insights Found</p>
                     </div>
@@ -231,9 +231,9 @@ export default function ToolInfoModal({ tool, isOpen, onClose }: ToolInfoModalPr
                 <Link
                   href={`/tools/${tool._id}`}
                   onClick={onClose}
-                  className="group relative flex items-center justify-center gap-3 w-full p-6 rounded-[28px] bg-primary text-white font-black text-sm uppercase tracking-[0.2em] shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all overflow-hidden"
+                  className="group relative flex items-center justify-center gap-3 w-full p-6 rounded-[28px] bg-primary text-primary-foreground font-black text-sm uppercase tracking-[0.2em] shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary-foreground/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                   Access Full Intelligence <ChevronRight size={18} />
                 </Link>
                 <div className="flex justify-center">

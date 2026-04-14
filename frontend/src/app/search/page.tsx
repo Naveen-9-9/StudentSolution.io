@@ -161,16 +161,16 @@ function SearchResults() {
                 <div className="flex flex-col gap-1">
                   {categories.map((cat) => {
                     const categoryStyles: Record<string, { active: string, inactiveBullet: string, hoverBullet: string }> = {
-                      "pdf-converter": { active: "bg-cat-pdf text-white shadow-lg shadow-cat-pdf/30", inactiveBullet: "bg-cat-pdf/40", hoverBullet: "group-hover/cat:bg-cat-pdf" },
-                      "ppt-maker": { active: "bg-cat-presentation text-white shadow-lg shadow-cat-presentation/30", inactiveBullet: "bg-cat-presentation/40", hoverBullet: "group-hover/cat:bg-cat-presentation" },
-                      "api": { active: "bg-cat-api text-white shadow-lg shadow-cat-api/30", inactiveBullet: "bg-cat-api/40", hoverBullet: "group-hover/cat:bg-cat-api" },
-                      "file-converter": { active: "bg-cat-file-converter text-white shadow-lg shadow-cat-file-converter/30", inactiveBullet: "bg-cat-file-converter/40", hoverBullet: "group-hover/cat:bg-cat-file-converter" },
-                      "productivity": { active: "bg-cat-productivity text-white shadow-lg shadow-cat-productivity/30", inactiveBullet: "bg-cat-productivity/40", hoverBullet: "group-hover/cat:bg-cat-productivity" },
-                      "education": { active: "bg-cat-education text-white shadow-lg shadow-cat-education/30", inactiveBullet: "bg-cat-education/40", hoverBullet: "group-hover/cat:bg-cat-education" },
-                      "ai": { active: "bg-cat-ai text-white shadow-lg shadow-cat-ai/30", inactiveBullet: "bg-cat-ai/40", hoverBullet: "group-hover/cat:bg-cat-ai" },
+                      "pdf-converter": { active: "bg-cat-pdf text-primary-foreground shadow-lg shadow-cat-pdf/30", inactiveBullet: "bg-cat-pdf/40", hoverBullet: "group-hover/cat:bg-cat-pdf" },
+                      "ppt-maker": { active: "bg-cat-presentation text-primary-foreground shadow-lg shadow-cat-presentation/30", inactiveBullet: "bg-cat-presentation/40", hoverBullet: "group-hover/cat:bg-cat-presentation" },
+                      "api": { active: "bg-cat-api text-primary-foreground shadow-lg shadow-cat-api/30", inactiveBullet: "bg-cat-api/40", hoverBullet: "group-hover/cat:bg-cat-api" },
+                      "file-converter": { active: "bg-cat-file-converter text-primary-foreground shadow-lg shadow-cat-file-converter/30", inactiveBullet: "bg-cat-file-converter/40", hoverBullet: "group-hover/cat:bg-cat-file-converter" },
+                      "productivity": { active: "bg-cat-productivity text-primary-foreground shadow-lg shadow-cat-productivity/30", inactiveBullet: "bg-cat-productivity/40", hoverBullet: "group-hover/cat:bg-cat-productivity" },
+                      "education": { active: "bg-cat-education text-primary-foreground shadow-lg shadow-cat-education/30", inactiveBullet: "bg-cat-education/40", hoverBullet: "group-hover/cat:bg-cat-education" },
+                      "ai": { active: "bg-cat-ai text-primary-foreground shadow-lg shadow-cat-ai/30", inactiveBullet: "bg-cat-ai/40", hoverBullet: "group-hover/cat:bg-cat-ai" },
                     };
 
-                    const style = categoryStyles[cat.id.toLowerCase()] || { active: "bg-primary text-white shadow-lg shadow-primary/30", inactiveBullet: "bg-primary/40", hoverBullet: "group-hover/cat:bg-primary" };
+                    const style = categoryStyles[cat.id.toLowerCase()] || { active: "bg-primary text-primary-foreground shadow-lg shadow-primary/30", inactiveBullet: "bg-primary/40", hoverBullet: "group-hover/cat:bg-primary" };
                     const isActive = category === cat.id;
 
                     return (
@@ -181,12 +181,12 @@ function SearchResults() {
                           "w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 flex items-center gap-3 group/cat",
                           isActive
                             ? style.active
-                            : "text-muted-foreground hover:bg-white/5 dark:hover:bg-white/5 hover:text-foreground"
+                            : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground"
                         )}
                       >
                         <div className={cn(
                           "w-2 h-2 rounded-full transition-all duration-300",
-                          isActive ? "bg-white scale-125 shadow-[0_0_8px_white]" : cn(style.inactiveBullet, "group-hover/cat:scale-125 shadow-sm", style.hoverBullet)
+                          isActive ? "bg-primary-foreground scale-125 shadow-[0_0_8px_hsl(var(--primary-foreground))]" : cn(style.inactiveBullet, "group-hover/cat:scale-125 shadow-sm", style.hoverBullet)
                         )} />
                         {cat.label}
                       </button>
@@ -226,7 +226,7 @@ function SearchResults() {
                             }}
                             className={cn(
                               "w-full text-left px-4 py-2 text-sm font-bold transition-colors flex items-center justify-between",
-                              sortBy === opt.id ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
+                              sortBy === opt.id ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground"
                             )}
                           >
                             {opt.label}
@@ -263,7 +263,7 @@ function SearchResults() {
               <div className="flex items-center gap-3">
                 <button 
                   onClick={() => setFiltersOpen(!filtersOpen)} 
-                  className="lg:hidden flex items-center justify-center min-w-[40px] min-h-[40px] px-3 py-2 glass border border-primary/20 rounded-full text-xs font-black uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-colors"
+                  className="lg:hidden flex items-center justify-center min-w-[40px] min-h-[40px] px-3 py-2 glass border border-primary/20 rounded-full text-xs font-black uppercase tracking-widest text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
                 >
                   <Filter size={16} className="mr-2" /> Filters
                 </button>
@@ -294,22 +294,22 @@ function SearchResults() {
                 key="auth-required"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="py-24 text-center glass-dark rounded-[40px] flex flex-col items-center justify-center space-y-8 px-8"
+                className="py-24 text-center glass-adaptive rounded-[40px] flex flex-col items-center justify-center space-y-8 px-8"
               >
                 <div className="bg-primary/20 w-24 h-24 rounded-[32px] flex items-center justify-center text-primary shadow-2xl">
                   <User className="w-12 h-12" />
                 </div>
                 <div className="max-w-md">
-                  <h3 className="text-3xl font-black text-white mb-4">Member Access Only</h3>
-                  <p className="text-blue-100/60 font-medium leading-relaxed">
+                  <h3 className="text-3xl font-black text-foreground mb-4">Member Access Only</h3>
+                  <p className="text-muted-foreground font-medium leading-relaxed">
                     Personalized search and full tool access are reserved for our community. Join thousands of students today.
                   </p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/auth/login" className="bg-primary text-white font-black px-10 py-4 rounded-2xl hover:bg-primary/90 transition-all shadow-xl shadow-primary/20">
+                  <Link href="/auth/login" className="bg-primary text-primary-foreground font-black px-10 py-4 rounded-2xl hover:bg-primary/90 transition-all shadow-xl shadow-primary/20">
                     Sign In
                   </Link>
-                  <Link href="/auth/register" className="bg-white text-black font-black px-10 py-4 rounded-2xl hover:bg-gray-100 transition-all shadow-xl">
+                  <Link href="/auth/register" className="bg-foreground text-background font-black px-10 py-4 rounded-2xl hover:opacity-90 transition-all shadow-xl">
                     Create Account
                   </Link>
                 </div>
@@ -378,7 +378,7 @@ function SearchResults() {
                     <button
                       onClick={() => handleFilterChange("page", (page - 1).toString())}
                       disabled={!pagination.hasPrev}
-                      className="p-3 glass rounded-2xl disabled:opacity-30 hover:bg-primary hover:text-white transition-all text-foreground shadow-lg active:scale-95"
+                      className="p-3 glass rounded-2xl disabled:opacity-30 hover:bg-primary hover:text-primary-foreground transition-all text-foreground shadow-lg active:scale-95"
                     >
                       <ChevronLeft size={20} />
                     </button>
@@ -388,7 +388,7 @@ function SearchResults() {
                     <button
                       onClick={() => handleFilterChange("page", (page + 1).toString())}
                       disabled={!pagination.hasNext}
-                      className="p-3 glass rounded-2xl disabled:opacity-30 hover:bg-primary hover:text-white transition-all text-foreground shadow-lg active:scale-95"
+                      className="p-3 glass rounded-2xl disabled:opacity-30 hover:bg-primary hover:text-primary-foreground transition-all text-foreground shadow-lg active:scale-95"
                     >
                       <ChevronRight size={20} />
                     </button>
@@ -409,7 +409,7 @@ function SearchResults() {
                 <p className="text-muted-foreground font-medium mb-8 max-w-sm mx-auto">Try adjusting your filters or searching for more general terms like &quot;PDF&quot; or &quot;Design&quot;.</p>
                 <button
                   onClick={() => router.push("/search")}
-                  className="bg-primary/10 text-primary px-8 py-4 rounded-2xl font-black hover:bg-primary hover:text-white transition-all active:scale-95"
+                  className="bg-primary/10 text-primary px-8 py-4 rounded-2xl font-black hover:bg-primary hover:text-primary-foreground transition-all active:scale-95"
                 >
                   Clear All Filters
                 </button>

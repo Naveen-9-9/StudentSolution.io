@@ -226,7 +226,7 @@ export default function HomePage() {
                   <Link href={`/tools/${tool._id}`} className="block relative h-full">
                     <div className="glass p-5 sm:p-8 rounded-3xl sm:rounded-[48px] border-primary/10 group-hover:border-primary/30 group-hover:bg-primary/5 transition-all duration-500 relative overflow-hidden h-full">
                        {/* Subtle Shine */}
-                       <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                       <div className="absolute inset-0 bg-gradient-to-br from-foreground/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                        
                        <div className="relative z-10 flex flex-col justify-between h-full space-y-6">
                           <div className="flex items-start justify-between">
@@ -237,7 +237,7 @@ export default function HomePage() {
                                 </div>
                                 <h3 className="text-2xl font-black text-foreground group-hover:text-primary transition-colors leading-tight">{tool.name}</h3>
                              </div>
-                             <div className="p-3 rounded-2xl bg-white/5 border border-white/5 text-muted-foreground group-hover:text-primary transition-colors">
+                             <div className="p-3 rounded-2xl bg-foreground/5 border border-foreground/5 text-muted-foreground group-hover:text-primary transition-colors">
                                 <ChevronRight size={20} />
                              </div>
                           </div>
@@ -287,7 +287,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {isLoading ? (
             Array(4).fill(0).map((_, i) => (
-              <div key={i} className="h-28 rounded-[32px] border animate-pulse bg-white/5" />
+              <div key={i} className="h-28 rounded-[32px] border animate-pulse bg-foreground/5" />
             ))
           ) : Array.isArray(categories) ? (
             categories.slice(0, 12).map((cat, idx) => {
@@ -324,7 +324,7 @@ export default function HomePage() {
                       </h4>
                       <p className="text-[10px] text-muted-foreground/60 font-black uppercase tracking-[0.2em]">{cat.count} Resources</p>
                     </div>
-                    <div className={cn("p-4 rounded-2xl bg-white/5 transition-all duration-300 relative z-10 group-hover:rotate-45 group-hover:text-white shadow-xl", styles.iconBg)}>
+                    <div className={cn("p-4 rounded-2xl bg-foreground/5 transition-all duration-300 relative z-10 group-hover:rotate-45 group-hover:text-primary-foreground shadow-xl", styles.iconBg)}>
                       <ArrowRight size={18} />
                     </div>
                     {/* Subtle Glow Backdrop */}
@@ -348,7 +348,7 @@ export default function HomePage() {
               <h2 className="text-4xl md:text-5xl font-black tracking-tight text-foreground leading-none">Curated Picks</h2>
               <p className="text-muted-foreground font-medium text-lg">Top-rated resources verified by our community.</p>
             </div>
-            <Link href="/search?sortBy=popular" className="text-[10px] p-5 glass rounded-2xl font-black uppercase tracking-[0.2em] text-primary hover:text-white hover:bg-primary transition-all">
+            <Link href="/search?sortBy=popular" className="text-[10px] p-5 glass rounded-2xl font-black uppercase tracking-[0.2em] text-primary hover:text-primary-foreground hover:bg-primary transition-all">
               Launch Global Search
             </Link>
           </div>

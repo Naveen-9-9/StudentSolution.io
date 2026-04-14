@@ -93,7 +93,7 @@ export default function ReviewForm({ toolId, onSuccess, initialData, onCancel }:
             <button 
               type="button" 
               onClick={onCancel}
-              className="p-2 rounded-xl hover:bg-white/10 text-muted-foreground transition-colors"
+              className="p-2 rounded-xl hover:bg-foreground/10 text-muted-foreground transition-colors"
             >
               <X size={20} />
             </button>
@@ -137,7 +137,7 @@ export default function ReviewForm({ toolId, onSuccess, initialData, onCancel }:
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Write your experience here... (What did you like? What could be better?)"
-            className="w-full min-h-[140px] bg-black/20 border border-white/10 rounded-2xl p-5 text-sm font-medium focus:outline-none focus:border-primary/40 transition-all placeholder:text-muted-foreground/30 resize-none"
+            className="w-full min-h-[140px] bg-foreground/5 border border-foreground/10 rounded-2xl p-5 text-sm font-medium focus:outline-none focus:border-primary/40 transition-all placeholder:text-muted-foreground/30 resize-none"
           />
           <div className="flex justify-between items-center px-1">
              {error ? (
@@ -159,7 +159,7 @@ export default function ReviewForm({ toolId, onSuccess, initialData, onCancel }:
           whileTap={{ scale: 0.98 }}
           disabled={isSubmitting}
           type="submit"
-          className="w-full py-4 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-4 bg-primary text-primary-foreground rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? (
             <>

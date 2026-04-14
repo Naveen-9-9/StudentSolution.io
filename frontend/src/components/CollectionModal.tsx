@@ -155,14 +155,14 @@ export default function CollectionModal({ tool, isOpen, onClose }: CollectionMod
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
               transition={{ type: "spring", duration: 0.3 }}
-              className="w-full max-w-lg glass rounded-[48px] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] border border-white/10 flex flex-col max-h-[90vh] pointer-events-auto"
+              className="w-full max-w-lg glass-adaptive rounded-[48px] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] border border-border/20 flex flex-col max-h-[90vh] pointer-events-auto"
             >
               {/* Header */}
               <div className="p-10 border-b border-primary/10 relative flex-shrink-0">
                 <div className="absolute top-8 right-8">
                   <button
                     onClick={onClose}
-                    className="p-3 text-muted-foreground hover:text-white transition-colors rounded-xl hover:bg-white/10"
+                    className="p-3 text-muted-foreground hover:text-foreground transition-colors rounded-xl hover:bg-foreground/10"
                   >
                     <X size={20} />
                   </button>
@@ -198,7 +198,7 @@ export default function CollectionModal({ tool, isOpen, onClose }: CollectionMod
                     </div>
                     <button
                       onClick={() => { onClose(); router.push("/auth/login"); }}
-                      className="px-8 py-4 bg-primary text-white font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/30"
+                      className="px-8 py-4 bg-primary text-primary-foreground font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/30"
                     >
                       Sign In to Continue
                     </button>
@@ -224,7 +224,7 @@ export default function CollectionModal({ tool, isOpen, onClose }: CollectionMod
                               "flex items-center justify-between p-6 rounded-3xl transition-all border-2 group",
                               isInCollection
                                 ? "bg-primary/10 border-primary text-primary"
-                                : "bg-white/5 border-white/5 text-muted-foreground hover:border-primary/40 hover:bg-white/10 hover:text-white"
+                                : "bg-foreground/5 border-foreground/5 text-muted-foreground hover:border-primary/40 hover:bg-foreground/10 hover:text-foreground"
                             )}
                           >
                             <div className="flex items-center gap-4">
@@ -237,7 +237,7 @@ export default function CollectionModal({ tool, isOpen, onClose }: CollectionMod
 
                             <div className={cn(
                               "w-8 h-8 rounded-xl flex items-center justify-center transition-all",
-                              isInCollection ? "bg-primary text-white" : "bg-white/5 group-hover:bg-primary/20"
+                              isInCollection ? "bg-primary text-primary-foreground" : "bg-foreground/5 group-hover:bg-primary/20"
                             )}>
                               {isProcessing ? (
                                 <Loader2 className="animate-spin" size={14} />
@@ -262,7 +262,7 @@ export default function CollectionModal({ tool, isOpen, onClose }: CollectionMod
 
               {/* Footer: Create New (only when authenticated) */}
               {isAuthenticated && (
-                <div className="p-8 bg-black/20 border-t border-white/5 space-y-4 flex-shrink-0">
+                <div className="p-8 bg-foreground/5 border-t border-foreground/5 space-y-4 flex-shrink-0">
                   {error && (
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
@@ -278,12 +278,12 @@ export default function CollectionModal({ tool, isOpen, onClose }: CollectionMod
                       value={newCollectionName}
                       onChange={(e) => setNewCollectionName(e.target.value)}
                       placeholder="Create New Toolkit..."
-                      className="w-full bg-white/5 border-2 border-white/5 focus:border-primary/40 focus:bg-primary/5 rounded-2xl px-6 py-4 outline-none transition-all text-sm font-medium text-white placeholder:text-muted-foreground/40"
+                      className="w-full bg-foreground/5 border-2 border-foreground/5 focus:border-primary/40 focus:bg-primary/5 rounded-2xl px-6 py-4 outline-none transition-all text-sm font-medium text-foreground placeholder:text-muted-foreground/40"
                     />
                     <button
                       type="submit"
                       disabled={!newCollectionName.trim() || isCreating}
-                      className="absolute right-2 top-2 p-3 bg-primary text-white rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:scale-100 disabled:bg-muted-foreground/20"
+                      className="absolute right-2 top-2 p-3 bg-primary text-primary-foreground rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:scale-100 disabled:bg-muted-foreground/20"
                     >
                       {isCreating ? <Loader2 className="animate-spin" size={16} /> : <Plus size={16} />}
                     </button>

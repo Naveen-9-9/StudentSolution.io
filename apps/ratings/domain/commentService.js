@@ -188,7 +188,7 @@ class CommentService {
   // Toggle upvote for a comment
   async toggleCommentUpvote(commentId, userId) {
     try {
-      const comment = await Comment.findById(commentId);
+      const comment = await Comment.findById(commentId).populate('toolId', 'name');
 
       if (!comment || !comment.isActive) {
         throw new NotFoundError('Comment not found');
@@ -213,6 +213,27 @@ class CommentService {
         await comment.save();
 
         logger.info(`Comment upvote added: ${commentId}`);
+
+        // Dispatch notification to comment author
+        try {
+          if (comment.userId && comment.userId.toString() !== userId.toString()) {
+            const User = require('mongoose').model('User');
+            const upvoter = await User.findById(userId).select('name');
+            const upvoterName = upvoter ? upvoter.name : 'A community member';
+            const toolName = comment.toolId ? comment.toolId.name : 'a tool';
+            
+            const notificationService = require('../../notifications/domain/notificationService');
+            notificationService.createNotification(
+              comment.userId,
+              'tool_upvoted', // Using existing icon type or custom
+              `${upvoterName} found your comment on "${toolName}" helpful`,
+              comment.toolId ? comment.toolId._id : null
+            ).catch(e => logger.error('Failed to send comment upvote notification:', e));
+          }
+        } catch (notifErr) {
+          logger.error('Error sending comment upvote notification:', notifErr);
+        }
+
         return { upvoted: true, upvoteCount: comment.upvoteCount };
       }
     } catch (error) {

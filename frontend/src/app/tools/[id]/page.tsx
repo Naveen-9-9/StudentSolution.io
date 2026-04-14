@@ -59,7 +59,7 @@ function CommentItem({
       animate={{ opacity: 1, x: 0, y: 0 }}
       className={cn(
         "relative",
-        level > 0 ? "ml-8 md:ml-12 mt-6" : "py-10 first:pt-0 border-b border-white/5 last:border-0"
+        level > 0 ? "ml-8 md:ml-12 mt-6" : "py-10 first:pt-0 border-b border-foreground/5 last:border-0"
       )}
     >
       {level > 0 && (
@@ -95,14 +95,14 @@ function CommentItem({
               )}
               {isAuthor && (
                 <div className="flex items-center gap-1">
-                  <button onClick={() => onEdit(comment)} className="p-2 text-muted-foreground hover:text-primary transition-colors hover:bg-white/5 rounded-lg"><Edit2 size={14} /></button>
-                  <button onClick={() => onDelete(comment._id)} className="p-2 text-muted-foreground hover:text-destructive transition-colors hover:bg-white/5 rounded-lg"><Trash2 size={14} /></button>
+                  <button onClick={() => onEdit(comment)} className="p-2 text-muted-foreground hover:text-primary transition-colors hover:bg-foreground/5 rounded-lg"><Edit2 size={14} /></button>
+                  <button onClick={() => onDelete(comment._id)} className="p-2 text-muted-foreground hover:text-destructive transition-colors hover:bg-foreground/5 rounded-lg"><Trash2 size={14} /></button>
                 </div>
               )}
             </div>
           </div>
 
-          <div className="glass p-6 md:p-8 rounded-[32px] border-white/5 hover:border-primary/20 transition-all duration-500 bg-white/[0.02] group/box">
+          <div className="glass-adaptive p-6 md:p-8 rounded-[32px] border-foreground/5 hover:border-primary/20 transition-all duration-500 bg-foreground/[0.02] group/box">
              <p className="text-sm md:text-base text-foreground/90 whitespace-pre-wrap leading-relaxed font-medium">
                {comment.text}
              </p>
@@ -337,7 +337,7 @@ export default function ToolDetailPage({ params }: { params: Promise<{ id: strin
           className="space-y-16"
         >
           {/* Tool Hero Section */}
-          <section className="relative glass p-10 md:p-20 rounded-[60px] border-primary/20 overflow-hidden">
+          <section className="relative glass-adaptive p-10 md:p-20 rounded-[60px] border-primary/20 overflow-hidden">
             <div className="absolute -top-32 -right-32 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
             
             <div className="relative z-10 space-y-12">
@@ -364,7 +364,7 @@ export default function ToolDetailPage({ params }: { params: Promise<{ id: strin
                   </p>
                </div>
 
-               <div className="grid md:grid-cols-3 gap-12 pt-12 border-t border-white/5">
+               <div className="grid md:grid-cols-3 gap-12 pt-12 border-t border-foreground/5">
                   <div className="space-y-6">
                     <div className="flex items-center gap-3 text-primary">
                       <ShieldCheck size={20} />
@@ -395,7 +395,7 @@ export default function ToolDetailPage({ params }: { params: Promise<{ id: strin
                       <h3 className="text-sm font-black uppercase tracking-widest">Pricing Matrix</h3>
                     </div>
                     <div className="space-y-3">
-                      <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
+                      <div className="p-4 rounded-2xl bg-foreground/5 border border-foreground/5">
                         <p className="text-[10px] font-black uppercase text-secondary-foreground/40 mb-1">Free Tier</p>
                         <p className="text-sm font-bold">{tool.pricing?.freeTrial || "Lifetime access to core tools"}</p>
                       </div>
@@ -426,7 +426,7 @@ export default function ToolDetailPage({ params }: { params: Promise<{ id: strin
                   {isCommentsLoading && comments.length === 0 ? (
                     <div className="space-y-8">
                       {[...Array(3)].map((_, i) => (
-                         <div key={i} className="h-48 glass rounded-[40px] border-dashed border-2 animate-pulse bg-white/5" />
+                         <div key={i} className="h-48 glass rounded-[40px] border-dashed border-2 animate-pulse bg-foreground/5" />
                       ))}
                     </div>
                   ) : comments.length > 0 ? (
@@ -460,7 +460,7 @@ export default function ToolDetailPage({ params }: { params: Promise<{ id: strin
                       )}
                     </motion.div>
                   ) : (
-                    <div className="p-20 glass rounded-[60px] text-center border-dashed border-2 border-primary/20 bg-white/5">
+                    <div className="p-20 glass-adaptive rounded-[60px] text-center border-dashed border-2 border-primary/20 bg-foreground/5">
                       <Sparkles size={48} className="mx-auto text-primary/40 mb-8" />
                       <h4 className="text-2xl font-black mb-4">Observation Required</h4>
                       <p className="text-muted-foreground font-medium">Be the first to provide a community verification for this tool.</p>
@@ -511,8 +511,8 @@ export default function ToolDetailPage({ params }: { params: Promise<{ id: strin
                        </div>
                     )
                   ) : (
-                    <div className="glass p-10 rounded-[48px] border-white/10 text-center space-y-8 bg-black/20">
-                      <div className="w-20 h-20 bg-white/5 rounded-[24px] mx-auto flex items-center justify-center text-muted-foreground mb-6 shadow-inner">
+                    <div className="glass p-10 rounded-[48px] border-foreground/10 text-center space-y-8 bg-foreground/5">
+                      <div className="w-20 h-20 bg-foreground/5 rounded-[24px] mx-auto flex items-center justify-center text-muted-foreground mb-6 shadow-inner">
                          <UserIcon size={32} />
                       </div>
                       <div className="space-y-3">
@@ -523,7 +523,7 @@ export default function ToolDetailPage({ params }: { params: Promise<{ id: strin
                       </div>
                       <Link 
                          href="/auth/login"
-                         className="w-full glass py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white/10 transition-all block"
+                         className="w-full glass py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-foreground/10 transition-all block"
                       >
                          Sign in to Contribute
                       </Link>
@@ -531,7 +531,7 @@ export default function ToolDetailPage({ params }: { params: Promise<{ id: strin
                   )}
                   
                   {/* Community Credits / Info */}
-                  <div className="glass p-8 rounded-[38px] border-white/5 space-y-6">
+                  <div className="glass p-8 rounded-[38px] border-foreground/5 space-y-6">
                      <div className="flex items-center gap-3">
                         <Star size={16} className="text-yellow-500 fill-yellow-500" />
                         <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Community Guidelines</h4>
