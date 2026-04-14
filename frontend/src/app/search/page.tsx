@@ -27,6 +27,7 @@ function SearchResults() {
   const [upvotingIds, setUpvotingIds] = useState<Set<string>>(new Set());
   const [intentMatched, setIntentMatched] = useState<string | null>(null);
   const [isSortOpen, setIsSortOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const sortOptions = [
     { id: "relevant", label: "Most Relevant" },
@@ -82,6 +83,7 @@ function SearchResults() {
     if (key !== "page") {
       newParams.set("page", "1");
     }
+    setFiltersOpen(false); // Close filters after selection on mobile
     router.push(`/search?${newParams.toString()}`);
   };
 
@@ -118,11 +120,22 @@ function SearchResults() {
     <div className="w-full px-6 py-12">
       <div className="flex flex-col lg:flex-row gap-12">
         {/* Premium Sidebar Filters */}
-        <aside className="w-full lg:w-72 space-y-8">
-          <div className="glass p-8 rounded-[32px] sticky top-24">
-            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-primary mb-6 flex items-center gap-2">
-              <Filter size={14} /> Filter Results
-            </h3>
+        <aside className={cn(
+          "w-full lg:w-72 space-y-8",
+          filtersOpen ? "block" : "hidden lg:block", 
+          filtersOpen && "lg:hidden mb-8"
+        )}>
+          <div className={cn("glass p-8 rounded-[32px]", !filtersOpen && "lg:sticky lg:top-24")}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-primary flex items-center gap-2">
+                <Filter size={14} /> Filter Results
+              </h3>
+              {filtersOpen && (
+                <button onClick={() => setFiltersOpen(false)} className="lg:hidden text-muted-foreground hover:text-foreground">
+                  ✕
+                </button>
+              )}
+            </div>
 
             <div className="space-y-8">
               <div>
@@ -236,7 +249,7 @@ function SearchResults() {
               <motion.h2
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="text-4xl font-black tracking-tight text-foreground"
+                className="text-3xl sm:text-4xl font-black tracking-tight text-foreground"
               >
                 {isLoading ? "Searching Tools..." : q ? `Results for "${q}"` : "All Tools"}
               </motion.h2>
@@ -247,10 +260,18 @@ function SearchResults() {
               )}
             </div>
             {!isLoading && pagination && (
-              <div className="bg-primary/5 px-4 py-2 rounded-full border border-primary/10">
-                <p className="text-xs font-black text-primary uppercase tracking-wider">
-                  {pagination.totalItems} Discoveries
-                </p>
+              <div className="flex items-center gap-3">
+                <button 
+                  onClick={() => setFiltersOpen(!filtersOpen)} 
+                  className="lg:hidden flex items-center justify-center min-w-[40px] min-h-[40px] px-3 py-2 glass border border-primary/20 rounded-full text-xs font-black uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-colors"
+                >
+                  <Filter size={16} className="mr-2" /> Filters
+                </button>
+                <div className="bg-primary/5 px-4 py-2.5 rounded-full border border-primary/10">
+                  <p className="text-[10px] sm:text-xs font-black text-primary uppercase tracking-wider">
+                    {pagination.totalItems} Discoveries
+                  </p>
+                </div>
               </div>
             )}
           </div>

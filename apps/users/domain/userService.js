@@ -254,6 +254,50 @@ class UserService {
     }
   }
 
+  // Generate a password reset token
+  async createPasswordResetToken(email) {
+    try {
+      const user = await User.findOne({ email: email.toLowerCase() });
+      if (!user) return null; // Silently return null for security
+
+      const token = crypto.randomBytes(32).toString('hex');
+      user.resetPasswordToken = token;
+      user.resetPasswordExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+      await user.save();
+
+      logger.info('Password reset token created for: ' + email);
+      return { user, token };
+    } catch (error) {
+      logger.error('Error creating password reset token:', error);
+      throw error;
+    }
+  }
+
+  // Reset password using token
+  async resetPassword(token, newPassword) {
+    try {
+      const user = await User.findOne({
+        resetPasswordToken: token,
+        resetPasswordExpires: { $gt: new Date() }
+      });
+
+      if (!user) {
+        throw new ValidationError('Reset link is invalid or has expired');
+      }
+
+      user.password = newPassword;
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpires = undefined;
+      await user.save();
+
+      logger.info('Password reset successful for: ' + user.email);
+      return user;
+    } catch (error) {
+      logger.error('Error resetting password:', error);
+      throw error;
+    }
+  }
+
   // Verify email using token
   async verifyEmail(token) {
     try {

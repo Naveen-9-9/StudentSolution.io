@@ -193,19 +193,19 @@ export default function SettingsPage() {
         {/* Sidebar Navigation */}
         <aside className="w-full md:w-64 space-y-8">
           <div className="space-y-4">
-            <h1 className="text-4xl font-black tracking-tighter">Settings</h1>
+            <h1 className="text-3xl sm:text-4xl font-black tracking-tighter">Settings</h1>
             <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest leading-relaxed">
               Configure your digital identity and hub preferences.
             </p>
           </div>
 
-          <nav className="flex flex-col gap-2">
+          <nav className="flex flex-row md:flex-col gap-2 overflow-x-auto no-scrollbar pb-2 md:pb-0">
             {(["profile", "appearance", "security"] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={cn(
-                  "flex items-center gap-3 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all",
+                  "flex items-center gap-3 px-4 py-3 md:px-6 md:py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap",
                   activeTab === tab 
                     ? "bg-primary text-secondary shadow-lg shadow-primary/20" 
                     : "glass text-foreground/60 hover:text-foreground hover:bg-white/10"
@@ -219,7 +219,7 @@ export default function SettingsPage() {
             ))}
           </nav>
 
-          <div className="pt-8 border-t border-primary/10">
+          <div className="pt-8 border-t border-primary/10 hidden md:block">
              <div className="glass p-6 rounded-3xl relative overflow-hidden group">
                 <div className="absolute inset-0 bg-primary/5 -z-10 group-hover:scale-110 transition-transform duration-700" />
                 <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-2">System Status</p>
@@ -247,7 +247,7 @@ export default function SettingsPage() {
                 <form onSubmit={handleUpdateProfile} className="space-y-10">
                    <div className="space-y-6">
                       <h2 className="text-3xl font-black tracking-tight">Identity Profile</h2>
-                      <div className="grid gap-8 p-8 glass rounded-[40px] border-primary/10">
+                      <div className="grid gap-8 p-5 sm:p-8 glass rounded-3xl sm:rounded-[40px] border-primary/10">
                          <div className="space-y-4">
                             <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Display Name</label>
                             <input 
@@ -402,8 +402,8 @@ export default function SettingsPage() {
                 <div className="space-y-12">
                    <form onSubmit={handleChangePassword} className="space-y-8">
                       <h2 className="text-3xl font-black tracking-tight">Secure Channel</h2>
-                      <div className="glass p-10 rounded-[48px] border-primary/10 space-y-6">
-                         <div className="grid sm:grid-cols-3 gap-6">
+                      <div className="glass p-6 sm:p-10 rounded-3xl sm:rounded-[48px] border-primary/10 space-y-6">
+                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                             {[
                               { id: "oldPassword", label: "Current Password", placeholder: "••••••••" },
                               { id: "newPassword", label: "New Credentials", placeholder: "••••••••" },
@@ -437,7 +437,7 @@ export default function SettingsPage() {
                          <Trash2 size={24} />
                          <h2 className="text-3xl font-black tracking-tight">Danger Zone</h2>
                       </div>
-                      <div className="glass p-10 rounded-[48px] border-destructive/20 bg-destructive/5 space-y-6">
+                      <div className="glass p-6 sm:p-10 rounded-3xl sm:rounded-[48px] border-destructive/20 bg-destructive/5 space-y-6">
                          <p className="text-sm font-medium text-muted-foreground leading-relaxed max-w-2xl">
                            Deleting your account will permanently remove your contribution record, saved tools, and reputation points. This action is **irreversible**.
                          </p>

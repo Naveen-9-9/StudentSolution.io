@@ -82,7 +82,7 @@ export default function RegisterPage() {
         initial={{ opacity: 0, scale: 0.95, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ type: "spring", damping: 25, stiffness: 100 }}
-        className="w-full max-w-[540px] relative"
+        className="w-full max-w-[540px] relative px-4 sm:px-6"
       >
         {/* Floating Brand Elements */}
         <div className="absolute -top-10 -right-10 w-20 h-20 glass rounded-[28px] flex items-center justify-center text-primary/60 shadow-2xl animate-float-delayed rotate-12 hidden lg:flex">
@@ -107,7 +107,7 @@ export default function RegisterPage() {
                 </div>
               </motion.div>
               
-              <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70">
                 Join Community
               </h1>
               <p className="text-muted-foreground font-medium max-w-sm text-base">
@@ -143,7 +143,7 @@ export default function RegisterPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     disabled={loading}
-                    className="w-full pl-14 pr-6 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-lg text-foreground"
+                    className="w-full pl-14 pr-6 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-base sm:text-lg text-foreground"
                   />
                 </div>
               </div>
@@ -161,7 +161,7 @@ export default function RegisterPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
-                    className="w-full pl-14 pr-6 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-lg text-foreground"
+                    className="w-full pl-14 pr-6 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-base sm:text-lg text-foreground"
                   />
                 </div>
               </div>
@@ -180,7 +180,7 @@ export default function RegisterPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       disabled={loading}
-                      className="w-full pl-14 pr-14 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-lg text-foreground"
+                      className="w-full pl-14 pr-14 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-base sm:text-lg text-foreground"
                     />
                     <button
                       type="button"
@@ -206,7 +206,7 @@ export default function RegisterPage() {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       disabled={loading}
-                      className="w-full pl-14 pr-14 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-lg text-foreground"
+                      className="w-full pl-14 pr-14 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-base sm:text-lg text-foreground"
                     />
                   </div>
                 </div>

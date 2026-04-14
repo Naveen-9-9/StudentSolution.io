@@ -69,7 +69,7 @@ export default function LoginPage() {
         initial={{ opacity: 0, scale: 0.95, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ type: "spring", damping: 25, stiffness: 100 }}
-        className="w-full max-w-[480px] relative"
+        className="w-full max-w-[480px] relative px-4 sm:px-6"
       >
         {/* Floating Brand Elements */}
         <div className="absolute -top-12 -left-12 w-24 h-24 glass rounded-3xl flex items-center justify-center text-primary shadow-2xl animate-float -rotate-12 hidden md:flex">
@@ -94,7 +94,7 @@ export default function LoginPage() {
                 </div>
               </motion.div>
               
-              <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-3 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/60">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter mb-3 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/60">
                 Unlock Hub
               </h1>
               <p className="text-muted-foreground font-medium max-w-sm">
@@ -130,7 +130,7 @@ export default function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
-                    className="w-full pl-14 pr-6 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-lg placeholder:font-medium placeholder:text-muted-foreground/30 text-foreground"
+                    className="w-full pl-14 pr-6 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-base sm:text-lg placeholder:font-medium placeholder:text-muted-foreground/30 text-foreground"
                   />
                 </div>
               </div>
@@ -138,7 +138,7 @@ export default function LoginPage() {
               <div className="space-y-3">
                 <div className="flex justify-between items-center px-4">
                   <label className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">Passcode</label>
-                  <Link href="#" className="text-[9px] font-black uppercase tracking-widest text-primary/60 hover:text-primary transition-colors">Recover Account?</Link>
+                  <Link href="/auth/forgot-password" className="text-[9px] font-black uppercase tracking-widest text-primary/60 hover:text-primary transition-colors">Recover Account?</Link>
                 </div>
                 <div className="relative group">
                   <div className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground/40 group-focus-within:text-primary transition-all duration-300">
@@ -151,7 +151,7 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={loading}
-                    className="w-full pl-14 pr-14 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-lg placeholder:font-medium placeholder:text-muted-foreground/30 text-foreground"
+                    className="w-full pl-14 pr-14 py-5 rounded-3xl bg-background/50 border border-border/10 focus:bg-background/80 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all font-bold text-base sm:text-lg placeholder:font-medium placeholder:text-muted-foreground/30 text-foreground"
                   />
                   <button
                     type="button"

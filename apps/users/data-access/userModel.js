@@ -46,6 +46,8 @@ const userSchema = new mongoose.Schema({
   },
   verificationToken: String,
   verificationExpires: Date,
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
   bio: {
     type: String,
     maxlength: [200, 'Bio cannot exceed 200 characters'],

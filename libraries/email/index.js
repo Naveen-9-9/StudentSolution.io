@@ -98,4 +98,60 @@ const sendVerificationEmail = async (user, token) => {
   }
 };
 
-module.exports = { sendVerificationEmail };
+const sendPasswordResetEmail = async (user, token) => {
+  const t = await setupTransporter();
+  if (!t) return;
+
+  const resetUrl = `${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/reset-password?token=${token}`;
+  
+  const mailOptions = {
+    from: '"StudentSolution.ai" <support@studentsolution.ai>',
+    to: user.email,
+    subject: "Reset Your Password - StudentSolution.ai",
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body { font-family: 'Inter', sans-serif; background-color: #060612; color: #ffffff; padding: 40px; }
+          .container { max-width: 600px; margin: 0 auto; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 40px; padding: 40px; text-align: center; }
+          .logo { font-weight: 900; font-size: 24px; letter-spacing: -1px; margin-bottom: 30px; }
+          .accent { color: #6d28d9; }
+          .btn { display: inline-block; padding: 20px 40px; background: linear-gradient(135deg, #8b5cf6, #6366f1); color: #ffffff; text-decoration: none; border-radius: 20px; font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 20px 40px rgba(109, 40, 217, 0.3); margin-top: 30px; }
+          .footer { margin-top: 40px; color: rgba(255, 255, 255, 0.4); font-size: 10px; text-transform: uppercase; letter-spacing: 2px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="logo">STUDENTSOLUTION<span class="accent">.AI</span></div>
+          <h1>Password Reset</h1>
+          <p>We received a request to reset your account password. Click the button below to establish a new passcode.</p>
+          <a href="${resetUrl}" class="btn">Reset Password</a>
+          <p style="margin-top: 40px; font-size: 12px; color: rgba(255, 255, 255, 0.6);">This link expires in 1 hour. If you didn't request this, ignore this email.</p>
+          <div class="footer">Built for Students, by Students</div>
+        </div>
+      </body>
+      </html>
+    `
+  };
+
+  try {
+    const info = await t.sendMail(mailOptions);
+    console.log(`[Email Service] Password Reset Message sent: %s`, info.messageId);
+    if (nodemailer.getTestMessageUrl(info)) {
+      const previewUrl = nodemailer.getTestMessageUrl(info);
+      console.log(`[Email Service] Password Reset Preview URL: ${previewUrl}`);
+      
+      const fs = require('fs');
+      const path = require('path');
+      const logPath = path.join(__dirname, '../../verification_links.log');
+      fs.appendFileSync(logPath, `[${new Date().toISOString()}] Reset: ${user.email} | Link: ${previewUrl}\n`);
+    }
+    return info;
+  } catch (error) {
+    console.error(`[Email Service] Error sending password reset email:`, error);
+    throw error;
+  }
+};
+
+module.exports = { sendVerificationEmail, sendPasswordResetEmail };

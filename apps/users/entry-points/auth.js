@@ -8,7 +8,7 @@ const { requireAuth } = require('../../../middleware/roles');
 const { ValidationError } = require('../../../libraries/errors');
 const { validate, asyncHandler } = require('../../../middleware/validate');
 const logger = require('../../../libraries/logger');
-const { sendVerificationEmail } = require('../../../libraries/email');
+const { sendVerificationEmail, sendPasswordResetEmail } = require('../../../libraries/email');
 
 const router = express.Router();
 
@@ -39,6 +39,15 @@ const updateProfileSchema = Joi.object({
 const changePasswordSchema = Joi.object({
   oldPassword: Joi.string().required(),
   newPassword: Joi.string().min(6).required()
+});
+
+const forgotPasswordSchema = Joi.object({
+  email: Joi.string().email().required()
+});
+
+const resetPasswordSchema = Joi.object({
+  token: Joi.string().required(),
+  password: Joi.string().min(6).required()
 });
 
 // @route   POST /auth/register
@@ -218,6 +227,39 @@ router.get('/verify', asyncHandler(async (req, res) => {
   res.json({
     success: true,
     message: 'Identity established and verified.'
+  });
+}));
+
+// @route   POST /auth/forgot-password
+// @desc    Initiate forgot password flow
+// @access  Public
+router.post('/forgot-password', validate(forgotPasswordSchema), asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const result = await userService.createPasswordResetToken(email);
+  
+  if (result) {
+    sendPasswordResetEmail(result.user, result.token).catch(err => {
+      logger.error('Failed to send password reset email:', err);
+    });
+  }
+  
+  // Always return success (don't reveal if email exists)
+  res.json({
+    success: true,
+    message: 'If an account with that email exists, a reset link has been sent.'
+  });
+}));
+
+// @route   POST /auth/reset-password
+// @desc    Reset password using token
+// @access  Public
+router.post('/reset-password', validate(resetPasswordSchema), asyncHandler(async (req, res) => {
+  const { token, password } = req.body;
+  await userService.resetPassword(token, password);
+  
+  res.json({
+    success: true,
+    message: 'Password has been reset successfully.'
   });
 }));
 

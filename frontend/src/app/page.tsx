@@ -123,8 +123,8 @@ export default function HomePage() {
   };
 
   return (
-    <div className="flex flex-col gap-24 pb-32">
-      <section id="hero-section" className="relative pt-32 pb-20 overflow-hidden px-6">
+    <div className="flex flex-col gap-12 md:gap-24 pb-16 md:pb-32">
+      <section id="hero-section" className="relative pt-20 md:pt-32 pb-12 md:pb-20 overflow-hidden px-4 sm:px-6">
         {/* Cinematic Hero Mesh - Localized Intensity */}
         <div className="absolute inset-0 -z-10 bg-background">
           <motion.div 
@@ -144,12 +144,12 @@ export default function HomePage() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="space-y-10"
           >
-            <div className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-white/5 border border-white/10 text-primary text-[10px] font-black uppercase tracking-[0.3em] mb-4 backdrop-blur-3xl shadow-2xl">
+            <div className="inline-flex items-center gap-2.5 px-4 sm:px-6 py-2.5 rounded-full bg-foreground/5 border border-foreground/10 text-primary text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-4 backdrop-blur-3xl shadow-2xl">
               <Sparkles size={14} className="fill-primary" /> The Ultimate Student Toolkit
             </div>
             
             <motion.h1 
-              className="text-7xl md:text-9xl font-black tracking-tighter leading-[0.85] mb-8 font-display"
+              className="text-4xl sm:text-6xl md:text-7xl lg:text-9xl font-black tracking-tighter leading-[0.85] mb-6 sm:mb-8 font-display"
             >
               <motion.span
                 initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
@@ -169,7 +169,7 @@ export default function HomePage() {
               </motion.span>
             </motion.h1>
             
-            <p className="text-xl md:text-2xl text-muted-foreground/70 max-w-4xl mx-auto mb-16 leading-relaxed font-medium">
+            <p className="text-base sm:text-xl md:text-2xl text-muted-foreground/70 max-w-4xl mx-auto mb-10 sm:mb-16 leading-relaxed font-medium px-2">
               Join thousands of students discovering and sharing the <span className="text-foreground font-bold">community-verified</span> tools that turn complex hurdles into simple solutions.
             </p>
           </motion.div>
@@ -178,13 +178,13 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="mb-16 max-w-4xl mx-auto relative px-4"
+            className="mb-10 sm:mb-16 max-w-4xl mx-auto relative px-2 sm:px-4"
           >
             <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 to-blue-500/30 blur-2xl opacity-20 pointer-events-none" />
             <SearchBar />
           </motion.div>
 
-          <div className="flex flex-wrap items-center justify-center gap-10 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-10 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40">
             <div className="flex items-center gap-3"><TrendingUp size={16} /> Community Ranked</div>
             <div className="flex items-center gap-3"><ShieldCheck size={16} /> Verified Tools</div>
             <div className="flex items-center gap-3"><Zap size={16} /> Instant Discovery</div>
@@ -203,7 +203,7 @@ export default function HomePage() {
               <h2 className="text-4xl md:text-5xl font-black tracking-tight text-foreground leading-none">Trending Today</h2>
               <p className="text-muted-foreground font-medium text-lg">Most active community resources in the last 24 hours.</p>
             </div>
-            <Link href="/search?sortBy=popular" className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-primary hover:gap-5 transition-all group p-4 border border-primary/20 rounded-2xl bg-primary/5">
+            <Link href="/search?sortBy=popular" className="hidden sm:flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-primary hover:gap-5 transition-all group p-4 border border-primary/20 rounded-2xl bg-primary/5">
               Live Feed <ArrowRight size={14} />
             </Link>
           </div>
@@ -221,10 +221,10 @@ export default function HomePage() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
-                  className="min-w-[320px] md:min-w-[400px] snap-center group"
+                  className="min-w-[280px] sm:min-w-[320px] md:min-w-[400px] snap-center group"
                 >
                   <Link href={`/tools/${tool._id}`} className="block relative h-full">
-                    <div className="glass p-8 rounded-[48px] border-primary/10 group-hover:border-primary/30 group-hover:bg-primary/5 transition-all duration-500 relative overflow-hidden h-full">
+                    <div className="glass p-5 sm:p-8 rounded-3xl sm:rounded-[48px] border-primary/10 group-hover:border-primary/30 group-hover:bg-primary/5 transition-all duration-500 relative overflow-hidden h-full">
                        {/* Subtle Shine */}
                        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                        
@@ -314,7 +314,7 @@ export default function HomePage() {
                   <Link 
                     href={`/search?category=${cat._id.toLowerCase()}`}
                     className={cn(
-                      "flex items-center justify-between p-8 rounded-[38px] glass border-white/5 transition-all duration-300 group overflow-hidden relative",
+                      "flex items-center justify-between p-5 sm:p-8 rounded-2xl sm:rounded-[38px] glass border-foreground/5 transition-all duration-300 group overflow-hidden relative",
                       styles.bg, styles.border
                     )}
                   >
@@ -353,7 +353,7 @@ export default function HomePage() {
             </Link>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
             {isLoading ? (
               Array(6).fill(0).map((_, i) => (
                 <Skeleton key={i} className="h-80 rounded-[48px]" />
@@ -363,14 +363,14 @@ export default function HomePage() {
                 initial={{ opacity: 0, scale: 0.98 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                className="col-span-full py-32 text-center glass border-primary/20 rounded-[60px] flex flex-col items-center justify-center space-y-10 px-6 relative overflow-hidden"
+                className="col-span-full py-16 md:py-32 text-center glass border-primary/20 rounded-3xl sm:rounded-[60px] flex flex-col items-center justify-center space-y-8 sm:space-y-10 px-4 sm:px-6 relative overflow-hidden"
               >
                 <div className="absolute inset-0 bg-primary/5 -z-10" />
                 <div className="bg-primary/20 w-32 h-32 rounded-[40px] flex items-center justify-center text-primary shadow-2xl animate-float">
                   <User className="w-16 h-16" />
                 </div>
                 <div className="max-w-xl space-y-4">
-                  <h3 className="text-5xl font-black text-foreground tracking-tighter leading-none">Member Access Only</h3>
+                  <h3 className="text-3xl sm:text-5xl font-black text-foreground tracking-tighter leading-none">Member Access Only</h3>
                   <p className="text-xl text-muted-foreground/80 font-medium leading-relaxed">
                     Unlock the full potential of our community. Join thousand of students discovering 50+ specialized tools, reviews, and social rewards.
                   </p>
