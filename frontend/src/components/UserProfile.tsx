@@ -74,7 +74,7 @@ export default function UserProfile() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-3 p-1.5 pr-4 rounded-full bg-black/10 dark:bg-card/20 border border-white/10 backdrop-blur-xl hover:bg-white/5 transition-all group"
+        className="flex items-center gap-3 p-1.5 pr-4 rounded-full bg-foreground/[0.02] border border-foreground/10 backdrop-blur-xl hover:bg-foreground/5 transition-all group"
       >
         <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-black shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform">
           <SelectedAvatar size={18} />
@@ -100,7 +100,7 @@ export default function UserProfile() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="absolute top-full right-0 mt-3 w-64 glass p-2 rounded-[24px] border border-primary/20 shadow-2xl z-[60] overflow-hidden"
+            className="absolute top-full right-0 mt-3 w-64 bg-background p-2 rounded-[24px] border border-primary/20 shadow-2xl z-[60] overflow-hidden"
           >
             <div className="p-4 border-b border-primary/10 mb-2">
               <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Account</p>

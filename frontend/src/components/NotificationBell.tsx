@@ -135,9 +135,9 @@ export default function NotificationBell() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="absolute right-0 mt-2 w-80 sm:w-96 glass rounded-2xl shadow-xl overflow-hidden z-50 border border-white/10"
+            className="absolute right-0 mt-2 w-80 sm:w-96 bg-background rounded-2xl shadow-xl overflow-hidden z-50 border border-foreground/10"
           >
-            <div className="flex items-center justify-between p-4 border-b border-white/10 bg-background/50">
+            <div className="flex items-center justify-between p-4 border-b border-foreground/5 bg-background/50">
               <h3 className="font-bold text-sm">Notifications</h3>
               {unreadCount > 0 && (
                 <button 
@@ -157,18 +157,18 @@ export default function NotificationBell() {
                   <p className="text-muted-foreground text-sm font-medium">No notifications yet</p>
                 </div>
               ) : (
-                <div className="divide-y divide-white/5">
+                <div className="divide-y divide-foreground/5">
                   {notifications.map((notif) => (
                     <div 
                       key={notif._id}
                       onClick={() => !notif.read && markAsRead(notif._id)}
                       className={cn(
-                        "p-4 flex gap-3 transition-colors hover:bg-white/5 cursor-pointer",
+                        "p-4 flex gap-3 transition-colors hover:bg-foreground/5 cursor-pointer",
                         !notif.read ? "bg-primary/5" : "opacity-75"
                       )}
                     >
                       <div className="shrink-0 mt-1">
-                        <div className="w-8 h-8 rounded-full bg-background flex items-center justify-center border border-white/5">
+                        <div className="w-8 h-8 rounded-full bg-background flex items-center justify-center border border-foreground/5">
                            {getIconForType(notif.type)}
                         </div>
                       </div>
