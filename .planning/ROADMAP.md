@@ -158,3 +158,36 @@ Plans:
 2. Rating stars are clearly visible on white backgrounds.
 3. Login and Register forms are fully legible in the "Technical White" theme.
 4. No hardcoded white text remains in primary auth pathways.
+
+---
+
+## Phase 09: Mobile Responsiveness, Auth Recovery & Real-Time Notifications
+
+**Goal:** Make the platform fully usable on mobile devices, resolve remaining UI polish issues, implement a forgot-password / account-recovery flow with real email delivery, and add real-time in-app notifications when content the user cares about is updated.
+
+**Requirements:** MOBILE-01, MOBILE-02, MOBILE-03, AUTH-RECOVER-01, AUTH-RECOVER-02, EMAIL-01, NOTIFY-01, NOTIFY-02, UI-POLISH-01
+
+**Depends on:** Phase 08
+
+**Plans:** 4 plans (2 waves)
+
+Plans:
+- [ ] 09-01 Mobile Responsive Layouts (Wave 1)
+- [ ] 09-02 Forgot Password & Account Recovery (Wave 1)
+- [ ] 09-03 Real-Time Notification System (Wave 2)
+- [ ] 09-04 UI Polish & Theme Fixes (Wave 2)
+
+**Deliverables:**
+- Mobile-first responsive layouts for Home, Search, Auth, and Settings pages.
+- Audit and fix all remaining Light-mode and cross-theme UI inconsistencies.
+- Forgot Password flow: frontend form, backend token generation + email (Nodemailer), reset page.
+- Account Recovery: allow SSO Google fallback when password is unknown.
+- Real email notifications (Nodemailer): welcome email on signup, password-reset email.
+- Real-time in-app notification bell: SSE/polling based — alerts user when a tool they've upvoted or saved receives a new review, or when a tool is approved.
+
+**Success Criteria:**
+1. All pages are usable on 375px-wide mobile screens without horizontal scroll.
+2. Forgot-password flow sends a real email and allows the user to set a new password.
+3. Google SSO is available as an account-recovery path.
+4. A notification bell icon in the navbar shows unread counts and a dropdown of recent events.
+5. No remaining hardcoded `text-white` / `bg-white/5` contrast bugs in any theme.

@@ -37,6 +37,25 @@
 
 ## Future Requirements
 
+### Mobile & Responsiveness
+- [ ] **MOBILE-01**: All pages are fully usable on 375px-wide mobile screens without horizontal scroll
+- [ ] **MOBILE-02**: Navbar collapses to a hamburger menu on mobile with slide-out drawer navigation
+- [ ] **MOBILE-03**: Search sidebar filters collapse into a toggleable mobile drawer
+
+### Auth Recovery
+- [ ] **AUTH-RECOVER-01**: Forgot-password flow sends a real email with a time-limited reset link
+- [ ] **AUTH-RECOVER-02**: Google SSO is available as an account-recovery path for linked accounts
+
+### Email
+- [ ] **EMAIL-01**: Password reset email uses premium HTML template matching brand aesthetic
+
+### Notifications
+- [ ] **NOTIFY-01**: Real-time in-app notification bell shows unread counts and dropdown of recent events
+- [ ] **NOTIFY-02**: Notifications trigger when tools user saved/upvoted get new reviews, or submitted tools are approved
+
+### UI Polish
+- [ ] **UI-POLISH-01**: No remaining hardcoded text-white / bg-white/5 contrast bugs in any theme
+
 ## Out of Scope
 
 - Mobile native app — web-first
@@ -63,3 +82,13 @@
 | VERIFY-01   | 06    |
 | VERIFY-02   | 06    |
 | VERIFY-03   | 06    |
+| MOBILE-01   | 09    |
+| MOBILE-02   | 09    |
+| MOBILE-03   | 09    |
+| AUTH-RECOVER-01 | 09 |
+| AUTH-RECOVER-02 | 09 |
+| EMAIL-01    | 09    |
+| NOTIFY-01   | 09    |
+| NOTIFY-02   | 09    |
+| UI-POLISH-01 | 09   |
+
