@@ -191,3 +191,41 @@ Plans:
 3. Google SSO is available as an account-recovery path.
 4. A notification bell icon in the navbar shows unread counts and a dropdown of recent events.
 5. No remaining hardcoded `text-white` / `bg-white/5` contrast bugs in any theme.
+
+---
+
+## Phase 10: Security Hardening
+
+**Goal:** Lock down backend against NoSQL injection, XSS, broken admin access control, token theft, and account brute-forcing. No hacker gets in.
+
+**Requirements:** SEC-01, SEC-02, SEC-03, SEC-04, SEC-05, SEC-06
+
+**Depends on:** Phase 09
+
+**Plans:** 5 plans (3 waves)
+
+Plans:
+- [ ] 10-01 NoSQL Injection & XSS Protection (Wave 1)
+- [ ] 10-02 Admin Access Control Fix (Wave 1)
+- [ ] 10-03 JWT Token Hardening & Blacklisting (Wave 2)
+- [ ] 10-04 Account Lockout & Google Password Fix (Wave 2)
+- [ ] 10-05 Secure Token Transport & Log Redaction (Wave 3)
+
+**Deliverables:**
+- Add `express-mongo-sanitize` and `hpp` middleware to block injection attacks.
+- Custom XSS sanitizer middleware stripping dangerous HTML from all user inputs.
+- Enforce `requireAdmin` on all admin-only routes.
+- Separate JWT secrets for access vs refresh tokens with `jti` tracking.
+- In-memory refresh token blacklist with TTL cleanup on logout.
+- Account lockout after 5 failed login attempts (15-min cooldown).
+- Allow Google OAuth users to set a local password without requiring current password.
+- Redact tokens from morgan access logs.
+- Add `hasPassword` flag to `/auth/me` response.
+
+**Success Criteria:**
+1. NoSQL injection payloads (`{"$gt":""}`) are rejected at middleware level.
+2. HTML/script tags are stripped from all stored user content.
+3. Non-admin users receive 403 on `/tools/pending` and `/tools/:id/status`.
+4. Logout invalidates refresh token — reuse returns 401.
+5. Account locks after 5 failed logins, unlocks after 15 minutes.
+6. Google OAuth users can set a password from Settings without "current password".

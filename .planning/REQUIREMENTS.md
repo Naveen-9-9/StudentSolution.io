@@ -56,6 +56,14 @@
 ### UI Polish
 - [ ] **UI-POLISH-01**: No remaining hardcoded text-white / bg-white/5 contrast bugs in any theme
 
+### Security Hardening
+- [ ] **SEC-01**: All user inputs sanitized against NoSQL injection ($gt, $ne operators stripped)
+- [ ] **SEC-02**: Stored user content (comments, bios, descriptions) stripped of XSS payloads (script tags, event handlers)
+- [ ] **SEC-03**: Admin-only routes enforce requireAdmin middleware — non-admin users receive 403
+- [ ] **SEC-04**: Refresh tokens are blacklisted on logout and checked before renewal
+- [ ] **SEC-05**: Account locks after 5 consecutive failed login attempts for 15 minutes
+- [ ] **SEC-06**: Google OAuth users can set a local password without requiring a current password
+
 ## Out of Scope
 
 - Mobile native app — web-first
