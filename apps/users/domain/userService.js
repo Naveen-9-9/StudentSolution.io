@@ -145,19 +145,36 @@ class UserService {
     }
   }
 
+  // Check if user has a password (for Google OAuth users who might not)
+  async userHasPassword(userId) {
+    try {
+      const user = await User.findById(userId).select('password');
+      return !!user?.password;
+    } catch (error) {
+      logger.error('Error checking user password:', error);
+      return false;
+    }
+  }
+
   // Update password
   async updatePassword(userId, oldPassword, newPassword) {
     try {
-      const user = await User.findById(userId).select('+password');
+      const user = await User.findById(userId).select('+password googleId email');
       if (!user) {
         throw new NotFoundError('User not found');
       }
 
-      // Verify old password
-      const isMatch = await user.comparePassword(oldPassword);
-      if (!isMatch) {
-        throw new ValidationError('Incorrect current password');
+      // If user has a password, verify the old one
+      if (user.password) {
+        const isMatch = await user.comparePassword(oldPassword);
+        if (!isMatch) {
+          throw new ValidationError('Incorrect current password');
+        }
+      } else if (!user.googleId) {
+        // Non-Google user with no password — shouldn't happen, but handle it
+        throw new ValidationError('Account state error — contact support');
       }
+      // Google user with no password: allow setting password without oldPassword
 
       // Update password (pre-save hook will hash it)
       user.password = newPassword;

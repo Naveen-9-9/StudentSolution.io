@@ -1,7 +1,7 @@
 const express = require('express');
 const toolService = require('../domain/toolService');
 const { authenticateToken, optionalAuthenticateToken } = require('../../../middleware/jwt');
-const { requireAuth } = require('../../../middleware/roles');
+const { requireAuth, requireAdmin } = require('../../../middleware/roles');
 const { ValidationError } = require('../../../libraries/errors');
 const { validate, validateQuery, validateParams, asyncHandler } = require('../../../middleware/validate');
 const Joi = require('joi');
@@ -73,15 +73,8 @@ router.get('/me', authenticateToken, requireAuth, asyncHandler(async (req, res) 
 
 // @route   GET /tools/pending
 // @desc    Get all pending tools (Admin only)
-// @access  Private
-router.get('/pending', authenticateToken, requireAuth, asyncHandler(async (req, res) => {
-  // Check if role is admin
-  // In a real app, use the requireAdmin middleware, but for now we check here or use requireAuth + manual role check
-  if (req.user.role !== 'admin') {
-     // throw new ForbiddenError('Admin access required');
-     // Since we don't have a specific Admin middleware yet, we'll allow it for now or check specifically
-  }
-  
+// @access  Private (Admin)
+router.get('/pending', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
   const result = await toolService.getTools({}, 1, 50, true); // true = includePending
   const pendingTools = result.tools.filter(t => t.status === 'pending');
   
@@ -93,8 +86,8 @@ router.get('/pending', authenticateToken, requireAuth, asyncHandler(async (req, 
 
 // @route   PATCH /tools/:id/status
 // @desc    Update tool status (Admin only)
-// @access  Private
-router.patch('/:id/status', authenticateToken, requireAuth, validateParams(objectIdParamSchema), asyncHandler(async (req, res) => {
+// @access  Private (Admin)
+router.patch('/:id/status', authenticateToken, requireAdmin, validateParams(objectIdParamSchema), asyncHandler(async (req, res) => {
   const { status } = req.body;
   if (!['approved', 'rejected', 'pending'].includes(status)) {
     throw new ValidationError('Invalid status');

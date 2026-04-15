@@ -38,31 +38,31 @@
 ## Future Requirements
 
 ### Mobile & Responsiveness
-- [ ] **MOBILE-01**: All pages are fully usable on 375px-wide mobile screens without horizontal scroll
-- [ ] **MOBILE-02**: Navbar collapses to a hamburger menu on mobile with slide-out drawer navigation
-- [ ] **MOBILE-03**: Search sidebar filters collapse into a toggleable mobile drawer
+- [x] **MOBILE-01**: All pages are fully usable on 375px-wide mobile screens without horizontal scroll
+- [x] **MOBILE-02**: Navbar collapses to a hamburger menu on mobile with slide-out drawer navigation
+- [x] **MOBILE-03**: Search sidebar filters collapse into a toggleable mobile drawer
 
 ### Auth Recovery
-- [ ] **AUTH-RECOVER-01**: Forgot-password flow sends a real email with a time-limited reset link
-- [ ] **AUTH-RECOVER-02**: Google SSO is available as an account-recovery path for linked accounts
+- [x] **AUTH-RECOVER-01**: Forgot-password flow sends a real email with a time-limited reset link
+- [x] **AUTH-RECOVER-02**: Google SSO is available as an account-recovery path for linked accounts
 
 ### Email
-- [ ] **EMAIL-01**: Password reset email uses premium HTML template matching brand aesthetic
+- [x] **EMAIL-01**: Password reset email uses premium HTML template matching brand aesthetic
 
 ### Notifications
-- [ ] **NOTIFY-01**: Real-time in-app notification bell shows unread counts and dropdown of recent events
-- [ ] **NOTIFY-02**: Notifications trigger when tools user saved/upvoted get new reviews, or submitted tools are approved
+- [x] **NOTIFY-01**: Real-time in-app notification bell shows unread counts and dropdown of recent events
+- [x] **NOTIFY-02**: Notifications trigger when tools user saved/upvoted get new reviews, or submitted tools are approved
 
 ### UI Polish
-- [ ] **UI-POLISH-01**: No remaining hardcoded text-white / bg-white/5 contrast bugs in any theme
+- [x] **UI-POLISH-01**: No remaining hardcoded text-white / bg-white/5 contrast bugs in any theme
 
 ### Security Hardening
-- [ ] **SEC-01**: All user inputs sanitized against NoSQL injection ($gt, $ne operators stripped)
-- [ ] **SEC-02**: Stored user content (comments, bios, descriptions) stripped of XSS payloads (script tags, event handlers)
-- [ ] **SEC-03**: Admin-only routes enforce requireAdmin middleware — non-admin users receive 403
-- [ ] **SEC-04**: Refresh tokens are blacklisted on logout and checked before renewal
-- [ ] **SEC-05**: Account locks after 5 consecutive failed login attempts for 15 minutes
-- [ ] **SEC-06**: Google OAuth users can set a local password without requiring a current password
+- [x] **SEC-01**: All user inputs sanitized against NoSQL injection ($gt, $ne operators stripped)
+- [x] **SEC-02**: Stored user content (comments, bios, descriptions) stripped of XSS payloads (script tags, event handlers)
+- [x] **SEC-03**: Admin-only routes enforce requireAdmin middleware — non-admin users receive 403
+- [x] **SEC-04**: Refresh tokens are blacklisted on logout and checked before renewal
+- [x] **SEC-05**: Account locks after 5 consecutive failed login attempts for 15 minutes
+- [x] **SEC-06**: Google OAuth users can set a local password without requiring a current password
 
 ## Out of Scope
 

@@ -10,6 +10,8 @@ const errorHandler = require('./middleware/errorHandler');
 const { NotFoundError } = require('./libraries/errors');
 const logger = require('./libraries/logger');
 const dns = require("dns");
+const hpp = require('hpp');
+const { xssSanitizer, mongoSanitizer } = require('./middleware/sanitize');
 
 //Change DNS
 dns.setServers(["1.1.1.1","8.8.8.8"]);
@@ -111,11 +113,24 @@ if (!isDevOrTest) {
 }
 
 // Logging
-app.use(morgan('combined'));
+// Logging — redact sensitive tokens from URLs
+morgan.token('redacted-url', (req) => {
+  return (req.originalUrl || req.url).replace(/token=[^&]+/g, 'token=REDACTED');
+});
+app.use(morgan(':method :redacted-url :status :res[content-length] - :response-time ms'));
 
 // Body parsing
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// Security: Sanitize MongoDB query operators from user input
+app.use(mongoSanitizer);
+
+// Security: Prevent HTTP Parameter Pollution
+app.use(hpp());
+
+// Security: Strip XSS payloads from request bodies
+app.use(xssSanitizer);
 
 // Health check
 app.get('/health', (req, res) => {

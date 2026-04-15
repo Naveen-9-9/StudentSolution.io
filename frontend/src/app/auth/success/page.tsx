@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { fetchApi } from "@/lib/api";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShieldCheck, Loader2, XCircle, Sparkles, CheckCircle2 } from "lucide-react";
 
@@ -21,23 +22,31 @@ export default function AuthSuccessPage() {
 
       try {
         const params = new URLSearchParams(window.location.search);
-        const encodedToken = params.get("token");
-        const encodedRefreshToken = params.get("refreshToken") || "";
+        const code = params.get("code");
 
-        // If we are already authenticated via state (standard flow), we can skip the URL param extraction
+        // If we are already authenticated via state (standard flow), we can skip the exchange
         const isAlreadyAuthenticated = localStorage.getItem("accessToken");
 
-        if (!encodedToken && !isAlreadyAuthenticated) {
-          throw new Error("Missing secure identity token.");
+        if (!code && !isAlreadyAuthenticated) {
+          throw new Error("Missing secure identity session.");
         }
 
         // Simulating a brief "Verification" delay for premium feel
         await new Promise(resolve => setTimeout(resolve, 1500));
 
-        if (encodedToken) {
-          const token = decodeURIComponent(encodedToken);
-          const refreshToken = encodedRefreshToken ? decodeURIComponent(encodedRefreshToken) : "";
-          await setTokensAndUser(token, refreshToken);
+        if (code) {
+          // Exchange short-lived code for tokens
+          const response = await fetchApi("/auth/exchange", {
+            method: "POST",
+            body: { code }
+          });
+
+          if (response.success && response.data) {
+            const { tokens } = response.data;
+            await setTokensAndUser(tokens.accessToken, tokens.refreshToken);
+          } else {
+            throw new Error("Exchange failed. Please try again.");
+          }
         }
         
         setStatus("success");

@@ -6,6 +6,19 @@ const { asyncHandler } = require('../../../middleware/validate');
 
 const router = express.Router();
 
+/**
+ * SSE Notification Stream
+ * 
+ * SECURITY NOTE: The EventSource browser API does not support custom headers,
+ * so the JWT token must be passed via query parameter (?token=XXX).
+ * 
+ * Mitigations in place:
+ * 1. Morgan logs redact token= values (see app.js)
+ * 2. Helmet CSP prevents cross-origin resource embedding
+ * 3. Access tokens have short TTL (10 minutes)
+ * 4. HTTPS encrypts tokens in transit (production)
+ * 5. Tokens are never stored server-side beyond request lifecycle
+ */
 // SSE stream — real-time notifications
 router.get('/stream', authenticateToken, requireAuth, (req, res) => {
   res.writeHead(200, {

@@ -3,14 +3,30 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const Joi = require('joi');
 const userService = require('../domain/userService');
-const { authenticateToken, generateAccessToken, generateRefreshToken } = require('../../../middleware/jwt');
+const { authenticateToken, generateAccessToken, generateRefreshToken, tokenBlacklist } = require('../../../middleware/jwt');
 const { requireAuth } = require('../../../middleware/roles');
 const { ValidationError } = require('../../../libraries/errors');
 const { validate, asyncHandler } = require('../../../middleware/validate');
 const logger = require('../../../libraries/logger');
 const { sendVerificationEmail, sendPasswordResetEmail } = require('../../../libraries/email');
+const { checkLockout, recordFailedAttempt, clearAttempts } = require('../../../middleware/loginLimiter');
 
 const router = express.Router();
+
+// Short-lived auth codes for OAuth token exchange (30-second TTL)
+const authCodes = new Map();
+const AUTH_CODE_TTL = 30 * 1000; // 30 seconds
+
+// Cleanup expired codes every 60 seconds
+const codeCleanup = setInterval(() => {
+  const now = Date.now();
+  for (const [code, data] of authCodes.entries()) {
+    if (now - data.createdAt > AUTH_CODE_TTL) {
+      authCodes.delete(code);
+    }
+  }
+}, 60 * 1000);
+if (codeCleanup.unref) codeCleanup.unref();
 
 // Validation schemas
 const registerSchema = Joi.object({
@@ -37,7 +53,7 @@ const updateProfileSchema = Joi.object({
 });
 
 const changePasswordSchema = Joi.object({
-  oldPassword: Joi.string().required(),
+  oldPassword: Joi.string().optional().allow(''),
   newPassword: Joi.string().min(6).required()
 });
 
@@ -94,6 +110,19 @@ router.post('/register', validate(registerSchema), asyncHandler(async (req, res)
 // @desc    Login user
 // @access  Public
 router.post('/login', validate(loginSchema), (req, res, next) => {
+  const { email } = req.body;
+  
+  // Check if account is locked
+  const lockStatus = checkLockout(email);
+  if (lockStatus.locked) {
+    const minutesLeft = Math.ceil(lockStatus.remainingMs / 60000);
+    return res.status(429).json({
+      success: false,
+      error: `Account temporarily locked. Try again in ${minutesLeft} minute(s).`,
+      code: 'ACCOUNT_LOCKED'
+    });
+  }
+
   passport.authenticate('local', { session: false }, (err, user, info) => {
     if (err) {
       logger.error('Login error:', err);
@@ -101,8 +130,21 @@ router.post('/login', validate(loginSchema), (req, res, next) => {
     }
 
     if (!user) {
-      return next(new ValidationError(info.message || 'Login failed'));
+      // Record failed attempt
+      const result = recordFailedAttempt(email);
+      const msg = result.locked 
+        ? `Account locked after too many failed attempts. Try again in ${result.lockoutMinutes} minutes.`
+        : (info.message || 'Login failed') + `. ${result.attemptsLeft} attempt(s) remaining.`;
+      
+      return res.status(401).json({
+        success: false,
+        error: msg,
+        code: result.locked ? 'ACCOUNT_LOCKED' : 'INVALID_CREDENTIALS'
+      });
     }
+
+    // Clear failed attempts on successful login
+    clearAttempts(email);
 
     // Generate tokens
     const accessToken = generateAccessToken(user._id);
@@ -166,15 +208,18 @@ router.get('/google/callback', (req, res, next) => {
 },
 (req, res) => {
     try {
-      // Generate tokens
-      const accessToken = generateAccessToken(req.user._id);
-      const refreshToken = generateRefreshToken(req.user._id);
+      const crypto = require('crypto');
+      const code = crypto.randomBytes(32).toString('hex');
+      
+      // Store the code with user data (short-lived)
+      authCodes.set(code, {
+        userId: req.user._id,
+        createdAt: Date.now()
+      });
 
-      // Redirect to frontend with tokens
+      // Redirect with code only (not raw tokens)
       const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
-      const encodedToken = encodeURIComponent(accessToken);
-      const encodedRefreshToken = encodeURIComponent(refreshToken);
-      res.redirect(`${clientUrl}/auth/success?token=${encodedToken}&refreshToken=${encodedRefreshToken}`);
+      res.redirect(`${clientUrl}/auth/success?code=${encodeURIComponent(code)}`);
     } catch (error) {
       logger.error('Google callback error:', error);
       res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}/login?error=auth_failed`);
@@ -192,11 +237,21 @@ router.post('/refresh', asyncHandler(async (req, res) => {
     throw new ValidationError('Refresh token required');
   }
 
-  // Verify refresh token
-  const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+  // Verify refresh token with refresh secret
+  const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET);
 
   if (decoded.type !== 'refresh') {
     throw new ValidationError('Invalid refresh token');
+  }
+
+  // Check if this token has been blacklisted (logged out or already rotated)
+  if (decoded.jti && tokenBlacklist.isBlacklisted(decoded.jti)) {
+    throw new ValidationError('Token has been revoked');
+  }
+
+  // Blacklist the old refresh token to prevent reuse (Token Rotation)
+  if (decoded.jti) {
+    tokenBlacklist.add(decoded.jti, decoded.exp);
   }
 
   // Generate new tokens
@@ -208,6 +263,61 @@ router.post('/refresh', asyncHandler(async (req, res) => {
     data: {
       accessToken: newAccessToken,
       refreshToken: newRefreshToken
+    }
+  });
+}));
+
+// @route   POST /auth/exchange
+// @desc    Exchange short-lived auth code for JWT tokens (from OAuth callback)
+// @access  Public
+router.post('/exchange', asyncHandler(async (req, res) => {
+  const { code } = req.body;
+  
+  if (!code) {
+    throw new ValidationError('Authorization code required');
+  }
+
+  const codeData = authCodes.get(code);
+  
+  if (!codeData) {
+    throw new ValidationError('Invalid or expired authorization code');
+  }
+
+  // Check expiry
+  if (Date.now() - codeData.createdAt > AUTH_CODE_TTL) {
+    authCodes.delete(code);
+    throw new ValidationError('Authorization code expired');
+  }
+
+  // Delete code immediately (single-use)
+  authCodes.delete(code);
+
+  // Generate tokens
+  const accessToken = generateAccessToken(codeData.userId);
+  const refreshToken = generateRefreshToken(codeData.userId);
+
+  // Get user data
+  const user = await userService.getUserById(codeData.userId);
+  await userService.updateLastLogin(codeData.userId);
+
+  res.json({
+    success: true,
+    data: {
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        isVerified: user.isVerified,
+        bio: user.bio,
+        socialLinks: user.socialLinks,
+        avatarId: user.avatarId,
+        themePreference: user.themePreference
+      },
+      tokens: {
+        accessToken,
+        refreshToken
+      }
     }
   });
 }));
@@ -278,22 +388,38 @@ router.post('/resend-verification', authenticateToken, requireAuth, asyncHandler
 }));
 
 // @route   POST /auth/logout
-// @desc    Logout user (client should discard tokens)
+// @desc    Logout user (blacklist refresh token)
 // @access  Private
-router.post('/logout', requireAuth, (req, res) => {
-  // In a stateless JWT system, logout is handled client-side
-  // In the future, we could implement token blacklisting
+router.post('/logout', authenticateToken, requireAuth, asyncHandler(async (req, res) => {
+  const { refreshToken } = req.body;
+  
+  // Blacklist the refresh token if provided
+  if (refreshToken) {
+    try {
+      const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET);
+      if (decoded.jti) {
+        tokenBlacklist.add(decoded.jti, decoded.exp);
+      }
+    } catch (err) {
+      // Token might be already expired or malformed — still allow logout to proceed
+      logger.warn('Could not decode refresh token during logout blacklisting');
+    }
+  }
+
   res.json({
     success: true,
     message: 'Logged out successfully'
   });
-});
+}));
 
 // @route   GET /auth/me
 // @desc    Get current user profile
 // @access  Private
 router.get('/me', authenticateToken, requireAuth, asyncHandler(async (req, res) => {
   const user = await userService.getUserById(req.user.userId);
+  
+  // Check if user has a password set (for Google OAuth users who may not)
+  const hasPassword = await userService.userHasPassword(req.user.userId);
 
   res.json({
     success: true,
@@ -309,7 +435,8 @@ router.get('/me', authenticateToken, requireAuth, asyncHandler(async (req, res) 
         bio: user.bio,
         socialLinks: user.socialLinks,
         avatarId: user.avatarId,
-        themePreference: user.themePreference
+        themePreference: user.themePreference,
+        hasPassword
       }
     }
   });

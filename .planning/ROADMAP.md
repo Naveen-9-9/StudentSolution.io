@@ -172,10 +172,10 @@ Plans:
 **Plans:** 4 plans (2 waves)
 
 Plans:
-- [ ] 09-01 Mobile Responsive Layouts (Wave 1)
-- [ ] 09-02 Forgot Password & Account Recovery (Wave 1)
-- [ ] 09-03 Real-Time Notification System (Wave 2)
-- [ ] 09-04 UI Polish & Theme Fixes (Wave 2)
+- [x] 09-01 Mobile Responsive Layouts (Wave 1)
+- [x] 09-02 Forgot Password & Account Recovery (Wave 1)
+- [x] 09-03 Real-Time Notification System (Wave 2)
+- [x] 09-04 UI Polish & Theme Fixes (Wave 2)
 
 **Deliverables:**
 - Mobile-first responsive layouts for Home, Search, Auth, and Settings pages.
@@ -205,11 +205,11 @@ Plans:
 **Plans:** 5 plans (3 waves)
 
 Plans:
-- [ ] 10-01 NoSQL Injection & XSS Protection (Wave 1)
-- [ ] 10-02 Admin Access Control Fix (Wave 1)
-- [ ] 10-03 JWT Token Hardening & Blacklisting (Wave 2)
-- [ ] 10-04 Account Lockout & Google Password Fix (Wave 2)
-- [ ] 10-05 Secure Token Transport & Log Redaction (Wave 3)
+- [x] 10-01 NoSQL Injection & XSS Protection (Wave 1)
+- [x] 10-02 Admin Access Control Fix (Wave 1)
+- [x] 10-03 JWT Token Hardening & Blacklisting (Wave 2)
+- [x] 10-04 Account Lockout & Google Password Fix (Wave 2)
+- [x] 10-05 Secure Token Transport & Log Redaction (Wave 3)
 
 **Deliverables:**
 - Add `express-mongo-sanitize` and `hpp` middleware to block injection attacks.

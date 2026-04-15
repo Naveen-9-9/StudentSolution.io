@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { AuthError } = require('../libraries/errors');
+const tokenBlacklist = require('./tokenBlacklist');
 
 // Middleware to authenticate JWT tokens
 const authenticateToken = (req, res, next) => {
@@ -16,7 +17,7 @@ const authenticateToken = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET || process.env.JWT_SECRET);
     req.user = decoded;
     next();
   } catch (error) {
@@ -40,7 +41,7 @@ const optionalAuthenticateToken = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET || process.env.JWT_SECRET);
     req.user = decoded;
     next();
   } catch (error) {
@@ -53,17 +54,26 @@ const optionalAuthenticateToken = (req, res, next) => {
 const generateAccessToken = (userId) => {
   return jwt.sign(
     { userId },
-    process.env.JWT_SECRET,
-    { expiresIn: '15m' } // Short-lived access token
+    process.env.JWT_ACCESS_SECRET || process.env.JWT_SECRET,
+    { 
+      expiresIn: '10m',
+      issuer: 'studentsolution-api',
+      audience: 'studentsolution-client'
+    }
   );
 };
 
 // Generate refresh token
 const generateRefreshToken = (userId) => {
+  const jti = tokenBlacklist.generateJti();
   return jwt.sign(
-    { userId, type: 'refresh' },
-    process.env.JWT_SECRET,
-    { expiresIn: '7d' } // Longer-lived refresh token
+    { userId, type: 'refresh', jti },
+    process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET,
+    { 
+      expiresIn: '7d',
+      issuer: 'studentsolution-api',
+      audience: 'studentsolution-client'
+    }
   );
 };
 
@@ -71,5 +81,6 @@ module.exports = {
   authenticateToken,
   optionalAuthenticateToken,
   generateAccessToken,
-  generateRefreshToken
+  generateRefreshToken,
+  tokenBlacklist
 };
