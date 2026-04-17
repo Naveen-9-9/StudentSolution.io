@@ -58,6 +58,17 @@ export default function NotificationBell() {
     eventSource.onerror = (err) => {
       console.error("SSE connection error", err);
       eventSource.close();
+      
+      // Attempt reconnection after a delay if still authenticated
+      if (isAuthenticated) {
+        const timer = setTimeout(() => {
+          // React's cleanup and standard effects will handle the rest
+          // by triggering a re-render/re-run if dependencies change,
+          // but we add a local retry logic or just let the interval/effect loop handle it.
+          window.dispatchEvent(new CustomEvent("sse:retry"));
+        }, 5000);
+        return () => clearTimeout(timer);
+      }
     };
 
     const interval = setInterval(loadNotifications, 60000); // Fallback poll every 60s
