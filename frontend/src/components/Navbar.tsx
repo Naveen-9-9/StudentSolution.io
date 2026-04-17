@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { NavBar, NavItem } from "./ui/tubelight-navbar";
-import { Home, Search, Trophy } from "lucide-react";
+import { Home, Search, Trophy, MessageSquare, Bot } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import UserProfile from "./UserProfile";
@@ -18,12 +18,14 @@ export default function GlobalNavbar() {
     { name: "Home", url: "/", icon: Home },
     { name: "Discovery", url: "/search", icon: Search },
     { name: "Ranking", url: "/leaderboard", icon: Trophy },
+    { name: "AI Support", url: "/support", icon: Bot },
   ];
 
   const mobileNavLinks = [
     { name: "Home", url: "/", icon: Home },
     { name: "Discovery", url: "/search", icon: Search },
     { name: "Ranking", url: "/leaderboard", icon: Trophy },
+    { name: "AI Support", url: "/support", icon: Bot },
   ];
 
   return (
