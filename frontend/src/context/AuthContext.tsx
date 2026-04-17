@@ -70,6 +70,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     hasInitialized.current = true;
 
     const initAuth = async () => {
+      // Skip initial background check if we are in the middle of a token exchange handshake
+      const searchParams = new URLSearchParams(window.location.search);
+      if (searchParams.has("code") || window.location.pathname === "/auth/success") {
+        setIsLoading(false);
+        return;
+      }
+
       try {
         const res = await fetchApi("/auth/me");
         if (res.success && res.data && res.data.user) {
