@@ -69,24 +69,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     hasInitialized.current = true;
 
     const initAuth = async () => {
-      const token = localStorage.getItem("accessToken");
-      if (token) {
-        try {
-          const res = await fetchApi("/auth/me");
-          if (res.success && res.data && res.data.user) {
-            setUser(res.data.user);
-          } else {
-            // Invalid token
-            localStorage.removeItem("accessToken");
-            localStorage.removeItem("refreshToken");
-          }
-        } catch (error: unknown) {
-          console.warn("Session expired or invalid token. Clearing local storage.", (error as Error)?.message);
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
+      try {
+        const res = await fetchApi("/auth/me");
+        if (res.success && res.data && res.data.user) {
+          setUser(res.data.user);
         }
+      } catch (error: unknown) {
+        // Not logged in or session expired
+        console.log("No active session found.");
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
 
     initAuth();
@@ -107,24 +100,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     window.location.href = `${API_URL}/auth/google`;
   }, []);
 
-  const logout = useCallback(() => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
+  const logout = useCallback(async () => {
+    try {
+      await fetchApi("/auth/logout", { method: "POST" });
+    } catch (err) {
+      console.error("Logout request failed", err);
+    }
     setUser(null);
     hasSyncedTheme.current = false;
   }, []);
 
-  const setTokensAndUser = useCallback(async (accessToken: string, refreshToken: string, userData?: User) => {
-    // Store tokens
-    localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("refreshToken", refreshToken);
-
+  const setTokensAndUser = useCallback(async (accessToken?: string, refreshToken?: string, userData?: User) => {
     if (userData) {
       setUser(userData);
       return;
     }
 
-    // Fetch user details if not provided (e.g., from Google OAuth)
+    // Fetch user details if not provided (e.g., from Google OAuth exchange)
     try {
       const res = await fetchApi("/auth/me");
       if (res.success && res.data && res.data.user) {
@@ -133,9 +125,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error("Invalid user data in response");
       }
     } catch (error) {
-      console.error("Failed to fetch user after setting tokens:", error);
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
+      console.error("Failed to fetch user after auth success:", error);
       throw error;
     }
   }, []);
