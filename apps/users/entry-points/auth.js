@@ -28,6 +28,23 @@ const codeCleanup = setInterval(() => {
 }, 60 * 1000);
 if (codeCleanup.unref) codeCleanup.unref();
 
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'lax',
+  path: '/'
+};
+
+const ACCESS_COOKIE_OPTIONS = {
+  ...COOKIE_OPTIONS,
+  maxAge: 15 * 60 * 1000 // 15 minutes
+};
+
+const REFRESH_COOKIE_OPTIONS = {
+  ...COOKIE_OPTIONS,
+  maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+};
+
 // Validation schemas
 const registerSchema = Joi.object({
   email: Joi.string().email().required(),
@@ -83,6 +100,9 @@ router.post('/register', validate(registerSchema), asyncHandler(async (req, res)
     logger.error('Failed to send verification email during registration:', err);
   });
 
+  res.cookie('accessToken', accessToken, ACCESS_COOKIE_OPTIONS);
+  res.cookie('refreshToken', refreshToken, REFRESH_COOKIE_OPTIONS);
+
   res.status(201).json({
     success: true,
     message: 'User registered successfully',
@@ -97,10 +117,6 @@ router.post('/register', validate(registerSchema), asyncHandler(async (req, res)
         socialLinks: user.socialLinks,
         avatarId: user.avatarId,
         themePreference: user.themePreference
-      },
-      tokens: {
-        accessToken,
-        refreshToken
       }
     }
   });
@@ -150,6 +166,9 @@ router.post('/login', validate(loginSchema), (req, res, next) => {
     const accessToken = generateAccessToken(user._id);
     const refreshToken = generateRefreshToken(user._id);
 
+    res.cookie('accessToken', accessToken, ACCESS_COOKIE_OPTIONS);
+    res.cookie('refreshToken', refreshToken, REFRESH_COOKIE_OPTIONS);
+
     res.json({
       success: true,
       message: 'Login successful',
@@ -164,10 +183,6 @@ router.post('/login', validate(loginSchema), (req, res, next) => {
           socialLinks: user.socialLinks,
           avatarId: user.avatarId,
           themePreference: user.themePreference
-        },
-        tokens: {
-          accessToken,
-          refreshToken
         }
       }
     });
@@ -231,7 +246,7 @@ router.get('/google/callback', (req, res, next) => {
 // @desc    Refresh access token
 // @access  Public (with refresh token)
 router.post('/refresh', asyncHandler(async (req, res) => {
-  const { refreshToken } = req.body;
+  const refreshToken = req.cookies['refreshToken'];
 
   if (!refreshToken) {
     throw new ValidationError('Refresh token required');
@@ -258,12 +273,12 @@ router.post('/refresh', asyncHandler(async (req, res) => {
   const newAccessToken = generateAccessToken(decoded.userId);
   const newRefreshToken = generateRefreshToken(decoded.userId);
 
+  res.cookie('accessToken', newAccessToken, ACCESS_COOKIE_OPTIONS);
+  res.cookie('refreshToken', newRefreshToken, REFRESH_COOKIE_OPTIONS);
+
   res.json({
     success: true,
-    data: {
-      accessToken: newAccessToken,
-      refreshToken: newRefreshToken
-    }
+    message: 'Token refreshed successfully'
   });
 }));
 
@@ -300,6 +315,9 @@ router.post('/exchange', asyncHandler(async (req, res) => {
   const user = await userService.getUserById(codeData.userId);
   await userService.updateLastLogin(codeData.userId);
 
+  res.cookie('accessToken', accessToken, ACCESS_COOKIE_OPTIONS);
+  res.cookie('refreshToken', refreshToken, REFRESH_COOKIE_OPTIONS);
+
   res.json({
     success: true,
     data: {
@@ -313,10 +331,6 @@ router.post('/exchange', asyncHandler(async (req, res) => {
         socialLinks: user.socialLinks,
         avatarId: user.avatarId,
         themePreference: user.themePreference
-      },
-      tokens: {
-        accessToken,
-        refreshToken
       }
     }
   });
@@ -389,9 +403,9 @@ router.post('/resend-verification', authenticateToken, requireAuth, asyncHandler
 
 // @route   POST /auth/logout
 // @desc    Logout user (blacklist refresh token)
-// @access  Private
-router.post('/logout', authenticateToken, requireAuth, asyncHandler(async (req, res) => {
-  const { refreshToken } = req.body;
+// @access  Public (Idempotent)
+router.post('/logout', asyncHandler(async (req, res) => {
+  const refreshToken = req.cookies['refreshToken'];
   
   // Blacklist the refresh token if provided
   if (refreshToken) {
@@ -405,6 +419,9 @@ router.post('/logout', authenticateToken, requireAuth, asyncHandler(async (req, 
       logger.warn('Could not decode refresh token during logout blacklisting');
     }
   }
+
+  res.clearCookie('accessToken', COOKIE_OPTIONS);
+  res.clearCookie('refreshToken', REFRESH_COOKIE_OPTIONS);
 
   res.json({
     success: true,
