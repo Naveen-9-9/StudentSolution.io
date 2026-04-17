@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const passport = require('./middleware/passport');
 const connectDB = require('./config/database');
@@ -62,6 +63,9 @@ app.use(cors({
   },
   credentials: true,
 }));
+
+// Cookie parsing
+app.use(cookieParser());
 
 // General rate limiter: 100 requests per 15 minutes
 const generalLimiter = rateLimit({
