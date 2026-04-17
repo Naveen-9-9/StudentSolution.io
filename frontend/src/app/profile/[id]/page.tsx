@@ -70,8 +70,25 @@ export default function PublicProfilePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen pt-[120px] pb-24 flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+      <div className="min-h-screen pt-[120px] pb-24 px-4 md:px-8 bg-background">
+        <div className="max-w-6xl mx-auto space-y-8 animate-pulse">
+          <div className="bg-card/50 rounded-3xl p-8 md:p-12 border border-foreground/5 h-64 flex flex-col md:flex-row items-center md:items-end gap-6">
+            <div className="w-32 h-32 rounded-full bg-foreground/5 shrink-0" />
+            <div className="flex-1 space-y-4 w-full">
+              <div className="h-8 w-48 bg-foreground/10 rounded-lg mx-auto md:mx-0" />
+              <div className="h-4 w-full max-w-xl bg-foreground/5 rounded-lg mx-auto md:mx-0" />
+              <div className="h-4 w-32 bg-primary/10 rounded-lg mx-auto md:mx-0" />
+            </div>
+          </div>
+          <div className="space-y-6">
+            <div className="h-8 w-64 bg-foreground/10 rounded-lg" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="h-48 bg-card/50 rounded-3xl border border-foreground/5" />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
