@@ -39,7 +39,28 @@ const app = express();
 app.set('trust proxy', 1);
 
 // Security middleware
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      connectSrc: [
+        "'self'", 
+        "http://localhost:5000", 
+        "http://localhost:3000", 
+        "http://localhost:3001",
+        "https://*.vercel.app",
+        process.env.NEXT_PUBLIC_API_URL, 
+        process.env.CLIENT_URL
+      ].filter(Boolean),
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "data:", "https:", "http:"],
+      fontSrc: ["'self'", "https:", "data:"],
+      objectSrc: ["'none'"],
+      upgradeInsecureRequests: [],
+    },
+  },
+}));
 
 // CORS
 const allowedOrigins = [
