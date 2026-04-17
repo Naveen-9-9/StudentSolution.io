@@ -39,7 +39,8 @@ export default function AuthSuccessPage() {
           });
 
           if (response.success && response.data) {
-            await setTokensAndUser();
+            const { user } = response.data;
+            await setTokensAndUser(undefined, undefined, user);
           } else {
             throw new Error("Exchange failed. Please try again.");
           }
