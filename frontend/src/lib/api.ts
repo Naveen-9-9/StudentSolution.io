@@ -74,6 +74,11 @@ export async function fetchApi(endpoint: string, options: any = {}): Promise<any
       isRefreshing = false;
       // If refresh fails, notify the app to logout
       window.dispatchEvent(new CustomEvent("auth:logout"));
+
+      // If this was a background checks, fail silently to guest mode
+      if (endpoint === "/auth/me") {
+        return { success: false, data: null, error: "Not authenticated" };
+      }
       throw error;
     }
   }
