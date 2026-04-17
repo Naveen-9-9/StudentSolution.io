@@ -5,7 +5,7 @@ const tokenBlacklist = require('./tokenBlacklist');
 // Middleware to authenticate JWT tokens
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
-  let token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+  let token = (authHeader && authHeader.split(' ')[1]) || req.cookies['accessToken']; 
 
   // Fallback to query parameter for EventSource/SSE compatibility
   if (!token && req.query.token) {
