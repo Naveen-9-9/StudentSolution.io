@@ -35,6 +35,9 @@ require('./middleware/passport');
 
 const app = express();
 
+// Trust proxy for secure cookies in hosted environments (Render, Vercel, etc.)
+app.set('trust proxy', 1);
+
 // Security middleware
 app.use(helmet());
 
