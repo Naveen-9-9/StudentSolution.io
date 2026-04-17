@@ -24,10 +24,7 @@ export default function AuthSuccessPage() {
         const params = new URLSearchParams(window.location.search);
         const code = params.get("code");
 
-        // If we are already authenticated via state (standard flow), we can skip the exchange
-        const isAlreadyAuthenticated = localStorage.getItem("accessToken");
-
-        if (!code && !isAlreadyAuthenticated) {
+        if (!code) {
           throw new Error("Missing secure identity session.");
         }
 
@@ -42,8 +39,7 @@ export default function AuthSuccessPage() {
           });
 
           if (response.success && response.data) {
-            const { tokens } = response.data;
-            await setTokensAndUser(tokens.accessToken, tokens.refreshToken);
+            await setTokensAndUser();
           } else {
             throw new Error("Exchange failed. Please try again.");
           }
