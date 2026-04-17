@@ -37,6 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const hasInitialized = useRef(false);
   const hasSyncedTheme = useRef(false);
+  const authChannel = useRef<BroadcastChannel | null>(null);
 
   const { setTheme } = useTheme();
 
@@ -83,6 +84,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     initAuth();
+
+    // Initialize BroadcastChannel for cross-tab sync
+    const channel = new BroadcastChannel("auth_sync");
+    authChannel.current = channel;
+
+    channel.onmessage = (event) => {
+      if (event.data === "login") {
+        initAuth();
+      } else if (event.data === "logout") {
+        setUser(null);
+        hasSyncedTheme.current = false;
+      }
+    };
+
+    return () => {
+      channel.close();
+    };
   }, []);
 
   useEffect(() => {
@@ -108,11 +126,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     setUser(null);
     hasSyncedTheme.current = false;
+    authChannel.current?.postMessage("logout");
   }, []);
 
   const setTokensAndUser = useCallback(async (accessToken?: string, refreshToken?: string, userData?: User) => {
     if (userData) {
       setUser(userData);
+      authChannel.current?.postMessage("login");
       return;
     }
 
