@@ -51,8 +51,9 @@ export async function fetchApi(endpoint: string, options: any = {}): Promise<any
   });
 
   // Handle 401 Unauthorized - Attempt Silent Token Refresh
-  // Note: We skip refresh if the endpoint itself is logout or refresh to avoid loops
-  if (response.status === 401 && typeof window !== "undefined" && endpoint !== "/auth/logout" && endpoint !== "/auth/refresh") {
+  // Note: We skip refresh for core auth endpoints to avoid loops and race conditions
+  const authEndpoints = ["/auth/login", "/auth/register", "/auth/exchange", "/auth/logout", "/auth/refresh"];
+  if (response.status === 401 && typeof window !== "undefined" && !authEndpoints.includes(endpoint)) {
     // If we're already refreshing, queue this request
     if (isRefreshing) {
       return new Promise((resolve) => {
