@@ -28,10 +28,13 @@ const codeCleanup = setInterval(() => {
 }, 60 * 1000);
 if (codeCleanup.unref) codeCleanup.unref();
 
+const isHostedEnv = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
+
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  secure: isHostedEnv,
+  sameSite: isHostedEnv ? 'none' : 'lax',
+  partitioned: isHostedEnv ? true : false, // Enable CHIPS for modern third-party cookie support
   path: '/'
 };
 
