@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { NavBar, NavItem } from "./ui/tubelight-navbar";
-import { Home, Search, Trophy, MessageSquare, Bot } from "lucide-react";
+import { Home, Search, Trophy, Bot } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import UserProfile from "./UserProfile";
