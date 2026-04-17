@@ -215,13 +215,22 @@ class UserService {
       // Simple Reputation Score (Upvotes * 10) + (Tools * 50)
       const impactScore = (stats.totalUpvotes || 0) * 10 + (stats.totalTools || 0) * 50;
 
+      const Tool = require('../../tools/data-access/toolModel');
+      const submittedTools = await Tool.find({ submittedBy: userId, status: 'approved' })
+         .select('name description websiteUrl imageUrl upvoteCount pricing category')
+         .sort({ upvoteCount: -1 });
+
       return {
         _id: user._id,
         name: user.name,
+        bio: user.bio,
+        avatarId: user.avatarId,
+        socialLinks: user.socialLinks,
         registeredAt: user.registeredAt,
         totalTools: stats.totalTools || 0,
         totalUpvotes: stats.totalUpvotes || 0,
-        impactScore
+        impactScore,
+        tools: submittedTools
       };
     } catch (error) {
        logger.error('Error getting public profile:', error);
