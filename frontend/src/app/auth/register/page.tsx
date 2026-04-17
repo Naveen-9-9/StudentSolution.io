@@ -43,8 +43,8 @@ export default function RegisterPage() {
       }) as any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
       if (response.success) {
-        const { tokens, user } = response.data;
-        await setTokensAndUser(tokens.accessToken, tokens.refreshToken, user);
+        const { user } = response.data;
+        await setTokensAndUser(undefined, undefined, user);
         router.push("/auth/success"); // Redirect to success page for premium feel
       }
     } catch (err: unknown) {
