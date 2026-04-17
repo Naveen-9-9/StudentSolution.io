@@ -26,7 +26,7 @@ interface AuthContextType {
   isLoading: boolean;
   loginWithGoogle: () => void;
   logout: () => void;
-  setTokensAndUser: (accessToken: string, refreshToken: string, userData?: User) => void;
+  setTokensAndUser: (accessToken?: string, refreshToken?: string, userData?: User) => Promise<void>;
   updateProfile: (data: Partial<User>) => Promise<boolean>;
 }
 
