@@ -35,9 +35,8 @@ export default function NotificationBell() {
     loadNotifications();
 
     // Setup SSE for real-time updates
-    const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-    const streamUrl = `${baseUrl}/notifications/stream${token ? `?token=${token}` : ''}`;
+    const streamUrl = `${baseUrl}/notifications/stream`;
     const eventSource = new EventSource(streamUrl, { withCredentials: true });
 
     eventSource.onmessage = (event) => {
@@ -180,7 +179,7 @@ export default function NotificationBell() {
                         </p>
                         <div className="flex items-center justify-between mt-1">
                            <span className="text-xs text-muted-foreground">
-                             {formatDistanceToNow(new Date(notif.createdAt), { addSuffix: true })}
+                             {formatDistanceToNow(new Date(notif.createdAt || Date.now()), { addSuffix: true })}
                            </span>
                            {notif.relatedTool && (
                               <Link 
