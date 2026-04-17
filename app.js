@@ -43,7 +43,7 @@ const allowedOrigins = [
   process.env.CLIENT_URL,
   'http://localhost:3000',
   'http://localhost:3001',
-  'https://studentsolution-io.vercel.app' // Fallback for your specific Vercel URL
+  'https://student-solution-io.vercel.app'
 ].filter(Boolean);
 
 app.use(cors({
