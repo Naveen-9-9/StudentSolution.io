@@ -25,9 +25,11 @@ interface ToolCardProps {
   tool: Tool;
   onUpvote: (id: string) => void;
   isUpvoting: boolean;
+  variant?: "default" | "minimal";
+  isHighlighted?: boolean;
 }
 
-export default function ToolCard({ tool, onUpvote, isUpvoting }: ToolCardProps) {
+export default function ToolCard({ tool, onUpvote, isUpvoting, variant = "default", isHighlighted }: ToolCardProps) {
   const [isBookmarkModalOpen, setIsBookmarkModalOpen] = useState(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
 
@@ -51,8 +53,16 @@ export default function ToolCard({ tool, onUpvote, isUpvoting }: ToolCardProps) 
   return (
     <motion.div
       whileHover={{ y: -8, scale: 1.01 }}
-      transition={{ type: "spring", stiffness: 350, damping: 25 }}
-      className="group relative"
+      animate={isHighlighted ? { 
+        scale: [1, 1.05, 1],
+        boxShadow: [
+          "0 0 0px rgba(var(--primary-oklch), 0)",
+          "0 0 30px rgba(var(--primary-oklch), 0.5)",
+          "0 0 0px rgba(var(--primary-oklch), 0)"
+        ]
+      } : {}}
+      transition={isHighlighted ? { duration: 1, repeat: 1 } : { type: "spring", stiffness: 350, damping: 25 }}
+      className={cn("group relative", isHighlighted && "ring-2 ring-primary ring-offset-4 ring-offset-background rounded-[32px]")}
     >
       {/* Premium Tool Card Body */}
       <div 
@@ -88,47 +98,63 @@ export default function ToolCard({ tool, onUpvote, isUpvoting }: ToolCardProps) 
 
           {/* Middle: Content */}
           <div className="flex-1">
-            <h3 className="text-2xl font-black tracking-tight text-foreground group-hover:text-primary transition-colors flex items-center gap-2 font-display">
+            <h3 className={cn(
+              "font-black tracking-tight text-foreground group-hover:text-primary transition-colors flex items-center gap-2 font-display",
+              variant === "minimal" ? "text-lg" : "text-2xl"
+            )}>
               {tool.name}
               <ExternalLink size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" />
             </h3>
-            <p className="text-sm font-medium text-muted-foreground mt-3 line-clamp-2 leading-relaxed">
-              {tool.description}
-            </p>
+            {variant !== "minimal" && (
+              <p className="text-sm font-medium text-muted-foreground mt-3 line-clamp-2 leading-relaxed">
+                {tool.description}
+              </p>
+            )}
           </div>
 
           {/* Bottom Row: Stats & Action */}
           <div className="flex items-center justify-between pt-4 border-t border-border/10">
-            <div className="flex items-center gap-4">
+            {variant === "minimal" ? (
               <div className="flex items-center gap-2 text-muted-foreground group-hover:text-primary transition-colors">
-                <TrendingUp size={16} />
-                <span className="text-sm font-black tracking-tight">{tool.upvoteCount || 0}</span>
+                <TrendingUp size={14} />
+                <span className="text-xs font-black tracking-tight">{tool.upvoteCount || 0}</span>
               </div>
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <MessageSquare size={16} />
-                <span className="text-sm font-bold tracking-tight">{tool.reviewCount || 0}</span>
+            ) : (
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 text-muted-foreground group-hover:text-primary transition-colors">
+                  <TrendingUp size={16} />
+                  <span className="text-sm font-black tracking-tight">{tool.upvoteCount || 0}</span>
+                </div>
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <MessageSquare size={16} />
+                  <span className="text-sm font-bold tracking-tight">{tool.reviewCount || 0}</span>
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="flex items-center gap-2">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsInfoModalOpen(true);
-                }}
-                className="p-3 rounded-2xl bg-secondary/50 text-secondary-foreground hover:bg-primary hover:text-primary-foreground transition-all shadow-md active:scale-95"
-              >
-                <Info size={18} />
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsBookmarkModalOpen(true);
-                }}
-                className="p-3 rounded-2xl bg-primary/5 text-primary hover:bg-primary/20 transition-all border border-primary/10"
-              >
-                <Bookmark size={18} />
-              </button>
+              {variant !== "minimal" && (
+                <>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsInfoModalOpen(true);
+                    }}
+                    className="p-3 rounded-2xl bg-secondary/50 text-secondary-foreground hover:bg-primary hover:text-primary-foreground transition-all shadow-md active:scale-95"
+                  >
+                    <Info size={18} />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsBookmarkModalOpen(true);
+                    }}
+                    className="p-3 rounded-2xl bg-primary/5 text-primary hover:bg-primary/20 transition-all border border-primary/10"
+                  >
+                    <Bookmark size={18} />
+                  </button>
+                </>
+              )}
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -138,7 +164,8 @@ export default function ToolCard({ tool, onUpvote, isUpvoting }: ToolCardProps) 
                 }}
                 disabled={isUpvoting}
                 className={cn(
-                  "px-5 py-3 rounded-2xl font-black text-[10px] uppercase tracking-[0.15em] transition-all shadow-lg flex items-center gap-2.5",
+                  "rounded-2xl font-black uppercase tracking-[0.15em] transition-all shadow-lg flex items-center gap-2.5",
+                  variant === "minimal" ? "px-4 py-2 text-[9px]" : "px-5 py-3 text-[10px]",
                   isUpvoting 
                     ? "bg-primary/20 text-primary cursor-wait" 
                     : tool.hasUpvoted
@@ -146,7 +173,7 @@ export default function ToolCard({ tool, onUpvote, isUpvoting }: ToolCardProps) 
                       : "bg-primary text-primary-foreground hover:shadow-primary/40"
                 )}
               >
-                <ArrowUpCircle size={18} className={cn(tool.hasUpvoted && "fill-primary")} />
+                <ArrowUpCircle size={variant === "minimal" ? 14 : 18} className={cn(tool.hasUpvoted && "fill-primary")} />
                 {isUpvoting ? "Voting" : tool.hasUpvoted ? "Upvoted" : "Upvote"}
               </motion.button>
             </div>
@@ -161,7 +188,8 @@ export default function ToolCard({ tool, onUpvote, isUpvoting }: ToolCardProps) 
       )} />
       
       {/* Premium Tooltip: Only shown on hover/large screens */}
-      <div className="hidden lg:block">
+      {(variant !== "minimal") && (
+        <div className="hidden lg:block">
         <AnimatePresence>
           <motion.div
             initial={{ opacity: 0, scale: 0.9, x: 20 }}
@@ -213,7 +241,8 @@ export default function ToolCard({ tool, onUpvote, isUpvoting }: ToolCardProps) 
             </div>
           </motion.div>
         </AnimatePresence>
-      </div>
+        </div>
+      )}
 
       <CollectionModal
         tool={tool}
