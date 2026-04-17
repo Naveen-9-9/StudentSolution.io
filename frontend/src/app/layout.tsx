@@ -7,6 +7,7 @@ import GlobalNavbar from "@/components/Navbar";
 import BackgroundMesh from "@/components/BackgroundMesh";
 import { cn } from "@/lib/utils";
 import RouteTransition from "@/components/RouteTransition";
+import CookieConsent from "@/components/CookieConsent";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,9 +56,10 @@ export default function RootLayout({
             <GlobalNavbar />
             <main className="flex-1 pt-12 sm:pt-20 min-h-screen">
                <RouteTransition>
-                {children}
+                 {children}
                </RouteTransition>
             </main>
+             <CookieConsent />
             
             {/* Simple Premium Footer */}
             <footer className="border-t bg-card/10 backdrop-blur-md py-12 mt-20">
