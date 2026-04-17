@@ -28,6 +28,7 @@ function SearchResults() {
   const [intentMatched, setIntentMatched] = useState<string | null>(null);
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [highlightedToolId, setHighlightedToolId] = useState<string | null>(null);
 
   const sortOptions = [
     { id: "relevant", label: "Most Relevant" },
@@ -72,6 +73,32 @@ function SearchResults() {
 
     fetchResults();
   }, [q, category, page, sortBy]);
+
+  useEffect(() => {
+    const highlight = searchParams.get("highlight");
+    if (highlight) {
+      setHighlightedToolId(highlight);
+      
+      // Automatic cleanup after 3 seconds
+      const timer = setTimeout(() => {
+        setHighlightedToolId(null);
+        // Clean the URL param without full reload
+        const newParams = new URLSearchParams(searchParams.toString());
+        newParams.delete("highlight");
+        router.replace(`/search?${newParams.toString()}`, { scroll: false });
+      }, 3000);
+
+      // Scroll to element after a short delay to ensure rendering
+      setTimeout(() => {
+        const el = document.getElementById(`tool-${highlight}`);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams, router]);
 
   const handleFilterChange = (key: string, value: string) => {
     const newParams = new URLSearchParams(searchParams.toString());
@@ -359,6 +386,7 @@ function SearchResults() {
                   {tools.map((tool, idx) => (
                     <motion.div
                       key={tool._id}
+                      id={`tool-${tool._id}`}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: idx * 0.05 }}
@@ -367,6 +395,7 @@ function SearchResults() {
                         tool={tool}
                         onUpvote={handleUpvote}
                         isUpvoting={upvotingIds.has(tool._id)}
+                        isHighlighted={highlightedToolId === tool._id}
                       />
                     </motion.div>
                   ))}
