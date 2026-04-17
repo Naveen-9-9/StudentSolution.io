@@ -60,14 +60,21 @@ export default function SupportPage() {
       }
     } catch (err: any) {
       console.error(err);
+      
+      let errorMessage = "❌ I encountered a system error trying to process your request. Please ensure you are logged in and your connection is stable.";
+      
+      if (err.message?.includes('high demand') || err.message?.includes('503')) {
+        errorMessage = "⚠️ The AI Assistant is currently at peak capacity. I need a moment to breathe — please try sending your question again in a few seconds.";
+      } else if (err.message?.includes('Too many requests')) {
+        errorMessage = "⚠️ Rate limit reached. I need a short cooldown, please try asking again in a minute.";
+      }
+
       setMessages((prev) => [
         ...prev,
         {
           id: (Date.now() + 2).toString(),
           role: "ai",
-          content: err.message === "Too many requests to the AI Support bot, please try again after a minute" 
-            ? "⚠️ Rate limit reached. I need a short cooldown, please try asking again in a minute."
-            : "❌ I encountered a system error trying to process your request. Please ensure you are logged in and your connection is stable.",
+          content: errorMessage,
         },
       ]);
     } finally {
