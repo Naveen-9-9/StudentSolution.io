@@ -1,55 +1,35 @@
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 let isRefreshing = false;
-let refreshSubscribers: ((token: string) => void)[] = [];
+let refreshSubscribers: (() => void)[] = [];
 
-function subscribeTokenRefresh(cb: (token: string) => void) {
+function subscribeTokenRefresh(cb: () => void) {
   refreshSubscribers.push(cb);
 }
 
-function onTokenRefreshed(token: string) {
-  refreshSubscribers.map((cb) => cb(token));
+function onTokenRefreshed() {
+  refreshSubscribers.map((cb) => cb());
   refreshSubscribers = [];
 }
 
 async function refreshAccessToken() {
-  const refreshToken = localStorage.getItem("refreshToken");
-  if (!refreshToken) {
-    throw new Error("Authentication required. Please log in to access this feature.");
-  }
-
   const response = await fetch(`${API_URL}/auth/refresh`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ refreshToken }),
+    credentials: "include" // Send refreshToken cookie
   });
 
   if (!response.ok) {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    throw new Error("Refresh token expired");
+    throw new Error("Session expired. Please log in again.");
   }
 
-  const data = await response.json();
-  if (data.success && data.data) {
-    const { accessToken, refreshToken: newRefreshToken } = data.data;
-    localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("refreshToken", newRefreshToken);
-    return accessToken;
-  }
-
-  throw new Error("Failed to refresh token");
+  return response.json();
 }
 
-// Standard fetch wrapper that automatically adds the Authorization header
+// Standard fetch wrapper that automatically uses secure cookies
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchApi(endpoint: string, options: any = {}): Promise<any> {
-  const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
   const headers = new Headers(options.headers || undefined);
-
-  if (token) {
-    headers.set("Authorization", `Bearer ${token}`);
-  }
 
   let body = options.body;
   if (body) {
@@ -57,7 +37,6 @@ export async function fetchApi(endpoint: string, options: any = {}): Promise<any
       headers.set("Content-Type", "application/json");
       body = JSON.stringify(body);
     } else if (typeof body === "string") {
-      // If it's a string, we assume it's JSON if it looks like it and no content-type is set
       if (!headers.has("Content-Type") && (body.startsWith("{") || body.startsWith("["))) {
         headers.set("Content-Type", "application/json");
       }
@@ -67,45 +46,35 @@ export async function fetchApi(endpoint: string, options: any = {}): Promise<any
   const response = await fetch(`${API_URL}${endpoint}`, {
     ...options,
     headers,
-    body
+    body,
+    credentials: "include" // Critical: Send and receive cookies
   });
 
-  // Handle 401 Unauthorized - Attempt Token Refresh
-  if (response.status === 401 && typeof window !== "undefined") {
-    // If we don't even have a refresh token, don't attempt to refresh
-    if (!localStorage.getItem("refreshToken")) {
-      throw new Error("Login required to access this feature.");
-    }
-
-    if (!isRefreshing) {
-      isRefreshing = true;
-      try {
-        const newToken = await refreshAccessToken();
-        isRefreshing = false;
-        onTokenRefreshed(newToken);
-      } catch (error) {
-        isRefreshing = false;
-        // Notify subscribers of failure (optional, but retry will fail anyway)
-        window.dispatchEvent(new CustomEvent("auth:logout"));
-        throw error;
-      }
-    }
-
-    // Wait for the token to be refreshed
-    const retryOriginalRequest = new Promise((resolve) => {
-      subscribeTokenRefresh((token) => {
-        const newOptions = { ...options };
-        const newHeaders = new Headers(newOptions.headers || undefined);
-        newHeaders.set("Authorization", `Bearer ${token}`);
-        if (newOptions.body && !newHeaders.has("Content-Type")) {
-           newHeaders.set("Content-Type", "application/json");
-        }
-        newOptions.headers = newHeaders;
-        resolve(fetch(`${API_URL}${endpoint}`, newOptions).then(res => res.json()));
+  // Handle 401 Unauthorized - Attempt Silent Token Refresh
+  // Note: We skip refresh if the endpoint itself is logout or refresh to avoid loops
+  if (response.status === 401 && typeof window !== "undefined" && endpoint !== "/auth/logout" && endpoint !== "/auth/refresh") {
+    // If we're already refreshing, queue this request
+    if (isRefreshing) {
+      return new Promise((resolve) => {
+        subscribeTokenRefresh(() => {
+          resolve(fetchApi(endpoint, options));
+        });
       });
-    });
+    }
 
-    return retryOriginalRequest;
+    isRefreshing = true;
+
+    try {
+      await refreshAccessToken();
+      isRefreshing = false;
+      onTokenRefreshed();
+      return fetchApi(endpoint, options);
+    } catch (error) {
+      isRefreshing = false;
+      // If refresh fails, notify the app to logout
+      window.dispatchEvent(new CustomEvent("auth:logout"));
+      throw error;
+    }
   }
 
   if (!response.ok) {
