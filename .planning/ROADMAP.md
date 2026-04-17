@@ -229,3 +229,23 @@ Plans:
 4. Logout invalidates refresh token — reuse returns 401.
 5. Account locks after 5 failed logins, unlocks after 15 minutes.
 6. Google OAuth users can set a password from Settings without "current password".
+
+---
+
+## Phase 11 & 12: Community Profiles & Contribution Transparency
+
+**Goal:** Create a space for users to showcase their identity and contributions, allowing the community to discover high-quality contributors through public profiles.
+
+**Requirements:** PROFILE-01, PROFILE-02
+
+**Depends on:** Phase 10
+
+**Deliverables:**
+- Backend: `GET /users/:id/profile` returning public user data, stats, and submitted tools.
+- Frontend: Public Profile Page `/profile/[id]` showcasing bio, impact score, and contribution grid.
+- System: Real-time notification updates for tool approvals and upvotes (completed).
+
+**Success Criteria:**
+1. Users can visit `/profile/[id]` and view another user's approved tool submissions.
+2. Clicking a tool in a user's profile redirects to the Discover page with a highlight effect.
+3. User impact score correctly reflects their contributions and community engagement.

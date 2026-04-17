@@ -21,10 +21,21 @@ Plan: Completed
 Status: Phase Finalized
 Last activity: 2026-04-14 — Integrated SSE notifications, implemented password recovery flow, and completed mobile-responsive UI polish.
 
-Phase: 10 — Personalized Feed & Analytics
-Plan: Pending
-Status: Ready to plan
-Last activity: N/A
+Phase: 10 — Security Hardening
+Plan: Completed
+Status: Phase Finalized
+Last activity: 2026-04-15 — Implemented NoSQL/XSS protection, JWT rotation, and account lockout features.
+
+Phase: 11 & 12 — Community Profiles & Contribution Transparency
+Plan: Completed
+Status: Phase Finalized
+Last activity: 2026-04-17 — Implemented Public Profile routing (`/profile/[id]`) and unified user contribution showcase. Removed experimental social/chat systems as per refinement.
+
+## Quick Tasks Completed
+
+| Date | Description |
+|------|-------------|
+| 2026-04-17 | Updated default avatars to modern `bottts` style globally, added real-time SSE listener in the Chat UI, and improved routing links for profiles across NotificationBell and Leaderboard. |
 
 ## Milestone: v1.2 Engagement & Identity
 
