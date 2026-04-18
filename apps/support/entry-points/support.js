@@ -8,7 +8,7 @@ const { ValidationError } = require('../../../libraries/errors');
 const router = express.Router();
 
 // Initialize the new Gemini SDK
-const ai = new GoogleGenAI(process.env.GEMINI_API_KEY);
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Restrict AI calls to prevent bill shock
@@ -18,14 +18,15 @@ const aiLimiter = rateLimit({
   message: { success: false, message: 'Too many requests to the AI Support bot, please try again after a minute' }
 });
 
-async function generateWithRetry(model, prompt, options = {}, retries = 3, delay = 500) {
+async function generateWithRetry(modelName, prompt, options = {}, retries = 3, delay = 500) {
   const systemInstruction = `You are the technical support assistant for StudentSolution.ai, a platform designed to help students discover and share digital tools. 
 Answer concisely. Be helpful, enthusiastic, and focus on resolving user queries about finding tools, using the upvote system, or understanding notifications.`;
 
   for (let i = 0; i < retries; i++) {
     try {
-      const response = await model.generateContent({
-        contents: [{ role: 'user', parts: [{ text: `${systemInstruction}\n\nUser Question: ${prompt}` }] }],
+      const response = await ai.models.generateContent({
+        model: modelName,
+        contents: `${systemInstruction}\n\nUser Question: ${prompt}`,
         ...options
       });
       return response;
@@ -56,12 +57,11 @@ router.post('/ask', aiLimiter, asyncHandler(async (req, res) => {
     throw new ValidationError("Prompt is required and must be a string");
   }
 
-  const model = ai.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const modelName = 'gemini-2.5-flash';
 
   try {
-    const response = await generateWithRetry(model, prompt);
-    const result = await response.response;
-    const text = result.text();
+    const response = await generateWithRetry(modelName, prompt);
+    const text = response.text; // The new genai SDK exposes text as a property directly
 
     return res.json({
       success: true,
