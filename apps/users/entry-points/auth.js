@@ -119,7 +119,9 @@ router.post('/register', validate(registerSchema), asyncHandler(async (req, res)
         bio: user.bio,
         socialLinks: user.socialLinks,
         avatarId: user.avatarId,
-        themePreference: user.themePreference
+        themePreference: user.themePreference,
+        registeredAt: user.registeredAt,
+        lastLogin: user.lastLogin
       }
     }
   });
@@ -185,7 +187,9 @@ router.post('/login', validate(loginSchema), (req, res, next) => {
           bio: user.bio,
           socialLinks: user.socialLinks,
           avatarId: user.avatarId,
-          themePreference: user.themePreference
+          themePreference: user.themePreference,
+          registeredAt: user.registeredAt,
+          lastLogin: user.lastLogin
         }
       }
     });
@@ -333,7 +337,9 @@ router.post('/exchange', asyncHandler(async (req, res) => {
         bio: user.bio,
         socialLinks: user.socialLinks,
         avatarId: user.avatarId,
-        themePreference: user.themePreference
+        themePreference: user.themePreference,
+        registeredAt: user.registeredAt,
+        lastLogin: user.lastLogin
       }
     }
   });
@@ -481,7 +487,9 @@ router.put('/me', authenticateToken, requireAuth, validate(updateProfileSchema),
         bio: user.bio,
         socialLinks: user.socialLinks,
         avatarId: user.avatarId,
-        themePreference: user.themePreference
+        themePreference: user.themePreference,
+        registeredAt: user.registeredAt,
+        lastLogin: user.lastLogin
       }
     }
   });
