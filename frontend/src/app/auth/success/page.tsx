@@ -9,9 +9,10 @@ import { ShieldCheck, Loader2, XCircle, Sparkles, CheckCircle2 } from "lucide-re
 
 export default function AuthSuccessPage() {
   const router = useRouter();
-  const { setTokensAndUser } = useAuth();
+  const { setTokensAndUser, user } = useAuth();
   const [status, setStatus] = useState<"processing" | "success" | "error">("processing");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [isNewUser, setIsNewUser] = useState(false);
 
   const isProcessing = useRef(false);
 
@@ -24,12 +25,7 @@ export default function AuthSuccessPage() {
         const params = new URLSearchParams(window.location.search);
         const code = params.get("code");
 
-        if (!code) {
-          throw new Error("Missing secure identity session.");
-        }
-
-        // Simulating a brief "Verification" delay for premium feel
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        let currentUser = user;
 
         if (code) {
           // Exchange short-lived code for tokens
@@ -39,10 +35,30 @@ export default function AuthSuccessPage() {
           });
 
           if (response.success && response.data) {
-            const { user } = response.data;
-            await setTokensAndUser(undefined, undefined, user);
+            currentUser = response.data.user;
+            await setTokensAndUser(undefined, undefined, currentUser || undefined);
           } else {
             throw new Error("Exchange failed. Please try again.");
+          }
+        } else {
+          // Normal login/register
+          if (!currentUser) {
+            const res = await fetchApi("/auth/me");
+            if (res.success && res.data && res.data.user) {
+              currentUser = res.data.user;
+              await setTokensAndUser(undefined, undefined, currentUser || undefined);
+            } else {
+              throw new Error("Missing secure identity session.");
+            }
+          }
+        }
+
+        if (currentUser) {
+          const regTime = new Date(currentUser.registeredAt || Date.now()).getTime();
+          const loginTime = new Date(currentUser.lastLogin || currentUser.registeredAt || Date.now()).getTime();
+          
+          if (Date.now() - regTime < 60000 || Math.abs(loginTime - regTime) < 5000) {
+            setIsNewUser(true);
           }
         }
         
@@ -59,7 +75,7 @@ export default function AuthSuccessPage() {
     };
 
     handleAuthSuccess();
-  }, [router, setTokensAndUser]);
+  }, [router, setTokensAndUser, user]);
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
@@ -125,9 +141,11 @@ export default function AuthSuccessPage() {
               <div className="space-y-3">
                 <h2 className="text-4xl font-black tracking-tighter text-white flex items-center justify-center gap-3">
                   <Sparkles className="text-yellow-400" size={24} /> 
-                  Welcome Back
+                  {isNewUser ? "Welcome" : "Welcome Back"}
                 </h2>
-                <p className="text-muted-foreground font-medium text-lg">Identity confirmed. Accessing the Hub...</p>
+                <p className="text-muted-foreground font-medium text-lg">
+                  {isNewUser ? "Identity successfully established. Accessing the Hub..." : "Identity confirmed. Accessing the Hub..."}
+                </p>
               </div>
             </motion.div>
           )}
