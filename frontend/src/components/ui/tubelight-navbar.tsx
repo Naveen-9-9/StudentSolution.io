@@ -30,7 +30,7 @@ export function NavBar({ items, className }: NavBarProps) {
   return (
     <div
       className={cn(
-        "fixed bottom-6 sm:bottom-auto sm:top-0 left-1/2 -translate-x-1/2 z-50 sm:pt-6",
+        "fixed bottom-6 md:bottom-auto md:top-0 left-1/2 -translate-x-1/2 z-50 md:pt-6",
         className,
       )}
     >
@@ -48,8 +48,8 @@ export function NavBar({ items, className }: NavBarProps) {
 
           const content = (
             <>
-              <span className="hidden md:inline">{item.name}</span>
-              <span className="md:hidden">
+              <span className="hidden xl:inline">{item.name}</span>
+              <span className="xl:hidden">
                 <Icon size={18} strokeWidth={2.5} />
               </span>
               {isActive && (
