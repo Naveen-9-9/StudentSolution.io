@@ -77,7 +77,7 @@ export default function ToolCard({ tool, onUpvote, isUpvoting, variant = "defaul
         )}
       >
         <div className={cn(
-          "relative p-7 flex flex-col h-full space-y-6 rounded-[28px] transition-all duration-500",
+          "relative p-5 sm:p-7 flex flex-col h-full space-y-4 sm:space-y-6 rounded-[24px] sm:rounded-[28px] transition-all duration-500",
           "group-hover:bg-gradient-to-br group-hover:from-foreground/5 group-hover:to-transparent"
         )}>
           {/* Top Row: Category & Rating */}
@@ -99,11 +99,11 @@ export default function ToolCard({ tool, onUpvote, isUpvoting, variant = "defaul
           {/* Middle: Content */}
           <div className="flex-1">
             <h3 className={cn(
-              "font-black tracking-tight text-foreground group-hover:text-primary transition-colors flex items-center gap-2 font-display",
-              variant === "minimal" ? "text-lg" : "text-2xl"
+              "font-black tracking-tight text-foreground group-hover:text-primary transition-colors flex items-center justify-between gap-2 font-display w-full",
+              variant === "minimal" ? "text-lg" : "text-xl sm:text-2xl"
             )}>
-              {tool.name}
-              <ExternalLink size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+              <span className="truncate block flex-1">{tool.name}</span>
+              <ExternalLink size={16} className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
             </h3>
             {variant !== "minimal" && (
               <p className="text-sm font-medium text-muted-foreground mt-3 line-clamp-2 leading-relaxed">
@@ -120,19 +120,19 @@ export default function ToolCard({ tool, onUpvote, isUpvoting, variant = "defaul
                 <span className="text-xs font-black tracking-tight">{tool.upvoteCount || 0}</span>
               </div>
             ) : (
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 text-muted-foreground group-hover:text-primary transition-colors">
-                  <TrendingUp size={16} />
-                  <span className="text-sm font-black tracking-tight">{tool.upvoteCount || 0}</span>
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="flex items-center gap-1.5 sm:gap-2 text-muted-foreground group-hover:text-primary transition-colors">
+                  <TrendingUp size={14} className="sm:w-4 sm:h-4" />
+                  <span className="text-xs sm:text-sm font-black tracking-tight">{tool.upvoteCount || 0}</span>
                 </div>
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <MessageSquare size={16} />
-                  <span className="text-sm font-bold tracking-tight">{tool.reviewCount || 0}</span>
+                <div className="flex items-center gap-1.5 sm:gap-2 text-muted-foreground">
+                  <MessageSquare size={14} className="sm:w-4 sm:h-4" />
+                  <span className="text-xs sm:text-sm font-bold tracking-tight">{tool.reviewCount || 0}</span>
                 </div>
               </div>
             )}
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               {variant !== "minimal" && (
                 <>
                   <button
@@ -140,18 +140,18 @@ export default function ToolCard({ tool, onUpvote, isUpvoting, variant = "defaul
                       e.stopPropagation();
                       setIsInfoModalOpen(true);
                     }}
-                    className="p-3 rounded-2xl bg-secondary/50 text-secondary-foreground hover:bg-primary hover:text-primary-foreground transition-all shadow-md active:scale-95"
+                    className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-secondary/50 text-secondary-foreground hover:bg-primary hover:text-primary-foreground transition-all shadow-md active:scale-95"
                   >
-                    <Info size={18} />
+                    <Info size={14} className="sm:w-[18px] sm:h-[18px]" />
                   </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       setIsBookmarkModalOpen(true);
                     }}
-                    className="p-3 rounded-2xl bg-primary/5 text-primary hover:bg-primary/20 transition-all border border-primary/10"
+                    className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-primary/5 text-primary hover:bg-primary/20 transition-all border border-primary/10"
                   >
-                    <Bookmark size={18} />
+                    <Bookmark size={14} className="sm:w-[18px] sm:h-[18px]" />
                   </button>
                 </>
               )}
@@ -164,8 +164,8 @@ export default function ToolCard({ tool, onUpvote, isUpvoting, variant = "defaul
                 }}
                 disabled={isUpvoting}
                 className={cn(
-                  "rounded-2xl font-black uppercase tracking-[0.15em] transition-all shadow-lg flex items-center gap-2.5",
-                  variant === "minimal" ? "px-4 py-2 text-[9px]" : "px-5 py-3 text-[10px]",
+                  "rounded-xl sm:rounded-2xl font-black uppercase tracking-[0.1em] transition-all shadow-lg flex items-center gap-1.5 sm:gap-2.5",
+                  variant === "minimal" ? "px-3 py-1.5 text-[8px]" : "px-3 py-2 sm:px-4 sm:py-2.5 text-[9px] sm:text-[10px]",
                   isUpvoting 
                     ? "bg-primary/20 text-primary cursor-wait" 
                     : tool.hasUpvoted
@@ -173,7 +173,7 @@ export default function ToolCard({ tool, onUpvote, isUpvoting, variant = "defaul
                       : "bg-primary text-primary-foreground hover:shadow-primary/40"
                 )}
               >
-                <ArrowUpCircle size={variant === "minimal" ? 14 : 18} className={cn(tool.hasUpvoted && "fill-primary")} />
+                <ArrowUpCircle size={14} className={cn("sm:w-[18px] sm:h-[18px]", tool.hasUpvoted && "fill-primary")} />
                 {isUpvoting ? "Voting" : tool.hasUpvoted ? "Upvoted" : "Upvote"}
               </motion.button>
             </div>
