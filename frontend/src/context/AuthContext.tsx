@@ -18,6 +18,8 @@ type User = {
   };
   avatarId?: string;
   themePreference?: string;
+  registeredAt?: string;
+  lastLogin?: string;
 };
 
 interface AuthContextType {
