@@ -39,7 +39,7 @@ export default function LoginPage() {
       if (response.success) {
         const { user } = response.data;
         await setTokensAndUser(undefined, undefined, user);
-        router.push("/");
+        router.push("/auth/success");
       }
     } catch (err: unknown) {
       setError((err as Error).message || "Identity verification failed.");
