@@ -33,6 +33,9 @@ export default function GlobalNavbar() {
       {/* ─── Global Floating Navbar ─── */}
       <NavBar items={navItems} />
 
+      {/* ─── Scroll Fade Mask (Prevents Text Overlap) ─── */}
+      <div className="hidden md:block fixed top-0 left-0 right-0 h-32 bg-gradient-to-b from-background via-background/90 to-transparent z-[40] pointer-events-none" />
+
       {/* ─── Desktop Header Items (Logo) ─── */}
       <div className="hidden md:flex fixed top-0 left-0 p-4 md:p-6 z-[60]">
         <Link href="/" className="flex items-center gap-2 group">
