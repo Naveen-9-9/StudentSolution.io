@@ -167,22 +167,6 @@ function SearchResults() {
             <div className="space-y-8">
               <div>
                 <label className="text-sm font-bold block mb-4 text-foreground/80 flex items-center gap-2">
-                  <Search size={14} className="text-primary" /> Search
-                </label>
-                <div className="relative">
-                  <input
-                    type="search"
-                    placeholder="Search tools..."
-                    value={q}
-                    onChange={(e) => handleFilterChange("q", e.target.value)}
-                    className="w-full bg-background/50 border border-border/40 rounded-xl pl-10 pr-4 py-3 text-sm font-bold focus:ring-2 focus:ring-primary/20 focus:border-primary/40 outline-none transition-all placeholder:font-medium placeholder:text-muted-foreground/50"
-                  />
-                  <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/50" />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-bold block mb-4 text-foreground/80 flex items-center gap-2">
                   <LayoutGrid size={14} className="text-primary" /> Category
                 </label>
                 <div className="flex flex-col gap-1">
@@ -271,6 +255,19 @@ function SearchResults() {
 
         {/* Main Results Area */}
         <main className="flex-1">
+          <div className="mb-8">
+            <div className="relative max-w-3xl">
+              <input
+                type="search"
+                placeholder="Search thousands of verified student tools..."
+                value={q}
+                onChange={(e) => handleFilterChange("q", e.target.value)}
+                className="w-full bg-background/80 backdrop-blur-md border border-border/40 hover:border-primary/40 rounded-2xl pl-12 pr-6 py-4 text-base font-bold focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:font-medium placeholder:text-muted-foreground/50 shadow-sm"
+              />
+              <Search size={22} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" />
+            </div>
+          </div>
+
           <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
               <motion.h2
