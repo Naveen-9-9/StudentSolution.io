@@ -5,6 +5,7 @@ import { NavBar, NavItem } from "./ui/tubelight-navbar";
 import { Home, Search, Trophy, Bot } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import UserProfile from "./UserProfile";
 import NotificationBell from "./NotificationBell";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,20 +13,13 @@ import { cn } from "@/lib/utils";
 
 export default function GlobalNavbar() {
   const pathname = usePathname();
-
+  const { isAuthenticated } = useAuth();
 
   const navItems: NavItem[] = [
     { name: "Home", url: "/", icon: Home },
     { name: "Discovery", url: "/search", icon: Search },
     { name: "Ranking", url: "/leaderboard", icon: Trophy },
-    { name: "AI Support", url: "/support", icon: Bot },
-  ];
-
-  const mobileNavLinks = [
-    { name: "Home", url: "/", icon: Home },
-    { name: "Discovery", url: "/search", icon: Search },
-    { name: "Ranking", url: "/leaderboard", icon: Trophy },
-    { name: "AI Support", url: "/support", icon: Bot },
+    ...(isAuthenticated ? [{ name: "AI Support", url: "/support", icon: Bot }] : []),
   ];
 
   return (
