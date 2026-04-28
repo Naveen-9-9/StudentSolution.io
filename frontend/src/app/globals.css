@@ -149,7 +149,6 @@
   body {
     @apply bg-background text-foreground selection:bg-primary/20 selection:text-primary;
     font-feature-settings: "cv11", "ss01";
-    scroll-behavior: smooth;
   }
   h1, h2, h3, h4, .font-display {
     @apply font-display tracking-tight text-foreground;

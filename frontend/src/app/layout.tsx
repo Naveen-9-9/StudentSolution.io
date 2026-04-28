@@ -40,20 +40,19 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      data-scroll-behavior="smooth"
       className={cn(
         geistSans.variable,
         geistMono.variable,
         outfit.variable,
-        "h-full antialiased scroll-smooth"
+        "antialiased"
       )}
     >
-      <body className="min-h-full bg-background text-foreground flex flex-col font-sans relative transition-colors duration-300">
+      <body className="bg-background text-foreground flex flex-col font-sans relative transition-colors duration-300">
         <SmoothScrollProvider>
           <ThemeProvider>
             <AuthProvider>
-              {/* overflow-x-hidden on a wrapper div, NOT body — body overflow breaks position:fixed modals */}
-              <div className="flex flex-col min-h-full overflow-x-hidden">
+              {/* No overflow-x-hidden on this wrapper to prevent Lenis conflicts */}
+              <div className="flex flex-col min-h-screen">
               <BackgroundMesh />
               <GlobalNavbar />
               <main className="flex-1 pt-12 sm:pt-20 min-h-screen max-w-[1440px] mx-auto w-full">

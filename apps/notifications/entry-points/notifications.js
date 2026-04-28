@@ -21,11 +21,16 @@ const router = express.Router();
  */
 // SSE stream — real-time notifications
 router.get('/stream', authenticateToken, requireAuth, (req, res) => {
+  // Disable timeout for this long-running connection
+  req.socket.setTimeout(0);
+  req.socket.setKeepAlive(true);
+  req.socket.setNoDelay(true);
+
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
-    'Cache-Control': 'no-cache',
+    'Cache-Control': 'no-cache, no-transform',
     'Connection': 'keep-alive',
-    'X-Accel-Buffering': 'no' // Disable nginx buffering
+    'X-Accel-Buffering': 'no'
   });
 
   // Send initial connection event
@@ -41,6 +46,7 @@ router.get('/stream', authenticateToken, requireAuth, (req, res) => {
 
   req.on('close', () => {
     clearInterval(keepalive);
+    notificationService.removeSSEClient(req.user.userId, res);
   });
 });
 
