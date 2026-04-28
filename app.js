@@ -134,11 +134,16 @@ const authMeLimiter = rateLimit({
   }
 });
 
-const isDevOrTest = process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development';
+const isDevOrTest = process.env.NODE_ENV?.trim().toLowerCase() === 'test' || 
+                  process.env.NODE_ENV?.trim().toLowerCase() === 'development';
 
 // Apply general rate limiter to all routes (skip in tests/dev)
 if (!isDevOrTest) {
-  app.use(generalLimiter);
+  app.use((req, res, next) => {
+    // Skip rate limiting for long-lived SSE connections
+    if (req.path === '/notifications/stream') return next();
+    generalLimiter(req, res, next);
+  });
 }
 
 // Logging

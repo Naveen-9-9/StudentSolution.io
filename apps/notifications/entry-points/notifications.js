@@ -21,6 +21,8 @@ const router = express.Router();
  */
 // SSE stream — real-time notifications
 router.get('/stream', authenticateToken, requireAuth, (req, res) => {
+  console.log(`[SSE] Client connected: ${req.user.userId}`);
+
   // Disable timeout for this long-running connection
   req.socket.setTimeout(0);
   req.socket.setKeepAlive(true);
@@ -32,6 +34,9 @@ router.get('/stream', authenticateToken, requireAuth, (req, res) => {
     'Connection': 'keep-alive',
     'X-Accel-Buffering': 'no'
   });
+
+  // Send 1KB padding to bypass browser/proxy buffering
+  res.write(':' + ' '.repeat(1024) + '\n\n');
 
   // Send initial connection event
   res.write(`data: ${JSON.stringify({ type: 'connected' })}\n\n`);

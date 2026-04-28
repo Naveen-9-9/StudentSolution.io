@@ -39,6 +39,10 @@ export default function NotificationBell() {
     const streamUrl = `${baseUrl}/notifications/stream`;
     const eventSource = new EventSource(streamUrl, { withCredentials: true });
 
+    eventSource.onopen = () => {
+      console.log("SSE connection established");
+    };
+
     eventSource.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
@@ -56,7 +60,7 @@ export default function NotificationBell() {
     };
 
     eventSource.onerror = (err) => {
-      console.error("SSE connection error", err);
+      console.error("SSE connection error", err, "ReadyState:", eventSource.readyState);
       eventSource.close();
       
       // Attempt reconnection after a delay if still authenticated
