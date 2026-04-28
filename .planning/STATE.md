@@ -36,6 +36,7 @@ Last activity: 2026-04-17 — Implemented Public Profile routing (`/profile/[id]
 | Date | Description |
 |------|-------------|
 | 2026-04-17 | Updated default avatars to modern `bottts` style globally, added real-time SSE listener in the Chat UI, and improved routing links for profiles across NotificationBell and Leaderboard. |
+| 2026-04-28 | [260428-xaa] Added premium buttery smooth scrolling globally using `@studio-freight/react-lenis` to meet design aesthetics. [260428-xaa-i-need-my-web-site-to-run-smoothly-so-wh](./quick/260428-xaa-i-need-my-web-site-to-run-smoothly-so-wh/) |
 
 ## Milestone: v1.2 Engagement & Identity
 
