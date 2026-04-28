@@ -51,7 +51,6 @@ router.get('/stream', authenticateToken, requireAuth, (req, res) => {
 
   req.on('close', () => {
     clearInterval(keepalive);
-    notificationService.removeSSEClient(req.user.userId, res);
   });
 });
 
