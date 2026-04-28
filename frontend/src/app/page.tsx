@@ -123,7 +123,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="max-w-[1440px] mx-auto w-full flex flex-col gap-12 md:gap-24 pb-16 md:pb-32">
+    <div className="flex flex-col gap-12 md:gap-24 pb-16 md:pb-32">
       <section id="hero-section" className="relative pt-20 md:pt-32 pb-12 md:pb-20 overflow-hidden px-4 sm:px-6">
         {/* Cinematic Hero Mesh - Localized Intensity */}
         <div className="absolute inset-0 -z-10 bg-background">
