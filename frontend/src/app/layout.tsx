@@ -54,7 +54,7 @@ export default function RootLayout({
             <div className="flex flex-col min-h-full overflow-x-hidden">
             <BackgroundMesh />
             <GlobalNavbar />
-            <main className="flex-1 pt-12 sm:pt-20 min-h-screen">
+            <main className="flex-1 pt-12 sm:pt-20 min-h-screen max-w-[1440px] mx-auto w-full">
                <RouteTransition>
                  {children}
                </RouteTransition>
@@ -63,7 +63,7 @@ export default function RootLayout({
             
             {/* Simple Premium Footer */}
             <footer className="border-t bg-card/10 backdrop-blur-md py-12 mt-20">
-              <div className="w-full px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+              <div className="w-full max-w-[1440px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
                 <div className="flex flex-col gap-2">
                   <span className="text-xl font-black tracking-tight text-foreground font-display uppercase">
                     StudentSolution<span className="text-cyber-gradient">.ai</span>
