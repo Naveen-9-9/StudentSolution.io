@@ -20,6 +20,8 @@ import Link from "next/link";
 import CollectionModal from "./CollectionModal";
 import ToolInfoModal from "./ToolInfoModal";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 
 interface ToolCardProps {
   tool: Tool;
@@ -30,6 +32,7 @@ interface ToolCardProps {
 }
 
 export default function ToolCard({ tool, onUpvote, isUpvoting, variant = "default", isHighlighted }: ToolCardProps) {
+  const router = useRouter();
   const [isBookmarkModalOpen, setIsBookmarkModalOpen] = useState(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
 
@@ -67,8 +70,7 @@ export default function ToolCard({ tool, onUpvote, isUpvoting, variant = "defaul
       {/* Premium Tool Card Body */}
       <div 
         onClick={() => {
-          window.open(tool.url, "_blank");
-          localStorage.setItem(`tool_launched_${tool._id}`, "true");
+          router.push(`/tools/${tool._id}`);
         }}
         className={cn(
           "cursor-pointer overflow-hidden rounded-[32px] p-1 transition-all duration-500",
@@ -135,6 +137,17 @@ export default function ToolCard({ tool, onUpvote, isUpvoting, variant = "defaul
             <div className="flex items-center gap-1.5 sm:gap-2">
               {variant !== "minimal" && (
                 <>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(tool.url, "_blank");
+                      localStorage.setItem(`tool_launched_${tool._id}`, "true");
+                    }}
+                    className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all shadow-md active:scale-95"
+                    title="Visit Official Website"
+                  >
+                    <ExternalLink size={14} className="sm:w-[18px] sm:h-[18px]" />
+                  </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();

@@ -55,9 +55,9 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 
   /* PREMIUM BRAND - StudentSolution.ai Cyber-Pulse Palette (OKLCH) */
-  --color-brand-violet: oklch(0.6 0.25 285);
-  --color-brand-indigo: oklch(0.5 0.23 275);
-  --color-brand-cyan: oklch(0.7 0.22 200);
+  --color-brand-red: oklch(0.6 0.25 25);
+  --color-brand-pink: oklch(0.7 0.2 0);
+  --color-brand-orange: oklch(0.75 0.18 50);
 
   /* CATEGORY TOKENS - Specific OKLCH hues for semantic grouping */
   --color-cat-ai: oklch(0.65 0.22 280);
@@ -87,7 +87,7 @@
   --card-foreground: oklch(0.15 0.02 285);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.15 0.02 285);
-  --primary: var(--primary-violet);
+  --primary: var(--primary-ruby);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.96 0.01 285);
   --secondary-foreground: oklch(0.15 0.02 285);
@@ -114,7 +114,7 @@
   --card-foreground: oklch(0.98 0 0);
   --popover: oklch(0.12 0.02 280);
   --popover-foreground: oklch(0.98 0 0);
-  --primary: var(--primary-violet);
+  --primary: var(--primary-ruby);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.18 0.02 280);
   --secondary-foreground: oklch(0.98 0 0);
@@ -146,6 +146,10 @@
   *:focus-visible {
     @apply outline-2 outline-primary/50 outline-offset-2 transition-all;
   }
+  html, body {
+    @apply overflow-x-hidden;
+    max-width: 100vw;
+  }
   body {
     @apply bg-background text-foreground selection:bg-primary/20 selection:text-primary;
     font-feature-settings: "cv11", "ss01";
@@ -176,8 +180,8 @@
   background: linear-gradient(
     135deg,
     var(--primary) 0%,
-    color-mix(in oklch, var(--primary), black 20%) 45%,
-    var(--color-brand-cyan) 100%
+    color-mix(in oklch, var(--primary), black 10%) 45%,
+    var(--color-brand-orange) 100%
   );
 }
 
@@ -185,8 +189,8 @@
   background: linear-gradient(
     135deg,
     var(--primary) 0%,
-    color-mix(in oklch, var(--primary), black 20%) 45%,
-    var(--color-brand-cyan) 100%
+    color-mix(in oklch, var(--primary), black 10%) 45%,
+    var(--color-brand-orange) 100%
   );
   -webkit-background-clip: text;
   background-clip: text;
@@ -196,9 +200,9 @@
 @utility mesh-gradient {
   background-image: 
     radial-gradient(at 0% 0%, var(--primary) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, var(--color-brand-cyan) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, var(--color-brand-orange) 0px, transparent 50%),
     radial-gradient(at 100% 100%, var(--primary) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, var(--color-brand-cyan) 0px, transparent 50%);
+    radial-gradient(at 0% 100%, var(--color-brand-orange) 0px, transparent 50%);
   opacity: 0.12;
   filter: blur(120px);
 }
